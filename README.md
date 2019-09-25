@@ -1,2 +1,2 @@
 # CoreAutomationTest
-Use as core for other projects
+Use as core for other auto test projects
