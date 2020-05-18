@@ -23,6 +23,9 @@ public class App
 	//local
 	static String username = "ntlneo";
 	static String password = "Docnhat001@";
+	static String emailFB = "suzukihzt@gmail.com";
+	static String passFB = "Docnhat1";
+
 	
 	//locators
 	static By loginBtn = By.xpath("//a[contains(@title,'Login')]");
@@ -36,9 +39,12 @@ public class App
 	static String strLikeBtn = "//td[contains(@id,'task')]/descendant::span[contains(@id,'likebutton')]/a";
 	static By numberOfLikeBtn = By.xpath("//td[contains(@id,'task')]");
 	
-	static By dangnhapBtn = By.xpath("(//*[text()='Đăng nhập'])[1]");
-	static By likePageBtn = By.xpath("(//*[text()='Thích' or text()='Like'])[1]");
-//	static By likePageBtn = By.xpath("//div[@class='_59k _2rgt _1j-f _2rgt' and text()='Thích' or text()='Like']/preceding-sibling::*/img");
+	//window mới chứa pagelike
+	static By dangnhapBtn = By.xpath("(//*[text()='Đăng nhập'])[1]/..");
+	static By emailFbBox = By.xpath("//*[@name='email']");
+	static By passFbBox = By.xpath("//*[@name='pass']");
+	static By loginFbBtn = By.xpath("//*[@name='login']");
+	static By likePageBtn = By.xpath("//*[@aria-label='like button']");
 	
 	
 	//PLAY
@@ -53,7 +59,7 @@ public class App
         doLoopLike();
         
     	try {
-			Thread.sleep(9000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,6 +72,7 @@ public class App
 	
     
     static void doLoopLike() {
+    	int count = 0;
     	for (int i = 0; i < getListWebElement(numberOfLikeBtn).size(); i++) {
     		String strSearch = "')]/descendant";    		
     		String strNewLikeBtn = strLikeBtn.replace(strSearch,i + strSearch);
@@ -73,16 +80,28 @@ public class App
     		click(NewLikeBtn);
     		
     		String firstWindow  = driver.getWindowHandle();
-    		System.out.println("Cửa sổ đầu tiên là: " + firstWindow);
+//    		System.out.println("Cửa sổ đầu tiên là: " + firstWindow);
     		
     		Set<String> windows = driver.getWindowHandles();
-    		
+    		String currentWindow = null;
     		for (String window : windows) {    			
 				driver.switchTo().window(window);
-				System.out.println("Các Cửa sổ sau là: " + window);
-				click(likePageBtn);
-	    		driver.close();
+				currentWindow = window;
+//				System.out.println("Các cửa sổ sau là: " + currentWindow);				
 			}
+    		
+    		try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		if(i==0) {
+    			click(dangnhapBtn);
+        		input(emailFbBox, emailFB);
+        		input(passFbBox, passFB);
+        		click(loginFbBtn);
+    		}
     		
     		try {
 				Thread.sleep(3000);
@@ -92,7 +111,23 @@ public class App
 			}
     		
     		
+    		try {
+    		click(likePageBtn);
+    		count += 1;
+    		System.out.println("###### ĐÃ CLICK LIKE LẦN " + count + " ######");
+				Thread.sleep(3000);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+//				e.printStackTrace();
+				driver.close();
+				currentWindow = firstWindow;
+			}
+    		if (!currentWindow.equals(firstWindow)) {
+    			driver.close();
+    		}
+    		
     		driver.switchTo().window(firstWindow);
+    		
     	}
     }
     
