@@ -28,7 +28,7 @@
 				</configuration>
 			</plugin>
 			<!-- Below plug-in is used to execute tests -->
-<!-- 			<plugin>
+<!--  			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.0</version>
@@ -39,10 +39,10 @@
 						<file>src/test/resources/suite.xml</file>
 					</suiteXmlFiles>
 				</configuration>
-			</plugin> -->
+			</plugin>  -->
 			
 			<!-- use maven-jar-plugin to create a manifest file and package it by adding it to the JAR file. -->
-			<plugin>
+<!-- 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.1.1</version>
@@ -53,7 +53,7 @@
 						</manifest>
 					</archive>
 				</configuration>
-			</plugin>
+			</plugin> -->
 		</plugins>
 	</build>
 

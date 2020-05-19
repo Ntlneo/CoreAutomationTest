@@ -1,5 +1,8 @@
 package CoreAutomation.TestAuto;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,16 +60,17 @@ public class Test_AutoLikeFB {
 		startAutoLike();
 		doLogin();
 		openFbLike();
-//		doLoopLike();
+		doLoopLike();
 
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
-		driver.quit();
+		}
 		System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t\t######");
+		driver.quit();
+
 	}
 
 	// *********************** MIX ***********************
@@ -74,59 +78,59 @@ public class Test_AutoLikeFB {
 	static void doLoopLike() {
 		int count = 0;
 		for (int i = 0; i < getListWebElement(numberOfLikeBtn).size(); i++) {
-			String currentURL = driver.getCurrentUrl();
-			if (!currentURL.contains("bonus-page")) {
-				String strSearch = "')]/descendant";
-				String strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
-				By NewLikeBtn = By.xpath(strNewLikeBtn);
-				click(NewLikeBtn);
-				String firstWindow = driver.getWindowHandle();
-				Set<String> windows = driver.getWindowHandles();
-				String currentWindow = null;
-				for (String window : windows) {
-					driver.switchTo().window(window);
-					currentWindow = window;
-				}
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if (i == 0) {
-					click(dangnhapBtn);
-					input(emailFbBox, emailFB);
-					input(passFbBox, passFB);
-					click(loginFbBtn);
-				}
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try {
-					click(likePageBtn);
-					count += 1;
-					System.out.println("###### CLICKED LIKE Button : " + count + " ######");
-					Thread.sleep(1000);
-				} catch (Exception e) {
-					driver.close();
-					currentWindow = firstWindow;
-				}
-				if (!currentWindow.equals(firstWindow)) {
-					driver.close();
-				}
-				driver.switchTo().window(firstWindow);
-			} else {
-				System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus page\' displayed *****");
-				driver.quit();
+			String strSearch = "')]/descendant";
+			String strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
+			By NewLikeBtn = By.xpath(strNewLikeBtn);
+			click(NewLikeBtn);
+			String firstWindow = driver.getWindowHandle();
+			Set<String> windows = driver.getWindowHandles();
+			String currentWindow = null;
+			for (String window : windows) {
+				driver.switchTo().window(window);
+				currentWindow = window;
 			}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (i == 0) {
+				click(dangnhapBtn);
+				input(emailFbBox, emailFB);
+				input(passFbBox, passFB);
+				click(loginFbBtn);
+			}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				click(likePageBtn);
+				count += 1;
+				System.out.println("###### CLICKED LIKE Button : " + count + " ######");
+				Thread.sleep(1000);
+			} catch (Exception e) {
+				driver.close();
+				currentWindow = firstWindow;
+			}
+			if (!currentWindow.equals(firstWindow)) {
+				driver.close();
+			}
+			driver.switchTo().window(firstWindow);
 		}
 	}
 
 	static void openFbLike() {
 		hoverAndClick(smExchangeBtn, fbLikesBtn);
+		String currentURL = driver.getCurrentUrl();
+		if (currentURL.contains("bonus-page")) {
+			System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
+			driver.quit();
+			fail("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");			
+		}
 	}
 
 	static void doLogin() {
