@@ -1,0 +1,11 @@
+Có 2 cách run:
+
+1. Sẽ Ko xem dc Log sau khi run:
+- Unzip file TestAuto.zip ra ổ D
+- Mở folder TestAuto > Double click vào file RunAutoLike
+
+2. Sẽ xem dc Log sau khi run:
+- Unzip file TestAuto.zip ra ổ D
+- Nhấn vào thanh địa chỉ của Explorer (ThisPC > D: > TestAuto)
+- Gõ cmd > Enter
+- Trong CMD, gõ: mvn clean test
