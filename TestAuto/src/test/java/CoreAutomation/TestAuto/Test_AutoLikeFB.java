@@ -1,6 +1,8 @@
 package CoreAutomation.TestAuto;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -8,50 +10,54 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-	//global
-	static WebDriver driver;
-	static String driverPath;
-	
-	//local
-	static String username = "ntlneo";
-	static String password = "Docnhat001@";
-	static String emailFB = "suzukihzt@gmail.com";
-	static String passFB = "Docnhat1";
 
+/**
+ * Unit test for simple App.
+ */
+public class Test_AutoLikeFB 
+
+{
 	
-	//locators
-	static By loginBtn = By.xpath("//a[contains(@title,'Login')]");
-	static By usernameBox = By.xpath("//input[contains(@id,'username')]");
-	static By passwordBox = By.xpath("//input[contains(@id,'password')]");
-	static By submitBtn = By.xpath("//a[@class='form-button']");
-	
-	static By smExchangeBtn = By.xpath("//a[contains(text(),'Social Media Exchange')]");
-	static By fbLikesBtn = By.xpath("//a[contains(@title,'Facebook Likes')]");
-	
-	static String strLikeBtn = "//td[contains(@id,'task')]/descendant::span[contains(@id,'likebutton')]/a";
-	static By numberOfLikeBtn = By.xpath("//td[contains(@id,'task')]");
-	
-	//window mới chứa pagelike
-	static By dangnhapBtn = By.xpath("(//*[text()='Đăng nhập'])[1]/..");
-	static By emailFbBox = By.xpath("//*[@name='email']");
-	static By passFbBox = By.xpath("//*[@name='pass']");
-	static By loginFbBtn = By.xpath("//*[@name='login']");
-	static By likePageBtn = By.xpath("//*[@aria-label='like button']");
-	
-	
-	//PLAY
-    public static void main( String[] args )
+		//global
+		static WebDriver driver;
+		static String driverPath;
+		
+		//local
+		static String username = "ntlneo";
+		static String password = "Docnhat001@";
+		static String emailFB = "suzukihzt@gmail.com";
+		static String passFB = "Docnhat1";
+
+		
+		//locators
+		static By loginBtn = By.xpath("//a[contains(@title,'Login')]");
+		static By usernameBox = By.xpath("//input[contains(@id,'username')]");
+		static By passwordBox = By.xpath("//input[contains(@id,'password')]");
+		static By submitBtn = By.xpath("//a[@class='form-button']");
+		
+		static By smExchangeBtn = By.xpath("//a[contains(text(),'Social Media Exchange')]");
+		static By fbLikesBtn = By.xpath("//a[contains(@title,'Facebook Likes')]");
+		
+		static String strLikeBtn = "//td[contains(@id,'task')]/descendant::span[contains(@id,'likebutton')]/a";
+		static By numberOfLikeBtn = By.xpath("//td[contains(@id,'task')]");
+		
+		//window mới chứa pagelike
+		static By dangnhapBtn = By.xpath("(//*[text()='Đăng nhập'])[1]/..");
+		static By emailFbBox = By.xpath("//*[@name='email']");
+		static By passFbBox = By.xpath("//*[@name='pass']");
+		static By loginFbBtn = By.xpath("//*[@name='login']");
+		static By likePageBtn = By.xpath("//*[@aria-label='like button']");
+		
+	@org.junit.Test
+    public void TestAutoLike()
     {
     	
-        System.out.println( "WELCOME TO MY AUTO-LIKE SCRIPT" );
+        System.out.println( "\t######\t\tWELCOME TO NTLNEO AUTO-LIKE SCRIPT\t######" );
+        System.out.println( "\t###### SkyPE: ntlneo1\t\t\t\t\t######" );
+        System.out.println( "\t###### Email: lam.nguyenthanh84@gmail.com\t\t######" );
         
         startAutoLike();
         doLogin();
@@ -67,31 +73,28 @@ public class App
     	
         driver.quit();
     }
-	
-    //*********************** MIX ***********************
+
+ //*********************** MIX ***********************
 	
     
     static void doLoopLike() {
     	int count = 0;
     	for (int i = 0; i < getListWebElement(numberOfLikeBtn).size(); i++) {
+    		String currentURL = driver.getCurrentUrl();
+    		if (!currentURL.contains("bonus-page")) { 
     		String strSearch = "')]/descendant";    		
     		String strNewLikeBtn = strLikeBtn.replace(strSearch,i + strSearch);
     		By NewLikeBtn =  By.xpath(strNewLikeBtn);
-    		click(NewLikeBtn);
-    		
-    		String firstWindow  = driver.getWindowHandle();
-//    		System.out.println("Cửa sổ đầu tiên là: " + firstWindow);
-    		
+    		click(NewLikeBtn);    		
+    		String firstWindow  = driver.getWindowHandle();    		
     		Set<String> windows = driver.getWindowHandles();
     		String currentWindow = null;
     		for (String window : windows) {    			
 				driver.switchTo().window(window);
-				currentWindow = window;
-//				System.out.println("Các cửa sổ sau là: " + currentWindow);				
-			}
-    		
+				currentWindow = window;			
+			}    		
     		try {
-				Thread.sleep(3000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -101,21 +104,18 @@ public class App
         		input(emailFbBox, emailFB);
         		input(passFbBox, passFB);
         		click(loginFbBtn);
-    		}
-    		
+    		}    		
     		try {
-				Thread.sleep(3000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-    		
-    		
+			}    		
     		try {
     		click(likePageBtn);
     		count += 1;
-    		System.out.println("###### ĐÃ CLICK LIKE LẦN " + count + " ######");
-				Thread.sleep(3000);
+    		System.out.println("###### CLICKED LIKE Button : " + count + " ######");
+				Thread.sleep(1000);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 //				e.printStackTrace();
@@ -124,10 +124,12 @@ public class App
 			}
     		if (!currentWindow.equals(firstWindow)) {
     			driver.close();
-    		}
-    		
-    		driver.switchTo().window(firstWindow);
-    		
+    		}    		
+    		driver.switchTo().window(firstWindow);    		
+    		}else {
+    			System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus page\' displayed *****");
+    			driver.quit();
+			}    		
     	}
     }
     
@@ -145,7 +147,24 @@ public class App
     static void startAutoLike() {
     	driverPath = "Drivers/chromedriver.exe";
     	System.setProperty("webdriver.chrome.driver", driverPath);
-    	driver = new ChromeDriver();
+    	
+    	// Remove text of Chrome Driver in Console 
+    	System.setProperty("webdriver.chrome.silentOutput", "true");
+    	
+    	ChromeOptions options = new ChromeOptions();
+
+    	// Turn off AutomationExtension popup
+    	options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation","enable-logging"});
+    	options.setExperimentalOption("useAutomationExtension", false);
+
+    	
+    	// Turn off Save Password popup
+    	Map<String, Object> prefs = new HashMap<String, Object>();
+    	prefs.put("credentials_enable_service", false);
+    	prefs.put("profile.password_manager_enabled", false);    	
+    	options.setExperimentalOption("prefs", prefs);    	
+   	   	
+    	driver = new ChromeDriver(options);
     	driver.manage().window().maximize();
     	driver.manage().deleteAllCookies();
     	driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);    	
@@ -183,10 +202,4 @@ public class App
 		acts.doubleClick(getWebElement(by));
 	}
 
-	
-	
-	
-
-    
-    
 }

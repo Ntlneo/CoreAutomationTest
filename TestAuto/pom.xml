@@ -24,21 +24,22 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 			<!-- Below plug-in is used to execute tests -->
-			<plugin>
+<!-- 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.0</version>
 				<configuration>
 					<suiteXmlFiles>
-						<!-- TestNG suite XML files -->
+						TestNG suite XML files
 						<suiteXmlFile>${project.basedir}\TestRunAndData\TestCryptonoWeb-groups.xml</suiteXmlFile>
-<!-- 						<file>src/test/resources/suite.xml</file> -->
+						<file>src/test/resources/suite.xml</file>
 					</suiteXmlFiles>
 				</configuration>
-			</plugin>
+			</plugin> -->
 			
 			<!-- use maven-jar-plugin to create a manifest file and package it by adding it to the JAR file. -->
 			<plugin>
@@ -48,7 +49,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>Automation.CryptonoWeb.App</mainClass>
+							<mainClass>AutoLikeFB.App</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -138,12 +139,12 @@
 		</dependency>  -->
 
 <!-- https://mvnrepository.com/artifact/org.testng/testng -->
-<dependency>
+<!-- <dependency>
     <groupId>org.testng</groupId>
     <artifactId>testng</artifactId>
     <version>7.1.0</version>
     <scope>test</scope>
-</dependency>
+</dependency> -->
 
 
 <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
