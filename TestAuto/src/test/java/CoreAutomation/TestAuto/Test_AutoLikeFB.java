@@ -70,7 +70,7 @@ public class Test_AutoLikeFB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t\t######");
+		System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t######");
 		driver.quit();
 
 	}
@@ -119,15 +119,17 @@ public class Test_AutoLikeFB {
 				try {
 					click(likePageBtn);
 					count += 1;
-					System.out.println("###### CLICKED LIKE Button : " + count + " ######");
+					System.out.println("###### CLICKED LIKE Button : " + count );
 					Thread.sleep(1000);
 				} catch (Exception e) {
 					try {
 						click(likePostBtn);
 						count += 1;
-						System.out.println("###### CLICKED LIKE Button : " + count + " ######");
+						System.out.println("###### CLICKED LIKE Button : " + count );
 						Thread.sleep(1000);
 					} catch (Exception x) {
+						count += 1;
+						System.out.println("###### CLICKED LIKE Button : " + count + " --> Missed !");
 					}
 				} finally {
 					driver.close();
