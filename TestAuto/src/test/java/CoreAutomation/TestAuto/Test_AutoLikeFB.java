@@ -30,6 +30,7 @@ public class Test_AutoLikeFB {
 	static String password = "Docnhat001@";
 	static String emailFB = "suzukihzt@gmail.com";
 	static String passFB = "Docnhat1";
+	static int numberOfLoop = 20;
 
 	// locators
 	static By loginBtn = By.xpath("//a[contains(@title,'Login')]");
@@ -41,7 +42,7 @@ public class Test_AutoLikeFB {
 	static By fbLikesBtn = By.xpath("//a[contains(@title,'Facebook Likes')]");
 
 	static String strLikeBtn = "//td[contains(@id,'task')]/descendant::span[contains(@id,'likebutton')]/a";
-	static By numberOfLikeBtn = By.xpath("//td[contains(@id,'task')]");
+	static By listLikeBtn = By.xpath("//td[contains(@id,'task')]");
 
 	// new window with pagelike
 	static By dangnhapBtn = By.xpath("(//*[text()='Đăng nhập'])[1]/..");
@@ -49,6 +50,7 @@ public class Test_AutoLikeFB {
 	static By passFbBox = By.xpath("//*[@name='pass']");
 	static By loginFbBtn = By.xpath("//*[@name='login']");
 	static By likePageBtn = By.xpath("//*[@aria-label='like button']");
+	static By likePostBtn = By.xpath("//a[@data-autoid='autoid_7']");
 
 	@org.junit.Test
 	public void TestAutoLike() {
@@ -56,7 +58,7 @@ public class Test_AutoLikeFB {
 		System.out.println("\t###### SkyPE: ntlneo1\t\t\t\t######");
 		System.out.println("\t###### Email: lam.nguyenthanh84@gmail.com\t######");
 
-		// Play
+		// START
 		startAutoLike();
 		doLogin();
 		openFbLike();
@@ -77,49 +79,66 @@ public class Test_AutoLikeFB {
 
 	static void doLoopLike() {
 		int count = 0;
-		for (int i = 0; i < getListWebElement(numberOfLikeBtn).size(); i++) {
-			String strSearch = "')]/descendant";
-			String strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
-			By NewLikeBtn = By.xpath(strNewLikeBtn);
-			click(NewLikeBtn);
-			String firstWindow = driver.getWindowHandle();
-			Set<String> windows = driver.getWindowHandles();
-			String currentWindow = null;
-			for (String window : windows) {
-				driver.switchTo().window(window);
-				currentWindow = window;
+		int numberOfLikeBtn = getListWebElement(listLikeBtn).size();
+		
+			for (int i = 0; i < numberOfLikeBtn; i++) {
+				if (count < numberOfLoop) {
+				String currentURL = driver.getCurrentUrl();
+				if (currentURL.contains("bonus-page")) {
+					System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
+					driver.quit();
+					fail("***** STOP AUTO-LIKE since \'Active members Bonus\' page's displayed *****");
+				}
+				String strSearch = "')]/descendant";
+				String strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
+				By NewLikeBtn = By.xpath(strNewLikeBtn);
+				click(NewLikeBtn);
+				String firstWindow = driver.getWindowHandle();
+				Set<String> windows = driver.getWindowHandles();
+				for (String window : windows) {
+					driver.switchTo().window(window);
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (i == 0 && count == 0) {
+					click(dangnhapBtn);
+					input(emailFbBox, emailFB);
+					input(passFbBox, passFB);
+					click(loginFbBtn);
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					click(likePageBtn);
+					count += 1;
+					System.out.println("###### CLICKED LIKE Button : " + count + " ######");
+					Thread.sleep(1000);
+				} catch (Exception e) {
+					try {
+						click(likePostBtn);
+						count += 1;
+						System.out.println("###### CLICKED LIKE Button : " + count + " ######");
+						Thread.sleep(1000);
+					} catch (Exception x) {
+					}
+				} finally {
+					driver.close();
+				}
+				driver.switchTo().window(firstWindow);
+				if (i == 13) {
+					i = -1;
+				}
+			}else {
+				break;
 			}
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (i == 0) {
-				click(dangnhapBtn);
-				input(emailFbBox, emailFB);
-				input(passFbBox, passFB);
-				click(loginFbBtn);
-			}
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				click(likePageBtn);
-				count += 1;
-				System.out.println("###### CLICKED LIKE Button : " + count + " ######");
-				Thread.sleep(1000);
-			} catch (Exception e) {
-				driver.close();
-				currentWindow = firstWindow;
-			}
-			if (!currentWindow.equals(firstWindow)) {
-				driver.close();
-			}
-			driver.switchTo().window(firstWindow);
 		}
 	}
 
@@ -129,7 +148,7 @@ public class Test_AutoLikeFB {
 		if (currentURL.contains("bonus-page")) {
 			System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
 			driver.quit();
-			fail("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");			
+			fail("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
 		}
 	}
 
@@ -154,7 +173,7 @@ public class Test_AutoLikeFB {
 		driver = new ChromeDriver(options);
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		driver.get("https://www.like4like.org");
 	}
 
