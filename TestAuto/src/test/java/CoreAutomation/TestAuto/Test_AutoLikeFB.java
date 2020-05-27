@@ -20,7 +20,7 @@ import org.openqa.selenium.interactions.Actions;
  * Unit test for simple App.
  */
 public class Test_AutoLikeFB {
-
+	
 	// global
 	static WebDriver driver;
 	static String driverPath;
@@ -54,6 +54,7 @@ public class Test_AutoLikeFB {
 
 	@org.junit.Test
 	public void TestAutoLike() {
+		System.out.println("Testbranch");
 		System.out.println("\t###### WELCOME TO NTLNEO AUTO-LIKE SCRIPT\t######");
 		System.out.println("\t###### SkyPE: ntlneo1\t\t\t\t######");
 		System.out.println("\t###### Email: lam.nguyenthanh84@gmail.com\t######");
