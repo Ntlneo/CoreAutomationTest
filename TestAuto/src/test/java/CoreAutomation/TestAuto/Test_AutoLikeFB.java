@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -25,7 +26,7 @@ public class Test_AutoLikeFB {
 	static WebDriver driver;
 	static String driverPath;
 
-	// changed
+	// changed	
 	static String username = "ntlneo";
 	static String password = "Docnhat001@";
 	static String emailFB = "suzukihzt@gmail.com";
@@ -49,7 +50,7 @@ public class Test_AutoLikeFB {
 	static By emailFbBox = By.xpath("//*[@name='email']");
 	static By passFbBox = By.xpath("//*[@name='pass']");
 	static By loginFbBtn = By.xpath("//*[@name='login']");
-	static By likePageBtn = By.xpath("//*[@aria-label='like button']");
+	static By likePageBtn = By.xpath("//*[@aria-label='like button' or @aria-label='nút thích']");
 	static By likePostBtn = By.xpath("//a[@data-autoid='autoid_7']");
 
 	@org.junit.Test
@@ -174,6 +175,7 @@ public class Test_AutoLikeFB {
 		prefs.put("profile.password_manager_enabled", false);
 		options.setExperimentalOption("prefs", prefs);
 		driver = new ChromeDriver(options);
+		driver.manage().window().setPosition(new Point(0, 50000));
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
