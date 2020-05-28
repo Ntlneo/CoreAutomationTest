@@ -80,23 +80,28 @@ public class Test_AutoLikeFB {
 	}
 
 	// *********************** MIX ***********************
-
+	
+	static void checkBonusPage() {
+		String currentURL = driver.getCurrentUrl();
+		if (currentURL.contains("bonus-page")) {
+			System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
+			driver.quit();
+			fail("\n***** STOP AUTO-LIKE since \'Active members Bonus\' page's displayed *****");
+		}
+	}
+	
 	static void doLoopLike() {
 		int count = 0;
 		int numberOfLikeBtn = getListWebElement(listLikeBtn).size();
 		
 			for (int i = 0; i < numberOfLikeBtn; i++) {
 				if (count < numberOfLoop) {
-				String currentURL = driver.getCurrentUrl();
-				if (currentURL.contains("bonus-page")) {
-					System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
-					driver.quit();
-					fail("***** STOP AUTO-LIKE since \'Active members Bonus\' page's displayed *****");
-				}
+				checkBonusPage();
 				String strSearch = "')]/descendant";
 				String strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
 				By NewLikeBtn = By.xpath(strNewLikeBtn);
 				click(NewLikeBtn);
+				checkBonusPage();
 				String firstWindow = driver.getWindowHandle();
 				Set<String> windows = driver.getWindowHandles();
 				for (String window : windows) {
@@ -150,12 +155,7 @@ public class Test_AutoLikeFB {
 
 	static void openFbLike() {
 		hoverAndClick(smExchangeBtn, fbLikesBtn);
-		String currentURL = driver.getCurrentUrl();
-		if (currentURL.contains("bonus-page")) {
-			System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
-			driver.quit();
-			fail("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
-		}
+		checkBonusPage();
 	}
 
 	static void doLogin() {
@@ -178,7 +178,7 @@ public class Test_AutoLikeFB {
 		prefs.put("profile.password_manager_enabled", false);
 		options.setExperimentalOption("prefs", prefs);
 		driver = new ChromeDriver(options);
-		driver.manage().window().setPosition(new Point(0, 50000));
+//		driver.manage().window().setPosition(new Point(0, 50000));
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
