@@ -45,11 +45,11 @@ public class Test_AutoLikeFB {
 	static By listLikeBtn = By.xpath("//td[contains(@id,'task')]");
 
 	// new window with pagelike
-	static By dangnhapBtn = By.xpath("(//*[text()='Đăng nhập'])[1]/..");
+	static By dangnhapBtn = By.xpath("(//*[contains(text(),'Đăng nhập')])[1]/..");
 	static By emailFbBox = By.xpath("//*[@name='email']");
 	static By passFbBox = By.xpath("//*[@name='pass']");
 	static By loginFbBtn = By.xpath("//*[@name='login']");
-	static By likePageBtn = By.xpath("//*[@aria-label='like button']");
+	static By likePageBtn = By.xpath("//*[@aria-label='like button' or @aria-label='Like button' or @aria-label='nút thích' or @aria-label='Nút thích']");
 	static By likePostBtn = By.xpath("//a[@data-autoid='autoid_7']");
 
 	@org.junit.Test
