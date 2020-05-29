@@ -3,6 +3,8 @@ package CoreAutomation.TestAuto;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,7 +23,7 @@ import org.openqa.selenium.interactions.Actions;
 /**
  * Unit test for simple App.
  */
-public class Test_AutoLikeFB {
+public class Test_MoBaiHatYoutube {
 	
 	// global
 	static WebDriver driver;
@@ -54,17 +57,14 @@ public class Test_AutoLikeFB {
 	static By likePostBtn = By.xpath("//a[@data-autoid='autoid_7']");
 
 	@org.junit.Test
-	public void TestAutoLike() {
+	public void youtubeSearchAndPlay() {
 		System.out.println("Testbranch");
 		System.out.println("\t###### WELCOME TO NTLNEO AUTO-LIKE SCRIPT\t######");
 		System.out.println("\t###### SkyPE: ntlneo1\t\t\t\t######");
 		System.out.println("\t###### Email: lam.nguyenthanh84@gmail.com\t######");
 
 		// START
-		startAutoLike();
-		doLogin();
-		openFbLike();
-		doLoopLike();
+		playYoutube();
 
 		try {
 			Thread.sleep(1000);
@@ -77,93 +77,7 @@ public class Test_AutoLikeFB {
 
 	}
 
-	// *********************** MIX ***********************
-
-	static void doLoopLike() {
-		int count = 0;
-		int numberOfLikeBtn = getListWebElement(listLikeBtn).size();
-		
-			for (int i = 0; i < numberOfLikeBtn; i++) {
-				if (count < numberOfLoop) {
-				String currentURL = driver.getCurrentUrl();
-				if (currentURL.contains("bonus-page")) {
-					System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
-					driver.quit();
-					fail("***** STOP AUTO-LIKE since \'Active members Bonus\' page's displayed *****");
-				}
-				String strSearch = "')]/descendant";
-				String strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
-				By NewLikeBtn = By.xpath(strNewLikeBtn);
-				click(NewLikeBtn);
-				String firstWindow = driver.getWindowHandle();
-				Set<String> windows = driver.getWindowHandles();
-				for (String window : windows) {
-					driver.switchTo().window(window);
-				}
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if (i == 0 && count == 0) {
-					click(dangnhapBtn);
-					input(emailFbBox, emailFB);
-					input(passFbBox, passFB);
-					click(loginFbBtn);
-				}
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try {
-					click(likePageBtn);
-					count += 1;
-					System.out.println("###### CLICKED LIKE Button : " + count );
-					Thread.sleep(1000);
-				} catch (Exception e) {
-					try {
-						click(likePostBtn);
-						count += 1;
-						System.out.println("###### CLICKED LIKE Button : " + count );
-						Thread.sleep(1000);
-					} catch (Exception x) {
-						count += 1;
-						System.out.println("###### CLICKED LIKE Button : " + count + " --> Missed !");
-					}
-				} finally {
-					driver.close();
-				}
-				driver.switchTo().window(firstWindow);
-				if (i == 13) {
-					i = -1;
-				}
-			}else {
-				break;
-			}
-		}
-	}
-
-	static void openFbLike() {
-		hoverAndClick(smExchangeBtn, fbLikesBtn);
-		String currentURL = driver.getCurrentUrl();
-		if (currentURL.contains("bonus-page")) {
-			System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
-			driver.quit();
-			fail("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
-		}
-	}
-
-	static void doLogin() {
-		click(loginBtn);
-		input(usernameBox, username);
-		input(passwordBox, password);
-		click(submitBtn);
-	}
-
-	static void startAutoLike() {
+	static void playYoutube() {
 		driverPath = "Drivers/chromedriver.exe";
 		System.setProperty("webdriver.chrome.driver", driverPath);
 		System.setProperty("webdriver.chrome.silentOutput", "true");
@@ -179,7 +93,57 @@ public class Test_AutoLikeFB {
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		driver.get("https://www.like4like.org");
+		driver.get("https://www.youtube.com");
+		
+		By searchBox = By.xpath("//input[@id='search']");
+		By videoTitle1 = By.xpath("(//a[@id='video-title'])[1]");
+		By videoScreen = By.xpath("//video");
+		By durationVideo = By.xpath("//*[@class='ytp-time-duration']");
+		By currentTimeVideo = By.xpath("//*[@class='ytp-time-current']");
+		String textSearch1 = "Độ ta không độ nàng";
+		String textSearch2 = "When you say nothing at all";
+		List<String> listSearch = new ArrayList<String>();
+		listSearch.add(textSearch1);
+		listSearch.add(textSearch2);
+		
+		for(int i = 0; i<2; i++) {
+			getWebElement(searchBox).clear();
+			input(searchBox, listSearch.get(i));		
+			getWebElement(searchBox).sendKeys(Keys.ENTER);
+			click(videoTitle1);
+			
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			//move chuot
+			Actions acts = new Actions(driver);
+			acts.moveToElement(getWebElement(videoScreen)).moveByOffset(100, 0).moveByOffset(-100, 0).perform();
+			
+			String durationText = driver.findElement(durationVideo).getText();
+			System.out.println("Duration video : " + durationText);
+			int minute = Integer.parseInt(durationText.substring(0, 1));
+			int second = Integer.parseInt(durationText.substring(2));
+			int totalDurationInSecond = minute*60 + second;
+			System.out.println("Duration Time in Second : " + totalDurationInSecond);
+			int expectedStopTime = totalDurationInSecond*40/100;
+			System.out.println("Expected Stop Time in Second : " + expectedStopTime);
+			
+			try {
+				Thread.sleep(Duration.ofSeconds(expectedStopTime).toMillis());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+	
+		
+		
 	}
 
 	static List<WebElement> getListWebElement(By by) {
