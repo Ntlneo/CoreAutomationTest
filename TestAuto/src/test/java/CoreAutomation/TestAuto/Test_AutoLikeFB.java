@@ -26,37 +26,47 @@ public class Test_AutoLikeFB {
 	static WebDriver driver;
 	static String driverPath;
 
-	// changed
-	static String lastName = "Nguyen";
-	static String firstName = "My";	
-	static String emailGG = "my.thao212000@gmail.com";
-	static String passGG = "Docnhat001@";
-	static String confirmPassGG = "Docnhat001@";
+	// changed	
+	static String username = "ntlneo";
+	static String password = "Docnhat001@";
+//	static String emailFB = "an.thanh282000@gmail.com";
+//	static String passFB = "Docnhat001@";
+	static String emailFB = "suzukihzt@gmail.com";
+	static String passFB = "Docnhat1";
 	static int numberOfLoop = 50;
 
-	// SignUp page
-	static By lastNameBox = By.xpath("//input[@id='lastName']");
-	static By firstNameBox = By.xpath("//input[@id='firstName']");
-	static By emailBox = By.xpath("//input[@id='username']");
-	static By passwordBox = By.xpath("//input[@name='Passwd']");
-	static By confirmPasswordBox = By.xpath("//input[@name='ConfirmPasswd']");
-	static By nextBtn = By.xpath("//div[@id='accountDetailsNext']");
-	
+	// locators
+	static By loginBtn = By.xpath("//a[contains(@title,'Login')]");
+	static By usernameBox = By.xpath("//input[contains(@id,'username')]");
+	static By passwordBox = By.xpath("//input[contains(@id,'password')]");
+	static By submitBtn = By.xpath("//a[@class='form-button']");
+
+	static By smExchangeBtn = By.xpath("//a[contains(text(),'Social Media Exchange')]");
+	static By fbLikesBtn = By.xpath("//a[contains(@title,'Facebook Likes')]");
+
+	static String strLikeBtn = "//td[contains(@id,'task')]/descendant::span[contains(@id,'likebutton')]/a";
+	static By listLikeBtn = By.xpath("//td[contains(@id,'task')]");
 
 	// new window with pagelike
-	static By dayBox = By.xpath("(//*[contains(text(),'Đăng nhập')])[1]/..");
-	
+	static By dangnhapBtn = By.xpath("(//*[contains(text(),'Đăng nhập')])[1]/..");
+	static By emailFbBox = By.xpath("//*[@name='email']");
+	static By passFbBox = By.xpath("//*[@name='pass']");
+	static By loginFbBtn = By.xpath("//*[@name='login']");
+	static By likePageBtn = By.xpath("//*[@aria-label='like button' or @aria-label='Like button' or @aria-label='nút thích' or @aria-label='Nút thích']");
+	static By likePostBtn = By.xpath("//a[@data-autoid='autoid_7']");
 
 	@org.junit.Test
-	public void TestAutoCreateGoogleAcc() {
+	public void TestAutoLike() {
 		System.out.println("Testbranch");
-		System.out.println("\t###### WELCOME TO NTLNEO AUTO-CREATE GG ACC SCRIPT\t######");
+		System.out.println("\t###### WELCOME TO NTLNEO AUTO-LIKE SCRIPT\t######");
 		System.out.println("\t###### SkyPE: ntlneo1\t\t\t\t######");
 		System.out.println("\t###### Email: lam.nguyenthanh84@gmail.com\t######");
 
 		// START
-		startGoogleAcc();
-		signupGoogle();
+		startAutoLike();
+		doLogin();
+		openFbLike();
+		doLoopLike();
 
 		try {
 			Thread.sleep(1000);
@@ -71,18 +81,91 @@ public class Test_AutoLikeFB {
 
 	// *********************** MIX ***********************
 	
-	static void signupGoogle() {
-		input(lastNameBox, lastName);
-		input(firstNameBox, firstName);
-		input(emailBox, emailGG);
-		input(passwordBox, passGG);
-		input(confirmPasswordBox, confirmPassGG);
-		click(nextBtn);
+	static void checkBonusPage() {
+		String currentURL = driver.getCurrentUrl();
+		if (currentURL.contains("bonus-page")) {
+			System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
+			driver.quit();
+			fail("\n***** STOP AUTO-LIKE since \'Active members Bonus\' page's displayed *****");
+		}
+	}
+	
+	static void doLoopLike() {
+		int count = 0;
+		int numberOfLikeBtn = getListWebElement(listLikeBtn).size();
 		
-		
+			for (int i = 0; i < numberOfLikeBtn; i++) {
+				if (count < numberOfLoop) {
+				checkBonusPage();
+				String strSearch = "')]/descendant";
+				String strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
+				By NewLikeBtn = By.xpath(strNewLikeBtn);
+				click(NewLikeBtn);
+				checkBonusPage();
+				String firstWindow = driver.getWindowHandle();
+				Set<String> windows = driver.getWindowHandles();
+				for (String window : windows) {
+					driver.switchTo().window(window);
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (i == 0 && count == 0) {
+					click(dangnhapBtn);
+					input(emailFbBox, emailFB);
+					input(passFbBox, passFB);
+					click(loginFbBtn);
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					click(likePageBtn);
+					count += 1;
+					System.out.println("###### CLICKED LIKE Button : " + count );
+					Thread.sleep(1000);
+				} catch (Exception e) {
+					try {
+						click(likePostBtn);
+						count += 1;
+						System.out.println("###### CLICKED LIKE Button : " + count );
+						Thread.sleep(1000);
+					} catch (Exception x) {
+						count += 1;
+						System.out.println("###### CLICKED LIKE Button : " + count + " --> Missed !");
+					}
+				} finally {
+					driver.close();
+				}
+				driver.switchTo().window(firstWindow);
+				if (i == 13) {
+					i = -1;
+				}
+			}else {
+				break;
+			}
+		}
 	}
 
-	static void startGoogleAcc() {
+	static void openFbLike() {
+		hoverAndClick(smExchangeBtn, fbLikesBtn);
+		checkBonusPage();
+	}
+
+	static void doLogin() {
+		click(loginBtn);
+		input(usernameBox, username);
+		input(passwordBox, password);
+		click(submitBtn);
+	}
+
+	static void startAutoLike() {
 		driverPath = "Drivers/chromedriver.exe";
 		System.setProperty("webdriver.chrome.driver", driverPath);
 		System.setProperty("webdriver.chrome.silentOutput", "true");
@@ -99,7 +182,7 @@ public class Test_AutoLikeFB {
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		driver.get("https://accounts.google.com/signup");
+		driver.get("https://www.like4like.org");
 	}
 
 	static List<WebElement> getListWebElement(By by) {
