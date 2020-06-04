@@ -29,11 +29,11 @@ public class Test_AutoLikeFB {
 	// changed	
 	static String username = "ntlneo";
 	static String password = "Docnhat001@";
-//	static String emailFB = "an.thanh282000@gmail.com";
-//	static String passFB = "Docnhat001@";
-	static String emailFB = "suzukihzt@gmail.com";
-	static String passFB = "Docnhat1";
-	static int numberOfLoop = 50;
+	static String emailFB = "an.thanh282000@gmail.com";
+	static String passFB = "Docnhat001@";
+//	static String emailFB = "suzukihzt@gmail.com";
+//	static String passFB = "Docnhat1";
+	static int numberOfLoop = 60;
 
 	// locators
 	static By loginBtn = By.xpath("//a[contains(@title,'Login')]");
@@ -48,7 +48,7 @@ public class Test_AutoLikeFB {
 	static By listLikeBtn = By.xpath("//td[contains(@id,'task')]");
 
 	// new window with pagelike
-	static By dangnhapBtn = By.xpath("(//*[contains(text(),'Đăng nhập')])[1]/..");
+	static By dangnhapBtn = By.xpath("(//*[contains(text(),'Đăng nhập') or contains(text(),'Log in') or contains(text(),'Login')]/ancestor::a)[1]");
 	static By emailFbBox = By.xpath("//*[@name='email']");
 	static By passFbBox = By.xpath("//*[@name='pass']");
 	static By loginFbBtn = By.xpath("//*[@name='login']");
@@ -113,8 +113,14 @@ public class Test_AutoLikeFB {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if (i == 0 && count == 0) {
-					click(dangnhapBtn);
+				if (i == 0 && count == 0) {					
+					try{
+						click(dangnhapBtn);
+					}catch (Exception e) {
+						click(dangnhapBtn);
+//						Actions acts = new Actions(driver);
+//						acts.moveToElement(getWebElement(dangnhapBtn)).click().perform();						
+					}
 					input(emailFbBox, emailFB);
 					input(passFbBox, passFB);
 					click(loginFbBtn);
