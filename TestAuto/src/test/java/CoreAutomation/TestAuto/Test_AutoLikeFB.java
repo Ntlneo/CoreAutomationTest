@@ -1,16 +1,12 @@
 package CoreAutomation.TestAuto;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -29,10 +25,10 @@ public class Test_AutoLikeFB {
 	// changed	
 	static String username = "ntlneo";
 	static String password = "Docnhat001@";
-	static String emailFB = "an.thanh282000@gmail.com";
-	static String passFB = "Docnhat001@";
-//	static String emailFB = "suzukihzt@gmail.com";
-//	static String passFB = "Docnhat1";
+//	static String emailFB = "an.thanh282000@gmail.com";
+//	static String passFB = "Docnhat001@";
+	static String emailFB = "suzukihzt@gmail.com";
+	static String passFB = "Docnhat1";
 	static int numberOfLoop = 60;
 
 	// locators
@@ -85,7 +81,11 @@ public class Test_AutoLikeFB {
 		String currentURL = driver.getCurrentUrl();
 		if (currentURL.contains("bonus-page")) {
 			System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
-			driver.quit();
+			Set<String> windows = driver.getWindowHandles();
+			for (String window : windows) {
+				driver.switchTo().window(window);
+				driver.close();
+			}			
 			fail("\n***** STOP AUTO-LIKE since \'Active members Bonus\' page's displayed *****");
 		}
 	}
@@ -117,9 +117,7 @@ public class Test_AutoLikeFB {
 					try{
 						click(dangnhapBtn);
 					}catch (Exception e) {
-						click(dangnhapBtn);
-//						Actions acts = new Actions(driver);
-//						acts.moveToElement(getWebElement(dangnhapBtn)).click().perform();						
+						click(dangnhapBtn);						
 					}
 					input(emailFbBox, emailFB);
 					input(passFbBox, passFB);
