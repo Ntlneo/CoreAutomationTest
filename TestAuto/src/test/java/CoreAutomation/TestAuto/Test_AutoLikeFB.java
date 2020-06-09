@@ -21,12 +21,12 @@ import org.openqa.selenium.interactions.Actions;
  * Unit test for simple App.
  */
 public class Test_AutoLikeFB {
-	
+
 	// global
 	static WebDriver driver;
 	static String driverPath;
 
-	// changed	
+	// changed
 	static String username = "ntlneo";
 	static String password = "Docnhat001@";
 	static String emailFB = "an.thanh282000@gmail.com";
@@ -48,11 +48,13 @@ public class Test_AutoLikeFB {
 	static By listLikeBtn = By.xpath("//td[contains(@id,'task')]");
 
 	// new window with pagelike
-	static By dangnhapBtn = By.xpath("(//*[contains(text(),'Đăng nhập') or contains(text(),'Log in') or contains(text(),'Login')]/ancestor::a)[1]");
+	static By dangnhapBtn = By.xpath(
+			"(//*[contains(text(),'Đăng nhập') or contains(text(),'Log in') or contains(text(),'Login') or contains(text(),'Log In')]/ancestor::a)[1]");
 	static By emailFbBox = By.xpath("//*[@name='email']");
 	static By passFbBox = By.xpath("//*[@name='pass']");
 	static By loginFbBtn = By.xpath("//*[@name='login']");
-	static By likePageBtn = By.xpath("//*[@aria-label='like button' or @aria-label='Like button' or @aria-label='nút thích' or @aria-label='Nút thích']");
+	static By likePageBtn = By.xpath(
+			"//*[@aria-label='like button' or @aria-label='Like button' or @aria-label='nút thích' or @aria-label='Nút thích']");
 	static By likePostBtn = By.xpath("//a[@data-autoid='autoid_7']");
 
 	@org.junit.Test
@@ -80,7 +82,7 @@ public class Test_AutoLikeFB {
 	}
 
 	// *********************** MIX ***********************
-	
+
 	static void checkBonusPage() {
 		String currentURL = driver.getCurrentUrl();
 		if (currentURL.contains("bonus-page")) {
@@ -89,17 +91,17 @@ public class Test_AutoLikeFB {
 			fail("\n***** STOP AUTO-LIKE since \'Active members Bonus\' page's displayed *****");
 		}
 	}
-	
+
 	static void doLoopLike() {
 		int count = 0;
 		int numberOfLikeBtn = getListWebElement(listLikeBtn).size();
-		
-			for (int i = 0; i < numberOfLikeBtn; i++) {
-				if (count < numberOfLoop) {
-				checkBonusPage();
+
+		for (int i = 0; i < numberOfLikeBtn; i++) {
+			if (count < numberOfLoop) {				
 				String strSearch = "')]/descendant";
 				String strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
 				By NewLikeBtn = By.xpath(strNewLikeBtn);
+				checkBonusPage();
 				click(NewLikeBtn);
 				checkBonusPage();
 				String firstWindow = driver.getWindowHandle();
@@ -113,10 +115,10 @@ public class Test_AutoLikeFB {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if (i == 0 && count == 0) {					
-					try{
+				if (i == 0 && count == 0) {
+					try {
 						click(dangnhapBtn);
-					}catch (Exception e) {
+					} catch (Exception e) {
 						click(dangnhapBtn);
 //						Actions acts = new Actions(driver);
 //						acts.moveToElement(getWebElement(dangnhapBtn)).click().perform();						
@@ -134,13 +136,13 @@ public class Test_AutoLikeFB {
 				try {
 					click(likePageBtn);
 					count += 1;
-					System.out.println("###### CLICKED LIKE Button : " + count );
+					System.out.println("###### CLICKED LIKE Button : " + count);
 					Thread.sleep(1000);
 				} catch (Exception e) {
 					try {
 						click(likePostBtn);
 						count += 1;
-						System.out.println("###### CLICKED LIKE Button : " + count );
+						System.out.println("###### CLICKED LIKE Button : " + count);
 						Thread.sleep(1000);
 					} catch (Exception x) {
 						count += 1;
@@ -153,14 +155,14 @@ public class Test_AutoLikeFB {
 				if (i == 13) {
 					i = -1;
 				}
-			}else {
+			} else {
 				break;
 			}
 		}
 	}
 
 	static void openFbLike() {
-		hoverAndClick(smExchangeBtn, fbLikesBtn);
+		hoverAndClick(smExchangeBtn, fbLikesBtn);		
 		checkBonusPage();
 	}
 
