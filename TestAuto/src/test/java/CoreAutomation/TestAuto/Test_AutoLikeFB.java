@@ -96,11 +96,11 @@ public class Test_AutoLikeFB {
 		int numberOfLikeBtn = getListWebElement(listLikeBtn).size();
 
 		for (int i = 0; i < numberOfLikeBtn; i++) {
-			if (count < numberOfLoop) {				
+			if (count < numberOfLoop) {
+				checkBonusPage();
 				String strSearch = "')]/descendant";
 				String strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
-				By NewLikeBtn = By.xpath(strNewLikeBtn);
-				checkBonusPage();
+				By NewLikeBtn = By.xpath(strNewLikeBtn);				
 				click(NewLikeBtn);
 				checkBonusPage();
 				String firstWindow = driver.getWindowHandle();
