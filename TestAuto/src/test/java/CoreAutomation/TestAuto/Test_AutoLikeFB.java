@@ -25,11 +25,11 @@ public class Test_AutoLikeFB {
 	// changed
 	static String username = "ntlneo";
 	static String password = "Docnhat001@";
-//	static String emailFB = "an.thanh282000@gmail.com";
-//	static String passFB = "Docnhat001@";
-	static String emailFB = "suzukihzt@gmail.com";
-	static String passFB = "Docnhat1";
-	static int numberOfLoop = 60;
+	static String emailFB = "an.thanh282000@gmail.com";
+	static String passFB = "Docnhat001@";
+//	static String emailFB = "suzukihzt@gmail.com";
+//	static String passFB = "Docnhat1";
+	static int numberOfLoop = 500;
 
 	// locators
 	static By loginBtn = By.xpath("//a[contains(@title,'Login')]");
@@ -106,7 +106,8 @@ public class Test_AutoLikeFB {
 				String firstWindow = driver.getWindowHandle();
 				Set<String> windows = driver.getWindowHandles();
 				for (String window : windows) {
-					driver.switchTo().window(window);
+					if (!firstWindow.equals(window))
+						driver.switchTo().window(window);
 				}
 				try {
 					Thread.sleep(1000);
