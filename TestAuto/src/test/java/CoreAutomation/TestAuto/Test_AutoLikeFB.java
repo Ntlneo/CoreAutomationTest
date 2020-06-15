@@ -29,7 +29,7 @@ public class Test_AutoLikeFB {
 	static String passFB = "Docnhat001@";
 //	static String emailFB = "suzukihzt@gmail.com";
 //	static String passFB = "Docnhat1";
-	static int numberOfLoop = 500;
+	static int numberOfLoop = 100;
 
 	// locators
 	static By loginBtn = By.xpath("//a[contains(@title,'Login')]");
@@ -44,8 +44,11 @@ public class Test_AutoLikeFB {
 	static By listLikeBtn = By.xpath("//td[contains(@id,'task')]");
 
 	// new window with pagelike
+	///Regex cho Login-Log in-Log In: Log[\s]?in/i.test('Log In')
+	// xpath 2.0: //tagA[@attrA[matches(., 'VAL\d')]]
+//	static By dangnhapBtn = By.xpath("(//*[text()[matches(.,'Log[\s]?in/i')] or contains(text(),'Đăng nhập')]/ancestor::a)[1]");
 	static By dangnhapBtn = By.xpath(
-			"(//*[contains(text(),'Đăng nhập') or contains(text(),'Log in') or contains(text(),'Login') or contains(text(),'Log In')]/ancestor::a)[1]");
+			"(//*[contains(text(),'Đăng nhập') or contains(text(),'Log in') or contains(text(),'Login') or contains(text(),'Log In')]/ancestor::a)[1]");			
 	static By emailFbBox = By.xpath("//*[@name='email']");
 	static By passFbBox = By.xpath("//*[@name='pass']");
 	static By loginFbBtn = By.xpath("//*[@name='login']");
