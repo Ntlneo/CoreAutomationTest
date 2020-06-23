@@ -27,10 +27,16 @@ public class Test_AutoLikeFB {
 	static String password = "Docnhat001@";
 //	static String emailFB = "an.thanh282000@gmail.com";
 //	static String passFB = "Docnhat001@";
-	static String emailFB = "suzukihzt@gmail.com";
-	static String passFB = "Docnhat1";
-//	static String emailFB = "phungtest04@gmail.com";
-//	static String passFB = "phung123";
+//	static String emailFB = "suzukihzt@gmail.com";
+//	static String passFB = "Docnhat1";
+	static String emailFB = "phungtest04@gmail.com";
+	static String passFB = "phung123";
+//	static String emailFB = "lamnguyeneditor@gmail.com";
+//	static String passFB = "Docnhat001@";
+//	static String emailFB = "lamnguyeneditor1@gmail.com";
+//	static String passFB = "Docnhat001@";
+//	static String emailFB = "lam.nguyenthanh841@gmail.com";
+//	static String passFB = "Docnhat001@";
 	static int numberOfLoop = 100;
 
 	// locators
@@ -57,6 +63,8 @@ public class Test_AutoLikeFB {
 	static By likePageBtn = By.xpath(
 			"//*[@aria-label='like button' or @aria-label='Like button' or @aria-label='nút thích' or @aria-label='Nút thích']");
 	static By likePostBtn = By.xpath("//a[@data-autoid='autoid_7']");
+	static By likeVideoBtn = By.xpath("//a[@data-autoid='autoid_6']");
+
 
 	@org.junit.Test
 	public void TestAutoLike() {		
@@ -105,7 +113,7 @@ public class Test_AutoLikeFB {
 				checkBonusPage();
 				String strSearch = "')]/descendant";
 				String strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
-				By NewLikeBtn = By.xpath(strNewLikeBtn);				
+				By NewLikeBtn = By.xpath(strNewLikeBtn);
 				click(NewLikeBtn);
 				checkBonusPage();
 				String firstWindow = driver.getWindowHandle();
@@ -124,7 +132,7 @@ public class Test_AutoLikeFB {
 					try {
 						click(dangnhapBtn);
 					} catch (Exception e) {
-						click(dangnhapBtn);						
+						click(dangnhapBtn);
 					}
 					input(emailFbBox, emailFB);
 					input(passFbBox, passFB);
@@ -148,8 +156,17 @@ public class Test_AutoLikeFB {
 						System.out.println("###### CLICKED LIKE Button : " + count);
 						Thread.sleep(1000);
 					} catch (Exception x) {
-						count += 1;
-						System.out.println("###### CLICKED LIKE Button : " + count + " --> Missed !");
+						try {
+							click(likeVideoBtn);
+							count += 1;
+							System.out.println("###### CLICKED LIKE Button : " + count);
+							Thread.sleep(1000);
+						} catch (Exception y) {
+							String currentURL = driver.getCurrentUrl();
+							count += 1;
+							System.out.println("###### CLICKED LIKE Button : " + count + " --> Missed !");
+							System.out.println("\t--> Please manually ReCheck URL: " + currentURL);
+						}
 					}
 				} finally {
 					driver.close();
@@ -196,6 +213,10 @@ public class Test_AutoLikeFB {
 		driver.get("https://www.like4like.org");
 	}
 
+	static String getCurrentURL() {
+		return driver.getCurrentUrl();
+	}
+	
 	static List<WebElement> getListWebElement(By by) {
 		return driver.findElements(by);
 	}
