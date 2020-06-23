@@ -25,10 +25,12 @@ public class Test_AutoLikeFB {
 	// changed
 	static String username = "ntlneo";
 	static String password = "Docnhat001@";
-	static String emailFB = "an.thanh282000@gmail.com";
-	static String passFB = "Docnhat001@";
-//	static String emailFB = "suzukihzt@gmail.com";
-//	static String passFB = "Docnhat1";
+//	static String emailFB = "an.thanh282000@gmail.com";
+//	static String passFB = "Docnhat001@";
+	static String emailFB = "suzukihzt@gmail.com";
+	static String passFB = "Docnhat1";
+//	static String emailFB = "phungtest04@gmail.com";
+//	static String passFB = "phung123";
 	static int numberOfLoop = 100;
 
 	// locators
