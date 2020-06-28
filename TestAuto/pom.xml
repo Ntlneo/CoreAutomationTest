@@ -103,40 +103,35 @@
     <version>3.1.1</version>
 </dependency>
 
-	<!-- https://mvnrepository.com/artifact/org.apache.poi/poi
-	<dependency>
-		<groupId>org.apache.poi</groupId>
-		<artifactId>poi</artifactId>
-		<version>3.17</version>
-	</dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>4.1.2</version>
+</dependency>
 
-	https://mvnrepository.com/artifact/com.sun.mail/javax.mail
+<!--	https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
 	<dependency>
 		<groupId>com.sun.mail</groupId>
 		<artifactId>javax.mail</artifactId>
 		<version>1.6.1</version>
-	</dependency>  -->
+	</dependency>
 
-	<!-- https://mvnrepository.com/artifact/com.aventstack/extentreports -->
+	<!-- https://mvnrepository.com/artifact/com.aventstack/extentreports 
 	<dependency>
 		<groupId>com.aventstack</groupId>
 		<artifactId>extentreports</artifactId>
 		<version>3.1.5</version>
-	</dependency>
+	</dependency> -->
 
 <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-server
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
 			<version>3.13.0</version>
-		</dependency>
+		</dependency> -->
 
-		https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>3.17</version>
-		</dependency>  -->
+
 
 <!-- https://mvnrepository.com/artifact/org.testng/testng -->
 <!-- <dependency>
@@ -151,7 +146,7 @@
 <dependency>
     <groupId>org.seleniumhq.selenium</groupId>
     <artifactId>selenium-java</artifactId>
-    <version>4.0.0-alpha-5</version>
+    <version>4.0.0-alpha-6</version>
 </dependency>
 
 	</dependencies>

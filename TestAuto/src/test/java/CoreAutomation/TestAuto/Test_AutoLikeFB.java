@@ -13,6 +13,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 
+import DataManager.ExcelManager;
+
 /**
  * Unit test for simple App.
  */
@@ -21,16 +23,21 @@ public class Test_AutoLikeFB {
 	// global
 	static WebDriver driver;
 	static String driverPath;
-
+	
 	// changed
-	static String username = "ntlneo";
-	static String password = "Docnhat001@";
+//	static String username_Like4Like;
+//	static String password_Like4Like;
+//	static String username_FB;
+//	static String password_FB;
+	
+//	static String username_Like4Like = "ntlneo";
+//	static String password_Like4Like = "Docnhat001@";
 //	static String emailFB = "an.thanh282000@gmail.com";
 //	static String passFB = "Docnhat001@";
 //	static String emailFB = "suzukihzt@gmail.com";
 //	static String passFB = "Docnhat1";
-	static String emailFB = "phungtest04@gmail.com";
-	static String passFB = "phung123";
+//	static String emailFB = "phungtest04@gmail.com";
+//	static String passFB = "phung123";
 //	static String emailFB = "lamnguyeneditor@gmail.com";
 //	static String passFB = "Docnhat001@";
 //	static String emailFB = "lamnguyeneditor1@gmail.com";
@@ -64,8 +71,9 @@ public class Test_AutoLikeFB {
 			"//*[@aria-label='like button' or @aria-label='Like button' or @aria-label='nút thích' or @aria-label='Nút thích']");
 	static By likePostBtn = By.xpath("//a[@data-autoid='autoid_7']");
 	static By likeVideoBtn = By.xpath("//a[@data-autoid='autoid_6']");
-
-
+	
+	ExcelManager excel = new ExcelManager();
+	
 	@org.junit.Test
 	public void TestAutoLike() {		
 		System.out.println("\t###### WELCOME TO NTLNEO AUTO-LIKE SCRIPT\t######");
@@ -74,18 +82,29 @@ public class Test_AutoLikeFB {
 
 		// START
 		startAutoLike();
-		doLogin();
-		openFbLike();
-		doLoopLike();
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				
+		for (int i = 0; i < excel.listUsername_Like4Like.size(); i++) {
+			doLogin(excel.listUsername_Like4Like.get(i), excel.listPassword_Like4Like.get(i));
+			
+			openFbLike();
+			
+			doLoopLike(excel.listUsername_FB.get(i), excel.listPassword_FB.get(i));
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+			
+			System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t######");
+			driver.quit();			
 		}
-		System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t######");
-		driver.quit();
+		
+		
+		
+		
+
+
 
 	}
 
@@ -104,10 +123,11 @@ public class Test_AutoLikeFB {
 		}
 	}
 
-	static void doLoopLike() {
+	static void doLoopLike(String username_FB, String password_FB) {
 		int count = 0;
 		int numberOfLikeBtn = getListWebElement(listLikeBtn).size();
 
+		
 		for (int i = 0; i < numberOfLikeBtn; i++) {
 			if (count < numberOfLoop) {
 				checkBonusPage();
@@ -134,8 +154,8 @@ public class Test_AutoLikeFB {
 					} catch (Exception e) {
 						click(dangnhapBtn);
 					}
-					input(emailFbBox, emailFB);
-					input(passFbBox, passFB);
+					input(emailFbBox, username_FB);
+					input(passFbBox, password_FB);
 					click(loginFbBtn);
 				}
 				try {
@@ -186,10 +206,10 @@ public class Test_AutoLikeFB {
 		checkBonusPage();
 	}
 
-	static void doLogin() {
+	static void doLogin(String username_Like4Like, String password_Like4Like) {		
 		click(loginBtn);
-		input(usernameBox, username);
-		input(passwordBox, password);
+		input(usernameBox, username_Like4Like);
+		input(passwordBox, password_Like4Like);
 		click(submitBtn);
 	}
 
@@ -210,7 +230,7 @@ public class Test_AutoLikeFB {
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		driver.get("https://www.like4like.org");
+		driver.get("https://www.like4like.org");		
 	}
 
 	static String getCurrentURL() {
