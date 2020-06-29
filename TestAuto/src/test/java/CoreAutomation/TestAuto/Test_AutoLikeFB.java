@@ -22,21 +22,40 @@ public class Test_AutoLikeFB {
 	static WebDriver driver;
 	static String driverPath;
 
-	// changed
-	static String username = "ntlneo";
-	static String password = "Docnhat001@";
+	//Acc rieng
+//	static String username = "ntlneo";
+//	static String password = "Docnhat001@";
+	
 //	static String emailFB = "an.thanh282000@gmail.com";
 //	static String passFB = "Docnhat001@";
 //	static String emailFB = "suzukihzt@gmail.com";
 //	static String passFB = "Docnhat1";
-	static String emailFB = "phungtest04@gmail.com";
-	static String passFB = "phung123";
+//	static String emailFB = "phungtest04@gmail.com";
+//	static String passFB = "phung123";
 //	static String emailFB = "lamnguyeneditor@gmail.com";
 //	static String passFB = "Docnhat001@";
 //	static String emailFB = "lamnguyeneditor1@gmail.com";
 //	static String passFB = "Docnhat001@";
 //	static String emailFB = "lam.nguyenthanh841@gmail.com";
 //	static String passFB = "Docnhat001@";
+	
+	//Acc cty
+	static String username = "suzukihzt";
+	static String password = "Docnhat001@";
+	
+//	static String emailFB = "judytrinh2609@gmail.com";
+//	static String passFB = "35nguyenhue";
+//	static String emailFB = "tamhuynhnh@gmail.com";
+//	static String passFB = "35nguyenhue";
+//	static String emailFB = "maichitrinhtran@gmail.com";	//bi khóa
+//	static String passFB = "35nguyenhue";					//bi khóa
+//	static String emailFB = "thithipleple@gmail.com";
+//	static String passFB = "35nguyenhue";
+//	static String emailFB = "hngtrnthnhhng@gmail.com";		//bi vô hiệu hóa
+//	static String passFB = "35nguyenhue";					//bi vô hiệu hóa
+	static String emailFB = "anthuynhien267@gmail.com";
+	static String passFB = "35Nguyenhue";
+	
 	static int numberOfLoop = 100;
 
 	// locators
