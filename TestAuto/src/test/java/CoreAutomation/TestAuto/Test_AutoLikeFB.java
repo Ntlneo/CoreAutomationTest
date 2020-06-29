@@ -1,6 +1,8 @@
 package CoreAutomation.TestAuto;
 
 import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +14,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.devtools.browser.Browser;
+import org.openqa.selenium.devtools.browser.model.PermissionType;
 import org.openqa.selenium.interactions.Actions;
 
 import DataManager.ExcelManager;
@@ -28,7 +33,10 @@ public class Test_AutoLikeFB {
 	static String driverPath;
 	
 	// changed
-	static int numberOfLoop = 100;
+	static String homePage_Like4Like = "https://www.like4like.org";
+	static String homePage_FB = "https://www.facebook.com";
+	static String likeListPage_Like4Like = "https://www.like4like.org/free-facebook-likes.php";
+	static int numberOfLoop = 2;
 
 	// locators
 	static By loginBtn = By.xpath("//a[contains(@title,'Login')]");
@@ -42,7 +50,7 @@ public class Test_AutoLikeFB {
 	static String strLikeBtn = "//td[contains(@id,'task')]/descendant::span[contains(@id,'likebutton')]/a";
 	static By listLikeBtn = By.xpath("//td[contains(@id,'task')]");
 
-	// new window with pagelike
+	// new FB window with pagelike
 	static By dangnhapBtn = By.xpath(
 			"(//*[contains(text(),'Đăng nhập') or contains(text(),'Log in') or contains(text(),'Login') or contains(text(),'Log In')]/ancestor::a)[1]");			
 	static By emailFbBox = By.xpath("//*[@name='email']");
@@ -53,51 +61,79 @@ public class Test_AutoLikeFB {
 	static By likePostBtn = By.xpath("//a[@data-autoid='autoid_7']");
 	static By likeVideoBtn = By.xpath("//a[@data-autoid='autoid_6']");
 	
-	//FB to logout
+	// FB to logout	
 	static By accountMenu = By.xpath("//*[@class='l9j0dhe7 j83agx80']/div[1]");
 	static By logoutBtn = By.xpath("//*[text()='Đăng xuất' or text()='Log Out']");
 	
-	ExcelManager excel = new ExcelManager();
 	
+	// *********************** RUN TEST AUTO ***********************
+	
+	// Before Test
+	ExcelManager excel = new ExcelManager();
+
+	// Start Test
 	@org.junit.Test
-	public void TestAutoLike() {		
+	public void TestAutoLike() {
 		System.out.println("\t###### WELCOME TO NTLNEO AUTO-LIKE SCRIPT\t######");
 		System.out.println("\t###### SkyPE: ntlneo1\t\t\t\t######");
 		System.out.println("\t###### Email: lam.nguyenthanh84@gmail.com\t######");
 
 		// START
-		startAutoLike();				
+		startAutoLike();
 
 		for (int i = 0; i < excel.listAcc_Like4Like.size(); i++) {
 			for (String key1 : excel.listAcc_Like4Like.get(i).keySet()) {
 				doLogin(key1, excel.listAcc_Like4Like.get(i).get(key1));
-			}
-			
-			openFbLike();
 
-			for (int j = 0; j < excel.listAcc_FB.size(); j++) {
-				for (String key2 : excel.listAcc_FB.get(j).keySet()) {
-					doLoopLike(key2, excel.listAcc_FB.get(j).get(key2));
+				openFbLike();
+
+				for (int j = 0; j < excel.listAcc_FB.size(); j++) {
+					for (String key2 : excel.listAcc_FB.get(j).keySet()) {
+						doLoopLike(key2, excel.listAcc_FB.get(j).get(key2));						
+						logoutFB_thenReturnLikeListPage();			
+					}
 				}
+
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t######");
-			driver.quit();
 		}
+		
+		sayGoodBye();
 	}
 
-	// *********************** MIX ***********************
+	// After Test
+	public void sayGoodBye() {
+		System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t######");
+		driver.quit();
+	}
+	
+	// *********************** TASKS ***********************
 
-	static void logoutFB() {
-		String comboKey = Keys.chord(Keys.CONTROL, "t");
+	static void logoutFB_thenReturnLikeListPage() {
+		openNewTab_thenSwitch();
+		driver.get(homePage_FB);
 		
+		try {
+			click(accountMenu);
+		} catch (Exception e) {
+			click(accountMenu);
+		}
+		click(logoutBtn);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		driver.get(likeListPage_Like4Like);
 	}
 	
 	static void checkBonusPage() {
@@ -117,7 +153,7 @@ public class Test_AutoLikeFB {
 		int count = 0;
 		int numberOfLikeBtn = getListWebElement(listLikeBtn).size();
 
-		
+		System.out.println("Using acc FB : " + username_FB);
 		for (int i = 0; i < numberOfLikeBtn; i++) {
 			if (count < numberOfLoop) {
 				checkBonusPage();
@@ -126,13 +162,9 @@ public class Test_AutoLikeFB {
 				By NewLikeBtn = By.xpath(strNewLikeBtn);
 				click(NewLikeBtn);
 				checkBonusPage();
-				String firstWindow = driver.getWindowHandle();
-//				Set<String> windows = driver.getWindowHandles();
-//				for (String window : windows) {
-//					if (!firstWindow.equals(window))
-//						driver.switchTo().window(window);
-//				}
-				switchWindow(2);
+				
+//				String firstWindow = driver.getWindowHandle();
+				switchWindow(1);
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -182,7 +214,7 @@ public class Test_AutoLikeFB {
 				} finally {
 					driver.close();
 				}
-				driver.switchTo().window(firstWindow);
+				switchWindow(0);
 				if (i == 13) {
 					i = -1;
 				}
@@ -221,12 +253,26 @@ public class Test_AutoLikeFB {
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		driver.get("https://www.like4like.org");		
+		driver.get(homePage_Like4Like);		
 	}
 	
 	static void switchWindow(int orderOfWindow) {		
-		List<String> windows = (List<String>) driver.getWindowHandles();		
-		driver.switchTo().window(windows.get(orderOfWindow));		
+		Set<String> windows = driver.getWindowHandles();
+		List<String> listWindow = new ArrayList<String>();
+		listWindow.addAll(windows);
+		driver.switchTo().window(listWindow.get(orderOfWindow));		
+	}
+	
+	
+	// *********************** BASE TEST ***********************
+	
+	static void refreshCurrentPage() {		
+		driver.findElement(By.cssSelector("body")).sendKeys(Keys.F5);
+	}
+	
+	//not work
+	static void openNewTab_thenSwitch() {		
+		driver.switchTo().newWindow(WindowType.TAB);
 	}
 	
 	static String getCurrentURL() {
