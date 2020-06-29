@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -27,25 +28,6 @@ public class Test_AutoLikeFB {
 	static String driverPath;
 	
 	// changed
-//	static String username_Like4Like;
-//	static String password_Like4Like;
-//	static String username_FB;
-//	static String password_FB;
-	
-//	static String username_Like4Like = "ntlneo";
-//	static String password_Like4Like = "Docnhat001@";
-//	static String emailFB = "an.thanh282000@gmail.com";
-//	static String passFB = "Docnhat001@";
-//	static String emailFB = "suzukihzt@gmail.com";
-//	static String passFB = "Docnhat1";
-//	static String emailFB = "phungtest04@gmail.com";
-//	static String passFB = "phung123";
-//	static String emailFB = "lamnguyeneditor@gmail.com";
-//	static String passFB = "Docnhat001@";
-//	static String emailFB = "lamnguyeneditor1@gmail.com";
-//	static String passFB = "Docnhat001@";
-//	static String emailFB = "lam.nguyenthanh841@gmail.com";
-//	static String passFB = "Docnhat001@";
 	static int numberOfLoop = 100;
 
 	// locators
@@ -61,9 +43,6 @@ public class Test_AutoLikeFB {
 	static By listLikeBtn = By.xpath("//td[contains(@id,'task')]");
 
 	// new window with pagelike
-	///Regex cho Login-Log in-Log In: Log[\s]?in/i.test('Log In')
-	// xpath 2.0: //tagA[@attrA[matches(., 'VAL\d')]]
-//	static By dangnhapBtn = By.xpath("(//*[text()[matches(.,'Log[\s]?in/i')] or contains(text(),'Đăng nhập')]/ancestor::a)[1]");
 	static By dangnhapBtn = By.xpath(
 			"(//*[contains(text(),'Đăng nhập') or contains(text(),'Log in') or contains(text(),'Login') or contains(text(),'Log In')]/ancestor::a)[1]");			
 	static By emailFbBox = By.xpath("//*[@name='email']");
@@ -74,6 +53,10 @@ public class Test_AutoLikeFB {
 	static By likePostBtn = By.xpath("//a[@data-autoid='autoid_7']");
 	static By likeVideoBtn = By.xpath("//a[@data-autoid='autoid_6']");
 	
+	//FB to logout
+	static By accountMenu = By.xpath("//*[@class='l9j0dhe7 j83agx80']/div[1]");
+	static By logoutBtn = By.xpath("//*[text()='Đăng xuất' or text()='Log Out']");
+	
 	ExcelManager excel = new ExcelManager();
 	
 	@org.junit.Test
@@ -83,34 +66,40 @@ public class Test_AutoLikeFB {
 		System.out.println("\t###### Email: lam.nguyenthanh84@gmail.com\t######");
 
 		// START
-		startAutoLike();
+		startAutoLike();				
+
+		for (int i = 0; i < excel.listAcc_Like4Like.size(); i++) {
+			for(String key1 : excel.listAcc_Like4Like.get(i).keySet()) {
+				doLogin(key1, excel.listAcc_Like4Like.get(i).get(key1));
 				
-//		for (int i = 0; i < excel.listUsername_Like4Like.size(); i++) {
-		for (int i = 0; i < excel.listAcc.size(); i++) {
-			for(String key : excel.listAcc.get(i).keySet()) {
-				doLogin(key, excel.listAcc.get(i).get(key));
-			}
-			
-		
-//			doLogin(excel.listUsername_Like4Like.get(i), excel.listPassword_Like4Like.get(i));
-			
-			openFbLike();
-			
-			doLoopLike(excel.listUsername_FB.get(i), excel.listPassword_FB.get(i));
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
-			
-			System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t######");
-			driver.quit();			
+				openFbLike();
+				
+				for (int j = 0; j < excel.listAcc_FB.size(); j++) {
+					for(String key2 : excel.listAcc_FB.get(j).keySet()) {
+						doLoopLike(key2, excel.listAcc_FB.get(j).get(key2));
+					}
+				}
+				
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}			
+				
+				System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t######");
+				driver.quit();	
+			}					
 		}
 	}
 
 	// *********************** MIX ***********************
 
+	static void logoutFB() {
+		String comboKey = Keys.chord(Keys.CONTROL, "t");
+		
+	}
+	
 	static void checkBonusPage() {
 		String currentURL = driver.getCurrentUrl();
 		if (currentURL.contains("bonus-page")) {
@@ -138,11 +127,12 @@ public class Test_AutoLikeFB {
 				click(NewLikeBtn);
 				checkBonusPage();
 				String firstWindow = driver.getWindowHandle();
-				Set<String> windows = driver.getWindowHandles();
-				for (String window : windows) {
-					if (!firstWindow.equals(window))
-						driver.switchTo().window(window);
-				}
+//				Set<String> windows = driver.getWindowHandles();
+//				for (String window : windows) {
+//					if (!firstWindow.equals(window))
+//						driver.switchTo().window(window);
+//				}
+				switchWindow(2);
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -233,7 +223,12 @@ public class Test_AutoLikeFB {
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		driver.get("https://www.like4like.org");		
 	}
-
+	
+	static void switchWindow(int orderOfWindow) {		
+		List<String> windows = (List<String>) driver.getWindowHandles();		
+		driver.switchTo().window(windows.get(orderOfWindow));		
+	}
+	
 	static String getCurrentURL() {
 		return driver.getCurrentUrl();
 	}

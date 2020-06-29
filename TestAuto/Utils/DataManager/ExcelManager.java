@@ -19,28 +19,12 @@ public class ExcelManager {
 	String sheetLike4Like = "Like4Like";
 	String sheetFB = "FB";
 //	String sheetGoogle = "Google";
+	
+	HashMap<String,String> acc = new HashMap<String, String>();
+	public List<HashMap<String, String>> listAcc_Like4Like = new ArrayList<HashMap<String, String>>();
+	public List<HashMap<String, String>> listAcc_FB = new ArrayList<HashMap<String, String>>();
 
 	Workbook wb;
-	public HashMap<String,String> acc = new HashMap<String, String>();
-	public List<HashMap<String, String>> listAcc = new ArrayList<HashMap<String, String>>();
-	
-//	public List<String> listUsername_Like4Like = new ArrayList<String>();
-//	public List<String> listPassword_Like4Like = new ArrayList<String>();
-	public List<String> listUsername_FB = new ArrayList<String>();
-	public List<String> listPassword_FB = new ArrayList<String>();
-//	List<String> listUsername_Google;	//use later
-//	List<String> listPassword_Google;	//use later
-
-	// use Later
-//	public ExcelManager(String excelFilePath) {
-//		this.excelFilePath = excelFilePath;
-//		try {
-//			wb = new XSSFWorkbook(excelFilePath);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
 
 	public ExcelManager() {
 		try {
@@ -55,25 +39,24 @@ public class ExcelManager {
 	}
 
 	public void readDataFromExcel() {
+		acc.clear();
+		listAcc_Like4Like.clear();
+		listAcc_FB.clear();
 		for (Sheet sheet : wb) {
-//			System.out.println("Name of sheet = " + sheet.getSheetName());
 			if (sheet.getSheetName().equalsIgnoreCase(sheetLike4Like)) {
-//				System.out.println("Last row numb = " + sheet.getLastRowNum());
 				for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-//					System.out.println(sheet.getRow(i).getLastCellNum());
-					acc.put(sheet.getRow(i).getCell(1).getStringCellValue(), sheet.getRow(i).getCell(2).getStringCellValue());
-//					listAcc.add(acc);
-//					listUsername_Like4Like.add(sheet.getRow(i).getCell(1).getStringCellValue());
-//					listPassword_Like4Like.add(sheet.getRow(i).getCell(2).getStringCellValue());
+					acc.put(sheet.getRow(i).getCell(1).getStringCellValue(), 
+							sheet.getRow(i).getCell(2).getStringCellValue());
 				}
-				listAcc.add(acc);
+				listAcc_Like4Like.add(acc);
 			}
 
 			if (sheet.getSheetName().equalsIgnoreCase(sheetFB)) {
 				for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-					listUsername_FB.add(sheet.getRow(i).getCell(1).getStringCellValue());
-					listPassword_FB.add(sheet.getRow(i).getCell(2).getStringCellValue());
+					acc.put(sheet.getRow(i).getCell(1).getStringCellValue(), 
+							sheet.getRow(i).getCell(2).getStringCellValue());
 				}
+				listAcc_FB.add(acc);
 			}
 		}
 	}
