@@ -3,7 +3,9 @@ package DataManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
@@ -19,9 +21,11 @@ public class ExcelManager {
 //	String sheetGoogle = "Google";
 
 	Workbook wb;
-
-	public List<String> listUsername_Like4Like = new ArrayList<String>();
-	public List<String> listPassword_Like4Like = new ArrayList<String>();
+	public HashMap<String,String> acc = new HashMap<String, String>();
+	public List<HashMap<String, String>> listAcc = new ArrayList<HashMap<String, String>>();
+	
+//	public List<String> listUsername_Like4Like = new ArrayList<String>();
+//	public List<String> listPassword_Like4Like = new ArrayList<String>();
 	public List<String> listUsername_FB = new ArrayList<String>();
 	public List<String> listPassword_FB = new ArrayList<String>();
 //	List<String> listUsername_Google;	//use later
@@ -57,9 +61,12 @@ public class ExcelManager {
 //				System.out.println("Last row numb = " + sheet.getLastRowNum());
 				for (int i = 1; i <= sheet.getLastRowNum(); i++) {
 //					System.out.println(sheet.getRow(i).getLastCellNum());
-					listUsername_Like4Like.add(sheet.getRow(i).getCell(1).getStringCellValue());
-					listPassword_Like4Like.add(sheet.getRow(i).getCell(2).getStringCellValue());//
+					acc.put(sheet.getRow(i).getCell(1).getStringCellValue(), sheet.getRow(i).getCell(2).getStringCellValue());
+//					listAcc.add(acc);
+//					listUsername_Like4Like.add(sheet.getRow(i).getCell(1).getStringCellValue());
+//					listPassword_Like4Like.add(sheet.getRow(i).getCell(2).getStringCellValue());
 				}
+				listAcc.add(acc);
 			}
 
 			if (sheet.getSheetName().equalsIgnoreCase(sheetFB)) {

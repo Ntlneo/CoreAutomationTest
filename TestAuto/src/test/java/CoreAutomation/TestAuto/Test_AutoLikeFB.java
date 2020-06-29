@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -83,8 +85,14 @@ public class Test_AutoLikeFB {
 		// START
 		startAutoLike();
 				
-		for (int i = 0; i < excel.listUsername_Like4Like.size(); i++) {
-			doLogin(excel.listUsername_Like4Like.get(i), excel.listPassword_Like4Like.get(i));
+//		for (int i = 0; i < excel.listUsername_Like4Like.size(); i++) {
+		for (int i = 0; i < excel.listAcc.size(); i++) {
+			for(String key : excel.listAcc.get(i).keySet()) {
+				doLogin(key, excel.listAcc.get(i).get(key));
+			}
+			
+		
+//			doLogin(excel.listUsername_Like4Like.get(i), excel.listPassword_Like4Like.get(i));
 			
 			openFbLike();
 			
@@ -99,13 +107,6 @@ public class Test_AutoLikeFB {
 			System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t######");
 			driver.quit();			
 		}
-		
-		
-		
-		
-
-
-
 	}
 
 	// *********************** MIX ***********************
