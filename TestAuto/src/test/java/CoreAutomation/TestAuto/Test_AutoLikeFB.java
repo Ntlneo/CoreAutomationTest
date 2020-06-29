@@ -23,20 +23,33 @@ public class Test_AutoLikeFB {
 	static String driverPath;
 
 	// changed
-	static String username = "ntlneo";
-	static String password = "Docnhat001@";
+//	static String username = "phungnguyen";
+//	static String password = "phung123";
+	static String username = "phungtest02";
+	static String password = "phung123";
 //	static String emailFB = "an.thanh282000@gmail.com";
 //	static String passFB = "Docnhat001@";
 //	static String emailFB = "suzukihzt@gmail.com";
 //	static String passFB = "Docnhat1";
-	static String emailFB = "phungtest04@gmail.com";
-	static String passFB = "phung123";
+//	static String emailFB = "phungtest04@gmail.com";
+//	static String passFB = "phung123";
 //	static String emailFB = "lamnguyeneditor@gmail.com";
 //	static String passFB = "Docnhat001@";
 //	static String emailFB = "lamnguyeneditor1@gmail.com";
 //	static String passFB = "Docnhat001@";
 //	static String emailFB = "lam.nguyenthanh841@gmail.com";
 //	static String passFB = "Docnhat001@";
+	
+// Account FAIL	static String emailFB = "thanhhuyen252281@gmail.com";
+//	static String passFB = "Thanh25.2";
+    static String emailFB = "nhatquang151617@gmail.com";
+	static String passFB = "Thanh25.2";
+//  static String emailFB = "thuyquynh181920@gmail.com";	
+//	static String passFB = "Thanh25.2";
+//  static String emailFB = "quynhvo121314@gmail.com";
+//	static String passFB = "Thanh25.2";
+//  static String emailFB = "vuquang212324@gmail.com";
+//	static String passFB = "Thanh25.2";
 	static int numberOfLoop = 100;
 
 	// locators
