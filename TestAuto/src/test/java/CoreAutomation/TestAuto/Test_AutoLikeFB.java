@@ -69,27 +69,27 @@ public class Test_AutoLikeFB {
 		startAutoLike();				
 
 		for (int i = 0; i < excel.listAcc_Like4Like.size(); i++) {
-			for(String key1 : excel.listAcc_Like4Like.get(i).keySet()) {
+			for (String key1 : excel.listAcc_Like4Like.get(i).keySet()) {
 				doLogin(key1, excel.listAcc_Like4Like.get(i).get(key1));
-				
-				openFbLike();
-				
-				for (int j = 0; j < excel.listAcc_FB.size(); j++) {
-					for(String key2 : excel.listAcc_FB.get(j).keySet()) {
-						doLoopLike(key2, excel.listAcc_FB.get(j).get(key2));
-					}
+			}
+			
+			openFbLike();
+
+			for (int j = 0; j < excel.listAcc_FB.size(); j++) {
+				for (String key2 : excel.listAcc_FB.get(j).keySet()) {
+					doLoopLike(key2, excel.listAcc_FB.get(j).get(key2));
 				}
-				
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}			
-				
-				System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t######");
-				driver.quit();	
-			}					
+			}
+
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t######");
+			driver.quit();
 		}
 	}
 
