@@ -20,8 +20,8 @@ public class ExcelManager {
 	String sheetFB = "FB";
 //	String sheetGoogle = "Google";
 	
-	HashMap<String,String> accLike4Like = new HashMap<String, String>();
-	HashMap<String,String> accFB = new HashMap<String, String>();
+	
+	
 	public List<HashMap<String, String>> listAcc_Like4Like = new ArrayList<HashMap<String, String>>();
 	public List<HashMap<String, String>> listAcc_FB = new ArrayList<HashMap<String, String>>();
 
@@ -39,26 +39,28 @@ public class ExcelManager {
 		readDataFromExcel();
 	}
 
-	public void readDataFromExcel() {		
-		accLike4Like.clear();
-		accFB.clear();
+	public void readDataFromExcel() {
 		listAcc_Like4Like.clear();
 		listAcc_FB.clear();
 		for (Sheet sheet : wb) {
 			if (sheet.getSheetName().equalsIgnoreCase(sheetLike4Like)) {
-				for (int i = 1; i <= sheet.getLastRowNum(); i++) {					
-					accLike4Like.put(sheet.getRow(i).getCell(1).getStringCellValue(), 
-							sheet.getRow(i).getCell(2).getStringCellValue());
-				}
-				listAcc_Like4Like.add(accLike4Like);
+				for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+					String user_Like4Like = sheet.getRow(i).getCell(1).getStringCellValue();
+					String pass_Like4Like = sheet.getRow(i).getCell(2).getStringCellValue();
+					HashMap<String,String> accLike4Like = new HashMap<String, String>();
+					accLike4Like.put(user_Like4Like, pass_Like4Like	);					
+					listAcc_Like4Like.add(accLike4Like);
+				}				
 			}
 
 			if (sheet.getSheetName().equalsIgnoreCase(sheetFB)) {
-				for (int i = 1; i <= sheet.getLastRowNum(); i++) {					
-					accFB.put(sheet.getRow(i).getCell(1).getStringCellValue(), 
-							sheet.getRow(i).getCell(2).getStringCellValue());
-				}
-				listAcc_FB.add(accFB);
+				for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+					String user_FB = sheet.getRow(i).getCell(1).getStringCellValue();
+					String pass_FB = sheet.getRow(i).getCell(2).getStringCellValue();
+					HashMap<String,String> accFB = new HashMap<String, String>();
+					accFB.put(user_FB, pass_FB);
+					listAcc_FB.add(accFB);
+				}				
 			}
 		}
 		closeExcel();
