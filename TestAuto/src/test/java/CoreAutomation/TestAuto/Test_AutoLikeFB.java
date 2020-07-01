@@ -36,7 +36,7 @@ public class Test_AutoLikeFB {
 	// global
 	static WebDriver driver;
 	static String driverPath;
-	
+
 	// changed
 	static String homePage_Like4Like = "https://www.like4like.org";
 	static String homePage_FB = "https://www.facebook.com";
@@ -64,42 +64,40 @@ public class Test_AutoLikeFB {
 	static By loginFbBtn = By.xpath("//*[@name='login']");
 	static By likePageBtn = By.xpath(
 			"//*[@aria-label='like button' or @aria-label='Like button' or @aria-label='nút thích' or @aria-label='Nút thích']");
-	static By likePostBtn = By.xpath("//a[@data-autoid='autoid_7']");
+	static By likePostBtn = By.xpath("//a[contains(@id,'u_0_') and @data-autoid='autoid_7']");
 	static By likeVideoBtn = By.xpath("//a[@data-autoid='autoid_6']");
-	
+
 	// new tab FB
 	static By emailFbBox_NewTab = By.xpath("//*[@id='email']");
 	static By passFbBox_NewTab = By.xpath("//*[@id='pass']");
-	static By loginFbBtn_NewTab = By.xpath("//*[@id='loginbutton']/input");
-	
+	static By loginFbBtn_NewTab = By.xpath("//*[@id='loginbutton']/input | //*[@name='login']");
+
 	// reLogin
 //	static By reLoginBtn = By.xpath("//*[@value='Log In']");
 //	static By rePasswordBox = By.xpath("//*[@name = 'pass']");
-	static By notYouBtn = By.xpath("//a[contains(@href,'login')]");
-	static By reEmailFB = By.xpath("//*[@id='m_login_email']");
-	static By rePasswordFB = By.xpath("//*[@id='m_login_password']");
-	static By reLoginBtn = By.xpath("//*[@value='Log In']");
-	
-	
-	// FB to logout	
+//	static By notYouBtn = By.xpath("//a[contains(@href,'login')]");
+//	static By reEmailFB = By.xpath("//*[@id='m_login_email']");
+//	static By rePasswordFB = By.xpath("//*[@id='m_login_password']");
+//	static By reLoginBtn = By.xpath("//*[@value='Log In']");
+
+	// FB to logout
 	static By accountMenu = By.xpath("//*[@id='pageLoginAnchor' or @aria-label='Account']");
 	static By logoutBtn = By.xpath("//*[text()='Đăng xuất' or text()='Log Out']");
 //	static By okBtn_loginOneTap = By.xpath(xpathExpression)
-	
-	
+
 	// *********************** RUN TEST AUTO ***********************
-	
+
 	// Before Test
 	ExcelManager excel = new ExcelManager();
 
 	// Start Test
 	@org.junit.Test
 	public void TestAutoLike() {
-		
+
 		// Before Test
 		System.out.println("\t###### WELCOME TO NTLNEO AUTO-LIKE SCRIPT\t######");
 		System.out.println("\t###### SkyPE: ntlneo1\t\t\t\t######");
-		System.out.println("\t###### Email: lam.nguyenthanh84@gmail.com\t######");		
+		System.out.println("\t###### Email: lam.nguyenthanh84@gmail.com\t######");
 		startAutoLike();
 
 		try {
@@ -108,7 +106,7 @@ public class Test_AutoLikeFB {
 				HashMap<String, String> m = excel.listAcc_Like4Like.get(i);
 				String user1 = m.keySet().toString().replace("[", "").replace("]", "");
 				String pass1 = m.get(user1);
-				System.out.println("Using Acc Like4Like " + "#" + (i+1) + " : " + user1 + " / " + pass1);
+				System.out.println("Using Acc Like4Like " + "#" + (i + 1) + " : " + user1 + " / " + pass1);
 				doLogin(user1, pass1);
 
 				openFbLike();
@@ -118,25 +116,16 @@ public class Test_AutoLikeFB {
 						HashMap<String, String> hm = excel.listAcc_FB.get(j);
 						String user2 = key2;
 						String pass2 = hm.get(user2);
-						System.out.println("Using Acc FB " + "#" + (j+1) + " : " + user2 + " / " + pass2);
+						System.out.println("Using Acc FB " + "#" + (j + 1) + " : " + user2 + " / " + pass2);
 						doLoopLike(user2, pass2);
 						logoutFB_thenReturnLikeListPage();
 					}
-				}
-
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 			}
 		} finally {
 			// After Test
 			sayGoodBye();
 		}
-//		// After Test
-//		sayGoodBye();
 	}
 
 	// After Test
@@ -144,9 +133,9 @@ public class Test_AutoLikeFB {
 		System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t######");
 		driver.quit();
 	}
-	
+
 	// *********************** TASKS ***********************
-	
+
 	static void loginFB_OnNewTab(String username, String pasword) {
 		openNewTab_thenSwitch();
 		driver.get(homePage_FB);
@@ -160,9 +149,9 @@ public class Test_AutoLikeFB {
 			e.printStackTrace();
 		}
 		driver.close();
-		switchWindow(0);		
+		switchWindow(0);
 	}
-	
+
 	static void logoutFB_thenReturnLikeListPage() {
 		openNewTab_thenSwitch();
 		driver.get(homePage_FB);
@@ -172,7 +161,7 @@ public class Test_AutoLikeFB {
 		switchWindow(0);
 		refreshCurrentPage();
 	}
-	
+
 	static void checkBonusPage() {
 		String currentURL = driver.getCurrentUrl();
 		if (currentURL.contains("bonus-page")) {
@@ -181,15 +170,15 @@ public class Test_AutoLikeFB {
 			for (String window : windows) {
 				driver.switchTo().window(window);
 				driver.close();
-			}			
-			fail("\n***** STOP AUTO-LIKE since \'Active members Bonus\' page's displayed *****");
+			}
+			fail("\nASSERT FAIL ***** STOP AUTO-LIKE since \'Active members Bonus\' page's displayed *****");
 		}
 	}
 
 	static void doLoopLike(String username_FB, String password_FB) {
 		int count = 0;
 		int numberOfLikeBtn = getListWebElement(listLikeBtn).size();
-
+		String firstWindow = driver.getWindowHandle();
 //		System.out.println("Using acc FB : " + username_FB);
 		for (int i = 0; i < numberOfLikeBtn; i++) {
 			if (count < numberOfLoop) {
@@ -197,83 +186,48 @@ public class Test_AutoLikeFB {
 				String strSearch = "')]/descendant";
 				String strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
 				By NewLikeBtn = By.xpath(strNewLikeBtn);
-//				click(NewLikeBtn);
-//				checkBonusPage();
-//				switchWindow(1);
-//				try {
-//					Thread.sleep(1000);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-				
-//				 try {
-////						waitElementClickable(notYouBtn).click();
-//					 	click(notYouBtn);
-//						input(reEmailFB, username_FB);
-//						input(rePasswordFB, password_FB);
-//						click(reLoginBtn);
-//					}catch (Exception e) {
-//						if (i == 0 && count == 0) {
-//							try {
-//								click(dangnhapBtn);
-//							} catch (Exception ex) {
-//								click(dangnhapBtn);
-//							}
-//							input(emailFbBox, username_FB);
-//							input(passFbBox, password_FB);
-//							click(loginFbBtn);
-//						}
-//					} 
-				
+
 				if (i == 0 && count == 0) {
 					loginFB_OnNewTab(username_FB, password_FB);
 				}
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
+				checkBonusPage();
 				click(NewLikeBtn);
 				checkBonusPage();
 				switchWindow(1);
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}				
-				
+
 				try {
 					click(likePageBtn);
 					count += 1;
 					System.out.println("###### CLICKED LIKE Button : " + count);
-					Thread.sleep(1000);
 				} catch (Exception e) {
 					try {
 						click(likePostBtn);
 						count += 1;
 						System.out.println("###### CLICKED LIKE Button : " + count);
-						Thread.sleep(1000);
 					} catch (Exception x) {
 						try {
 							click(likeVideoBtn);
 							count += 1;
 							System.out.println("###### CLICKED LIKE Button : " + count);
-							Thread.sleep(1000);
 						} catch (Exception y) {
-							String currentURL = driver.getCurrentUrl();
+							String currentURL_newWindow = getCurrentURL();
 							count += 1;
 							System.out.println("###### CLICKED LIKE Button : " + count + " --> Missed !");
-							System.out.println("\t--> Please manually ReCheck URL: " + currentURL);
+							System.out.println("\t--> Please manually ReCheck URL: " + currentURL_newWindow);
 						}
 					}
 				} finally {
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					driver.close();
+
 				}
-				switchWindow(0);
+				driver.switchTo().window(firstWindow);
+				checkBonusPage();
 				if (i == 13) {
 					i = -1;
 				}
@@ -284,11 +238,11 @@ public class Test_AutoLikeFB {
 	}
 
 	static void openFbLike() {
-		hoverAndClick(smExchangeBtn, fbLikesBtn);		
+		hoverAndClick(smExchangeBtn, fbLikesBtn);
 		checkBonusPage();
 	}
 
-	static void doLogin(String username_Like4Like, String password_Like4Like) {		
+	static void doLogin(String username_Like4Like, String password_Like4Like) {
 		click(loginBtn);
 		input(usernameBox, username_Like4Like);
 		input(passwordBox, password_Like4Like);
@@ -306,45 +260,44 @@ public class Test_AutoLikeFB {
 		Map<String, Object> prefs = new HashMap<String, Object>();
 		prefs.put("credentials_enable_service", false);
 		prefs.put("profile.password_manager_enabled", false);
-		prefs.put("profile.default_content_setting_values.notifications", 2);	//disable browser noti
+		prefs.put("profile.default_content_setting_values.notifications", 2); // disable browser noti
 		options.setExperimentalOption("prefs", prefs);
 		driver = new ChromeDriver(options);
 //		driver.manage().window().setPosition(new Point(0, 50000));
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		driver.get(homePage_Like4Like);		
+		driver.get(homePage_Like4Like);
 	}
-	
-	static void switchWindow(int orderOfWindow) {		
+
+	static void switchWindow(int orderOfWindow) {
 		Set<String> windows = driver.getWindowHandles();
 		List<String> listWindow = new ArrayList<String>();
 		listWindow.addAll(windows);
-		driver.switchTo().window(listWindow.get(orderOfWindow));		
+		driver.switchTo().window(listWindow.get(orderOfWindow));
 	}
-	
-	
+
 	// *********************** BASE TEST ***********************
-	
+
 	static WebElement waitElementClickable(By by) {
 		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 		return wait.until(ExpectedConditions.elementToBeClickable(by));
 	}
-	
-	static void refreshCurrentPage() {		
+
+	static void refreshCurrentPage() {
 //		driver.findElement(By.cssSelector("body")).sendKeys(Keys.F5);
 		driver.navigate().refresh();
 	}
-	
-	//not work
-	static void openNewTab_thenSwitch() {		
+
+	// not work
+	static void openNewTab_thenSwitch() {
 		driver.switchTo().newWindow(WindowType.TAB);
 	}
-	
+
 	static String getCurrentURL() {
 		return driver.getCurrentUrl();
 	}
-	
+
 	static List<WebElement> getListWebElement(By by) {
 		return driver.findElements(by);
 	}
