@@ -108,7 +108,7 @@ public class Test_AutoLikeFB {
 				HashMap<String, String> m = excel.listAcc_Like4Like.get(i);
 				String user1 = m.keySet().toString().replace("[", "").replace("]", "");
 				String pass1 = m.get(user1);
-				System.out.println("Using Acc Like4Like: " + user1 + " / " + pass1);
+				System.out.println("Using Acc Like4Like " + "#" + (i+1) + " : " + user1 + " / " + pass1);
 				doLogin(user1, pass1);
 
 				openFbLike();
@@ -118,7 +118,7 @@ public class Test_AutoLikeFB {
 						HashMap<String, String> hm = excel.listAcc_FB.get(j);
 						String user2 = key2;
 						String pass2 = hm.get(user2);
-						System.out.println("Using Acc FB: " + user2 + " / " + pass2);
+						System.out.println("Using Acc FB " + "#" + (j+1) + " : " + user2 + " / " + pass2);
 						doLoopLike(user2, pass2);
 						logoutFB_thenReturnLikeListPage();
 					}
