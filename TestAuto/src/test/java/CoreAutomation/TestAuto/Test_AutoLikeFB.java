@@ -64,8 +64,10 @@ public class Test_AutoLikeFB {
 	static By loginFbBtn = By.xpath("//*[@name='login']");
 	static By likePageBtn = By.xpath(
 			"//*[@aria-label='like button' or @aria-label='Like button' or @aria-label='nút thích' or @aria-label='Nút thích']");
-	static By likePostBtn = By.xpath("//a[contains(@id,'u_0_') and @data-autoid='autoid_7']");
-	static By likeVideoBtn = By.xpath("//a[@data-autoid='autoid_6']");
+//	static By likePostBtn = By.xpath("(//a[text()='Like'])[1] | //a[@data-autoid='autoid_7']");
+	static By likePostBtn = By.xpath("(//*[text()='Like'])[1] | (//*[text()='Giống'])[1]");
+//	static By likeVideoBtn = By.xpath("//a[@data-autoid='autoid_6']");
+	static By likeVideoBtn = By.xpath("(//*[text()='Like'])[2] | (//*[text()='Giống'])[2]");
 
 	// new tab FB
 	static By emailFbBox_NewTab = By.xpath("//*[@id='email']");
