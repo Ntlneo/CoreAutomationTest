@@ -75,7 +75,7 @@ public class Test_AutoLikeFB {
 	static By loginFbBtn_NewTab = By.xpath("//*[@id='loginbutton']/input | //*[@name='login']");
 
 	// FB to logout
-	static By accountMenu = By.xpath("//*[@id='pageLoginAnchor' or @aria-label='Account']");
+	static By accountMenu = By.xpath("//*[@id='pageLoginAnchor' or @aria-label='Account' or @aria-label='Tài khoản']");
 	static By logoutBtn = By.xpath("//*[text()='Đăng xuất' or text()='Log Out']");
 //	static By okBtn_loginOneTap = By.xpath(xpathExpression)
 
