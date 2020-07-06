@@ -74,14 +74,6 @@ public class Test_AutoLikeFB {
 	static By passFbBox_NewTab = By.xpath("//*[@id='pass']");
 	static By loginFbBtn_NewTab = By.xpath("//*[@id='loginbutton']/input | //*[@name='login']");
 
-	// reLogin
-//	static By reLoginBtn = By.xpath("//*[@value='Log In']");
-//	static By rePasswordBox = By.xpath("//*[@name = 'pass']");
-//	static By notYouBtn = By.xpath("//a[contains(@href,'login')]");
-//	static By reEmailFB = By.xpath("//*[@id='m_login_email']");
-//	static By rePasswordFB = By.xpath("//*[@id='m_login_password']");
-//	static By reLoginBtn = By.xpath("//*[@value='Log In']");
-
 	// FB to logout
 	static By accountMenu = By.xpath("//*[@id='pageLoginAnchor' or @aria-label='Account']");
 	static By logoutBtn = By.xpath("//*[text()='Đăng xuất' or text()='Log Out']");
@@ -124,7 +116,9 @@ public class Test_AutoLikeFB {
 					}
 				}
 			}
-		} finally {
+		} catch (Exception e) {
+			System.out.println("Error occurs: " + e);
+		}finally {
 			// After Test
 			sayGoodBye();
 		}
@@ -165,23 +159,23 @@ public class Test_AutoLikeFB {
 	}
 
 	static void checkBonusPage() {
-		String currentURL = driver.getCurrentUrl();
-		if (currentURL.contains("bonus-page")) {
-			System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
-			Set<String> windows = driver.getWindowHandles();
-			for (String window : windows) {
-				driver.switchTo().window(window);
-				driver.close();
+		Set<String> windows = driver.getWindowHandles();
+		for (String window : windows) {
+			driver.switchTo().window(window);
+			String currentURL = driver.getCurrentUrl();
+			if (currentURL.contains("bonus-page")) {
+				System.out.println("***** STOP AUTO-LIKE since \'Active members Bonus\' page displayed *****");
+				fail("\nASSERT FAIL ***** STOP AUTO-LIKE since \'Active members Bonus\' page's displayed *****");
 			}
-			fail("\nASSERT FAIL ***** STOP AUTO-LIKE since \'Active members Bonus\' page's displayed *****");
 		}
+		switchWindow(0);
 	}
 
 	static void doLoopLike(String username_FB, String password_FB) {
 		int count = 0;
 		int numberOfLikeBtn = getListWebElement(listLikeBtn).size();
 		String firstWindow = driver.getWindowHandle();
-//		System.out.println("Using acc FB : " + username_FB);
+
 		for (int i = 0; i < numberOfLikeBtn; i++) {
 			if (count < numberOfLoop) {
 				checkBonusPage();
@@ -191,12 +185,23 @@ public class Test_AutoLikeFB {
 
 				if (i == 0 && count == 0) {
 					loginFB_OnNewTab(username_FB, password_FB);
+				}								
+				
+				//fix error can't print Bonus page
+				try {
+					click(NewLikeBtn);
+				} catch (Exception e2) {
+					try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					checkBonusPage();
 				}
-				checkBonusPage();
-				click(NewLikeBtn);
-				checkBonusPage();
+				
 				switchWindow(1);
-
+				
 				try {
 					click(likePageBtn);
 					count += 1;
@@ -229,7 +234,6 @@ public class Test_AutoLikeFB {
 
 				}
 				driver.switchTo().window(firstWindow);
-				checkBonusPage();
 				if (i == 13) {
 					i = -1;
 				}
@@ -256,7 +260,6 @@ public class Test_AutoLikeFB {
 		System.setProperty("webdriver.chrome.driver", driverPath);
 		System.setProperty("webdriver.chrome.silentOutput", "true");
 		ChromeOptions options = new ChromeOptions();
-//		options.setExperimentalOption("excludeSwitches", new String[] { "enable-automation", "enable-logging" });
 		options.setExperimentalOption("excludeSwitches", new String[] { "enable-automation" });
 		options.setExperimentalOption("useAutomationExtension", false);
 		Map<String, Object> prefs = new HashMap<String, Object>();
@@ -265,7 +268,6 @@ public class Test_AutoLikeFB {
 		prefs.put("profile.default_content_setting_values.notifications", 2); // disable browser noti
 		options.setExperimentalOption("prefs", prefs);
 		driver = new ChromeDriver(options);
-//		driver.manage().window().setPosition(new Point(0, 50000));
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
