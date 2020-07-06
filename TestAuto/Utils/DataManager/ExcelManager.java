@@ -15,7 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelManager {
-	String excelFilePath = "DataTest/DataAutoFB.xlsx";
+//	String excelFilePath = "DataTest/DataAutoFB.xlsx";
 	String sheetLike4Like = "Like4Like";
 	String sheetFB = "FB";
 //	String sheetGoogle = "Google";
@@ -27,10 +27,10 @@ public class ExcelManager {
 
 	Workbook wb;
 
-	public ExcelManager() {
+	public ExcelManager(String pathToExcelFile) {
 		try {
 			String userPath = System.getProperty("user.dir");
-			File excelFile = new File(userPath + "/" + excelFilePath);
+			File excelFile = new File(userPath + "/" + pathToExcelFile);
 			wb = new XSSFWorkbook(excelFile);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

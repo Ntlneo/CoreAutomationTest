@@ -38,6 +38,7 @@ public class Test_AutoLikeFB {
 	static String driverPath;
 
 	// changed
+	static String pathToExcelFile = "DataTest/DataAutoFB.xlsx";
 	static String homePage_Like4Like = "https://www.like4like.org";
 	static String homePage_FB = "https://www.facebook.com";
 	static String likeListPage_Like4Like = "https://www.like4like.org/free-facebook-likes.php";
@@ -82,7 +83,7 @@ public class Test_AutoLikeFB {
 	// *********************** RUN TEST AUTO ***********************
 
 	// Before Test
-	ExcelManager excel = new ExcelManager();
+	ExcelManager excel = new ExcelManager(pathToExcelFile);
 
 	// Start Test
 	@org.junit.Test
