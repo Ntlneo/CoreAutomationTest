@@ -17,7 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ExcelManager {
 	String excelFilePath = "DataTest/DataAutoFB.xlsx";
 	String sheetLike4Like = "Like4Like";
-	String sheetFB = "FB Cty";
+	String sheetFB = "FB Lam";
 //	String sheetGoogle = "Google";
 	
 	
