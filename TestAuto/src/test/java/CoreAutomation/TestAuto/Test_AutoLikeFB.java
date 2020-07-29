@@ -93,7 +93,7 @@ public class Test_AutoLikeFB {
 
 		// Before Test
 		System.out.println("\t*** WELCOME TO NTLNEO AUTO-LIKE SCRIPT\t***");
-		System.out.println("\t*** SkyPE: ntlneo1\t\t\t\t***");
+		System.out.println("\t*** SkyPE: ntlneo1\t\t\t***");
 		System.out.println("\t*** Email: lam.nguyenthanh84@gmail.com\t***");
 		startAutoLike();
 
