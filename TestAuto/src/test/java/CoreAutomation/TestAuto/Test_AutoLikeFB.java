@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -55,6 +56,7 @@ public class Test_AutoLikeFB {
 
 	static String strLikeBtn = "//td[contains(@id,'task')]/descendant::span[contains(@id,'likebutton')]/a";
 	static By listLikeBtn = By.xpath("//td[contains(@id,'task')]");
+	static By currentScore = By.xpath("//span[@id='earned-credits']");
 
 	// new FB window with pagelike
 	static By dangnhapBtn = By.xpath(
@@ -90,9 +92,9 @@ public class Test_AutoLikeFB {
 	public void TestAutoLike() {
 
 		// Before Test
-		System.out.println("\t###### WELCOME TO NTLNEO AUTO-LIKE SCRIPT\t######");
-		System.out.println("\t###### SkyPE: ntlneo1\t\t\t\t######");
-		System.out.println("\t###### Email: lam.nguyenthanh84@gmail.com\t######");
+		System.out.println("\t*** WELCOME TO NTLNEO AUTO-LIKE SCRIPT\t***");
+		System.out.println("\t*** SkyPE: ntlneo1\t\t\t\t***");
+		System.out.println("\t*** Email: lam.nguyenthanh84@gmail.com\t***");
 		startAutoLike();
 
 		try {
@@ -111,7 +113,7 @@ public class Test_AutoLikeFB {
 						HashMap<String, String> hm = excel.listAcc_FB.get(j);
 						String user2 = key2;
 						String pass2 = hm.get(user2);
-						System.out.println("Using Acc FB " + "#" + (j + 1) + " : " + user2 + " / " + pass2);
+						System.out.println("Using Acc FB " + "#" + (j + 1) + " : " + user2 + " / " + pass2 + "\n");
 						doLoopLike(user2, pass2);
 						logoutFB_thenReturnLikeListPage();
 					}
@@ -127,7 +129,7 @@ public class Test_AutoLikeFB {
 
 	// After Test
 	public void sayGoodBye() {
-		System.out.println("\t###### END SCRIPT. SEE YA AGAIN !!!\t######");
+		System.out.println("\t### END SCRIPT. SEE YA AGAIN !!!\t###");
 		driver.quit();
 	}
 
@@ -176,24 +178,38 @@ public class Test_AutoLikeFB {
 		int count = 0;
 		int numberOfLikeBtn = getListWebElement(listLikeBtn).size();
 		String firstWindow = driver.getWindowHandle();
+		String strSearch = "')]/descendant";
+		String strNewLikeBtn;		
+		By NewLikeBtn;
+		String strCurrentScore;
 
+		
 		for (int i = 0; i < numberOfLikeBtn; i++) {
 			if (count < numberOfLoop) {
 				checkBonusPage();
-				String strSearch = "')]/descendant";
-				String strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
-				By NewLikeBtn = By.xpath(strNewLikeBtn);
-
+				strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
+				NewLikeBtn = By.xpath(strNewLikeBtn);
+				
+				strCurrentScore = getWebElement(currentScore).getText();				
+				System.out.print("@@@ Current Score: " + strCurrentScore + "\t");
+				
 				if (i == 0 && count == 0) {
 					loginFB_OnNewTab(username_FB, password_FB);
-				}								
+				}				
 				
-				//fix error can't print Bonus page
+				//fix error can't print Bonus page by wait 3s
 				try {
 					click(NewLikeBtn);
 				} catch (Exception e2) {
 					try {
+						System.out.println("\n\t--> Web's just reloaded... So, The script's reset to click 1st Like btn again");
 						Thread.sleep(3000);
+						//set newLikeBtn at 1st place again
+						//then click Likebtn again
+						i = 0;
+						strNewLikeBtn = strLikeBtn.replace(strSearch, i + strSearch);
+						NewLikeBtn = By.xpath(strNewLikeBtn);
+						click(NewLikeBtn);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -206,21 +222,21 @@ public class Test_AutoLikeFB {
 				try {
 					click(likePageBtn);
 					count += 1;
-					System.out.println("###### CLICKED LIKE Button : " + count);
+					System.out.println("### CLICKED LIKE Button : " + count);
 				} catch (Exception e) {
 					try {
 						click(likePostBtn);
 						count += 1;
-						System.out.println("###### CLICKED LIKE Button : " + count);
+						System.out.println("### CLICKED LIKE Button : " + count);
 					} catch (Exception x) {
 						try {
 							click(likeVideoBtn);
 							count += 1;
-							System.out.println("###### CLICKED LIKE Button : " + count);
+							System.out.println("### CLICKED LIKE Button : " + count);
 						} catch (Exception y) {
 							String currentURL_newWindow = getCurrentURL();
 							count += 1;
-							System.out.println("###### CLICKED LIKE Button : " + count + " --> Missed !");
+							System.out.println("### CLICKED LIKE Button : " + count + " --> Missed!!!");
 							System.out.println("\t--> Please manually ReCheck URL: " + currentURL_newWindow);
 						}
 					}
@@ -235,6 +251,7 @@ public class Test_AutoLikeFB {
 
 				}
 				driver.switchTo().window(firstWindow);
+					
 				if (i == 13) {
 					i = -1;
 				}
@@ -284,9 +301,14 @@ public class Test_AutoLikeFB {
 
 	// *********************** BASE TEST ***********************
 
-	static WebElement waitElementClickable(By by) {
-		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+	static WebElement waitElementClickable(By by,int durationInSecond) {
+		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(durationInSecond));
 		return wait.until(ExpectedConditions.elementToBeClickable(by));
+	}
+	
+	static WebElement waitElementVisible(By by,int durationInSecond) {
+		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(durationInSecond));
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 	}
 
 	static void refreshCurrentPage() {
