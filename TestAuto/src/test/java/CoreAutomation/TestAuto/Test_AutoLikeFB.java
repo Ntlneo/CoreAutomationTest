@@ -124,6 +124,7 @@ public class Test_AutoLikeFB {
 		}finally {
 			// After Test
 			sayGoodBye();
+			
 		}
 	}
 
