@@ -113,7 +113,7 @@ public class Test_AutoLikeFB {
 						HashMap<String, String> hm = excel.listAcc_FB.get(j);
 						String user2 = key2;
 						String pass2 = hm.get(user2);
-						System.out.println("Using Acc FB " + "#" + (j + 1) + " : " + user2 + " / " + pass2 + "\n");
+						System.out.println("\nUsing Acc FB " + "#" + (j + 1) + " : " + user2 + " / " + pass2 + "\n");
 						doLoopLike(user2, pass2);
 						logoutFB_thenReturnLikeListPage();
 					}
@@ -302,11 +302,13 @@ public class Test_AutoLikeFB {
 
 	// *********************** BASE TEST ***********************
 
+	//DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
 	static WebElement waitElementClickable(By by,int durationInSecond) {
 		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(durationInSecond));
 		return wait.until(ExpectedConditions.elementToBeClickable(by));
 	}
 	
+	//DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
 	static WebElement waitElementVisible(By by,int durationInSecond) {
 		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(durationInSecond));
 		return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
@@ -317,7 +319,7 @@ public class Test_AutoLikeFB {
 		driver.navigate().refresh();
 	}
 
-	// not work
+	//DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
 	static void openNewTab_thenSwitch() {
 		driver.switchTo().newWindow(WindowType.TAB);
 	}

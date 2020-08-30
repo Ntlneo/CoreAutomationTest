@@ -88,6 +88,19 @@
   <version>29.0-jre</version>
 </dependency>
 	
+	<!-- https://mvnrepository.com/artifact/org.apache.maven/maven-plugin-api -->
+<dependency>
+    <groupId>org.apache.maven</groupId>
+    <artifactId>maven-plugin-api</artifactId>
+    <version>3.6.3</version>
+</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.apache.maven/maven-core -->
+<dependency>
+    <groupId>org.apache.maven</groupId>
+    <artifactId>maven-core</artifactId>
+    <version>3.6.3</version>
+</dependency>
 	
 	<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin  -->
 <dependency>
@@ -124,30 +137,59 @@
 		<version>3.1.5</version>
 	</dependency> -->
 
-<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-server
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-server</artifactId>
-			<version>3.13.0</version>
-		</dependency> -->
 
-
-
-<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 <!-- <dependency>
-    <groupId>org.testng</groupId>
-    <artifactId>testng</artifactId>
-    <version>7.1.0</version>
-    <scope>test</scope>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+    <version>3.11</version>
 </dependency> -->
 
+<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-support -->
+<!-- <dependency>
+    <groupId>org.seleniumhq.selenium</groupId>
+    <artifactId>selenium-support</artifactId>
+    <version>4.0.0-alpha-6</version>
+</dependency> -->
 
+<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-remote-driver -->
+<!-- <dependency>
+    <groupId>org.seleniumhq.selenium</groupId>
+    <artifactId>selenium-remote-driver</artifactId>
+    <version>4.0.0-alpha-6</version>
+</dependency> -->
+
+<!-- DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound -->
 <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
-<dependency>
+<!-- <dependency>
     <groupId>org.seleniumhq.selenium</groupId>
     <artifactId>selenium-java</artifactId>
     <version>4.0.0-alpha-6</version>
+</dependency> -->
+
+<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-support -->
+<!-- <dependency>
+    <groupId>org.seleniumhq.selenium</groupId>
+    <artifactId>selenium-support</artifactId>
+    <version>4.0.0-alpha-6</version>
+</dependency> -->
+
+
+<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver -->
+<!-- <dependency>
+    <groupId>org.seleniumhq.selenium</groupId>
+    <artifactId>selenium-chrome-driver</artifactId>
+    <version>4.0.0-alpha-6</version>
+</dependency> -->
+
+
+<!-- https://mvnrepository.com/artifact/io.appium/java-client -->
+<dependency>
+    <groupId>io.appium</groupId>
+    <artifactId>java-client</artifactId>
+    <version>7.3.0</version>
 </dependency>
+
 
 	</dependencies>
 </project>
