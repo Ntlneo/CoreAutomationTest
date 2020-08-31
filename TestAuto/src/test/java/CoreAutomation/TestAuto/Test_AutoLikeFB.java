@@ -113,7 +113,7 @@ public class Test_AutoLikeFB {
 						HashMap<String, String> hm = excel.listAcc_FB.get(j);
 						String user2 = key2;
 						String pass2 = hm.get(user2);
-						System.out.println("Using Acc FB " + "#" + (j + 1) + " : " + user2 + " / " + pass2 + "\n");
+						System.out.println("\nUsing Acc FB " + "#" + (j + 1) + " : " + user2 + " / " + pass2 + "\n");
 						doLoopLike(user2, pass2);
 						logoutFB_thenReturnLikeListPage();
 					}
