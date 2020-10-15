@@ -9,63 +9,120 @@ import java.util.Map;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.NumberToTextConverter;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelManager {
-//	String excelFilePath = "DataTest/DataAutoFB.xlsx";
-	String sheetLike4Like = "Like4Like";
-	String sheetFB = "FB Lam";
-//	String sheetGoogle = "Google";
+//	String excelFilePath = "Facebook/DataAutoFB.xlsx";	
+//	String sheetFB = "FB";	
 	
+	ArrayList<FaceBookAccountModel> listAccount=new ArrayList();
 	
-	
-	public List<HashMap<String, String>> listAcc_Like4Like = new ArrayList<HashMap<String, String>>();
-	public List<HashMap<String, String>> listAcc_FB = new ArrayList<HashMap<String, String>>();
+	public ArrayList<FaceBookAccountModel> getListAccount() {
+		return listAccount;
+	}
 
 	Workbook wb;
+	String sheetName="";
 
-	public ExcelManager(String pathToExcelFile) {
+	public ExcelManager(String pathToExcelFile, String _sheetName) {
 		try {
+			sheetName=_sheetName;
 			String userPath = System.getProperty("user.dir");
 			File excelFile = new File(userPath + "/" + pathToExcelFile);
 			wb = new XSSFWorkbook(excelFile);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		readDataFromExcel();
+		
+	}
+	
+	// ****************************************************
+	// order begins from 1	
+	
+	
+	// ****************************************************
+	public void readDataFromExcel() {
+		try
+		{
+			clearOldDataOfList();
+			for (Sheet sheet : wb) 
+			{
+				if (sheet.getSheetName().equalsIgnoreCase(sheetName)) 
+				{
+					int numberOfRow=sheet.getLastRowNum();
+					for (int i = 1; i <= numberOfRow; i++) {
+						
+						Row row=sheet.getRow(i);
+						Cell cellUsername=row.getCell(1);
+						Cell cellPassword=row.getCell(2);
+						Cell cellUUID=row.getCell(3);
+						Cell cell2FA=row.getCell(4);
+						Cell cellbackup=row.getCell(5);
+						
+						
+						String username=getCellDataString(cellUsername);
+						String password=getCellDataString(cellPassword);
+						String uuid=getCellDataString(cellUUID);
+						String two_fa=getCellDataString(cell2FA);
+						String backup=getCellDataString(cellbackup);
+						listAccount.add(new FaceBookAccountModel(username,password,uuid,two_fa,backup));		
+					}				
+				}
+			}
+			for(  FaceBookAccountModel acc  : listAccount)
+			{
+			//	System.out.println(acc.username+"  "+acc.password+"   "+acc.uuid+"  "+acc.two_fa+"\n\n");
+			}
+		}
+		catch(Exception e)
+		{
+			e.toString();
+		}
+		
+		closeExcel();
 	}
 	
 	
-
-	public void readDataFromExcel() {
-		listAcc_Like4Like.clear();
-		listAcc_FB.clear();
-		for (Sheet sheet : wb) {
-			if (sheet.getSheetName().equalsIgnoreCase(sheetLike4Like)) {
-				for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-					String user_Like4Like = sheet.getRow(i).getCell(1).getStringCellValue();
-					String pass_Like4Like = sheet.getRow(i).getCell(2).getStringCellValue();
-					HashMap<String,String> accLike4Like = new HashMap<String, String>();
-					accLike4Like.put(user_Like4Like, pass_Like4Like	);					
-					listAcc_Like4Like.add(accLike4Like);
-				}				
-			}
-
-			if (sheet.getSheetName().equalsIgnoreCase(sheetFB)) {
-				for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-					String user_FB = sheet.getRow(i).getCell(1).getStringCellValue();
-					String pass_FB = sheet.getRow(i).getCell(2).getStringCellValue();
-					HashMap<String,String> accFB = new HashMap<String, String>();
-					accFB.put(user_FB, pass_FB);
-					listAcc_FB.add(accFB);
-				}				
-			}
+	public FaceBookAccountModel getfacebookAccount(int index)
+	{
+		return listAccount.get(index);
+	}
+	public String getCellDataString(Cell cell)
+	{
+		String ret="";
+		if(null!=cell)
+		{
+			CellType celltype=cell.getCellType();
+		    switch (celltype) {
+		        case BOOLEAN:
+		            //System.out.println(cell.getBooleanCellValue());
+		            break;
+		        case NUMERIC:
+		        	ret=NumberToTextConverter.toText(cell.getNumericCellValue());
+		        
+		            //System.out.println(ret);
+		            	           
+		            break;
+		        case STRING:
+		            //System.out.println(cell.getRichStringCellValue());
+		            ret=cell.getStringCellValue();
+		            break;
+		    }
 		}
-		closeExcel();
+		
+		
+		
+	
+		return ret;
 	}
 	
 	public void closeExcel() {
@@ -75,5 +132,9 @@ public class ExcelManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void clearOldDataOfList() {
+		listAccount.clear();
 	}
 }

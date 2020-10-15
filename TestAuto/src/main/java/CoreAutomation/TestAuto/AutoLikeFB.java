@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,6 +21,8 @@ public class AutoLikeFB {
     {
     	
         System.out.println( "WELCOME TO MY AUTO-LIKE SCRIPT" );
+        System.out.println( RandomStringUtils.randomAlphanumeric(3, 8) );
+        
         
   
     }

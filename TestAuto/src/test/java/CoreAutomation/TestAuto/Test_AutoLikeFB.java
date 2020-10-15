@@ -19,15 +19,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.devtools.browser.Browser;
-import org.openqa.selenium.devtools.browser.model.PermissionType;
+//import org.openqa.selenium.devtools.browser.Browser;
+//import org.openqa.selenium.devtools.browser.model.PermissionType;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import DataManager.ExcelManager;
+import DataManager.ExcelManager_Map;
 
 /**
  * Unit test for simple App.
@@ -85,7 +85,7 @@ public class Test_AutoLikeFB {
 	// *********************** RUN TEST AUTO ***********************
 
 	// Before Test
-	ExcelManager excel = new ExcelManager(pathToExcelFile);
+	ExcelManager_Map excel = new ExcelManager_Map(pathToExcelFile);
 
 	// Start Test
 	@org.junit.Test
@@ -303,16 +303,16 @@ public class Test_AutoLikeFB {
 	// *********************** BASE TEST ***********************
 
 	//DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
-	static WebElement waitElementClickable(By by,int durationInSecond) {
-		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(durationInSecond));
-		return wait.until(ExpectedConditions.elementToBeClickable(by));
-	}
-	
-	//DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
-	static WebElement waitElementVisible(By by,int durationInSecond) {
-		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(durationInSecond));
-		return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
-	}
+//	static WebElement waitElementClickable(By by,int durationInSecond) {
+//		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(durationInSecond));
+//		return wait.until(ExpectedConditions.elementToBeClickable(by));
+//	}
+//	
+//	//DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
+//	static WebElement waitElementVisible(By by,int durationInSecond) {
+//		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(durationInSecond));
+//		return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+//	}
 
 	static void refreshCurrentPage() {
 //		driver.findElement(By.cssSelector("body")).sendKeys(Keys.F5);
