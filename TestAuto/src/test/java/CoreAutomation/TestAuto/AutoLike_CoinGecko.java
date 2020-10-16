@@ -15,7 +15,9 @@ import java.util.function.Consumer;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
@@ -26,6 +28,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -41,12 +44,20 @@ public class AutoLike_CoinGecko {
 	static String driverPath;
 
 	// changed
+	static int numberOfAcc = 10;
+	static int lengthOfUsername = 6;
+	
+	//cookie register as suzukihzt@gmail.com
+	static String cookie_hCaptchaPage = "https://dashboard.hcaptcha.com/welcome_accessibility";
+	static String cookie_session = "7021a4a1-1a04-4fe8-9acd-1e670ccf4b03";
+	static String cookie__cfduid = "d45ad1fab2804986ba4b9e0086ecf8adf1600941513";
+	
+	
 	static String pathToExcelFile = "DataTest/DataCoinGecko.xlsx";
 	static String sheetName = "CoinGecko";
 	static String cgHomePage = "https://www.coingecko.com/en";
 	static String cgBwfPage = "https://www.coingecko.com/en/coins/beowulf";
 	
-	static int numberOfAcc = 10;
 	static String emailRegister_Prefix;
 	static String emailRegister_Suffix = "@mailinator.com";
 	static String emailRegister;
@@ -65,8 +76,18 @@ public class AutoLike_CoinGecko {
 	static By passBox = By.id("user_password");
 	static By checkBox1 = By.id("tos_agreement");
 	static By checkBox2 = By.id("subscribe_newsletter");
-	static By captchaCheckBox = By.id("checkbox");
 	static By signUpBtn = By.id("sign-up-button");
+	
+	//frame captcha
+	static By captchaFrame = By.xpath("//*[@title='widget containing checkbox for hCaptcha security challenge']");
+	static By captchaCheckBox = By.id("checkbox");
+	static By helpBtn = By.xpath("//*[@class='help button']");
+	static By accessibilityOption = By.xpath("//*[@class='option button']");	//1st option
+	static By cookieLink = By.xpath("//*[contains(text(),'Retrieve accessibility cookie')]");
+
+	
+	
+	
 	
 	
 	//bwf page
@@ -76,52 +97,86 @@ public class AutoLike_CoinGecko {
 	static String linkMailinator_part1 = "https://www.mailinator.com/v3/index.jsp?zone=public&query=";
 	static String linkMailinator_part2 = "#/#inboxpane";
 	static String linkMailinator = linkMailinator_part1 + emailRegister_Prefix + linkMailinator_part2;
-	static By title1stEmail = By.xpath("((//*[@id='inboxpane']//tr[contains(@id,row_lam)])[2]/td[@class='ng-binding'])[2]");
-			
+	static By sender1stEmail = By.xpath("((//*[@id='inboxpane']//tr[contains(@id,row_lam)])[2]/td[@class='ng-binding'])[2]");
+	static By senderEmail_CoinGecko = By.xpath("//*[contains(text(),'CoinGecko')]");
+	static By titleEmail_CoinGecko = By.xpath("//*[contains(text(),'Confirmation instructions')]");
+	static By listRowEmail = By.xpath("//*[@ng-repeat='email in emails']");	
+	static By confirmAccBtn = By.xpath("(//*[@target='_other'])[2]");
+	
+	//redirect from Mailinator to login Coingecko
+	static By loginBtn = By.name("commit");
+	
 	
 
 	// *********************** RUN TEST AUTO ***********************
 
-	// Before Test
-	ExcelManager_Map excel = new ExcelManager_Map(pathToExcelFile);
+	// Before Script
+//	ExcelManager_Map excel = new ExcelManager_Map(pathToExcelFile);
 
-	// Start Test
+	// AUTO SCRIPT
 	@org.junit.Test
 	public void Test_CoinGecko() {
 
 		// Before Test
 		System.out.println("\t*** STARTING SCRIPT\t***");
-		setUpListAccRegister(numberOfAcc);
+		setUpListAccRegister(numberOfAcc,lengthOfUsername);
 		for (String acc : listGeneratedEmail) {
 			System.out.println(acc);
 		}
 		
-//		startAutoLike();
+		// Star Test
+		startDriver();
+		
+		for (String email : listGeneratedEmail) {
+			registerAcc_CoinGecko(email, passwordRegister);
+			verifyAccAndLogin_InMailinator();
+			clickStarBWF_CoinGecko();
+		}
+		
+		// After Test
+		sayGoodBye();
 
 		
 	}
 
-	// After Test
+	// After Script
 	public void sayGoodBye() {
 		System.out.println("\t### END SCRIPT. SEE YA AGAIN !!!\t###");
 		driver.quit();
 	}
 
 	// *********************** TASKS ***********************
-
-	static void registerAcc_CoinGecko() {
-		click(signUpMenuBtn);
-		input(emailBox, emailRegister);
-		
-		
+	
+	static void clickStarBWF_CoinGecko() {
+		openURL(cgBwfPage);
+		click(starIcon);
 	}
 	
-	static void setUpListAccRegister(int numberOfAcc) {
+	static void verifyAccAndLogin_InMailinator() {
+		openURL(linkMailinator);
+		getElement_ByFluentWait(titleEmail_CoinGecko, 180, 5).click();
+		click(confirmAccBtn);
+		click(loginBtn);		
+	}
+	
+	static void registerAcc_CoinGecko(String email, String password) {
+		click(signUpMenuBtn);
+		input(emailBox, email);
+		input(passBox, password);
+		click(checkBox1);
+		click(checkBox2);
+		driver.switchTo().frame(driver.findElement(captchaFrame));
+		click(captchaCheckBox);
+		driver.switchTo().defaultContent();
+		click(signUpBtn);		
+	}
+	
+	static void setUpListAccRegister(int numberOfAcc, int lengthOfUsername) {
 		do {
 //			listGeneratedEmail.clear();
 //			listGeneratedEmailPrefix.clear();
 			
-			emailRegister_Prefix = RandomStringUtils.randomAlphanumeric(20);
+			emailRegister_Prefix = RandomStringUtils.randomAlphanumeric(lengthOfUsername);
 			emailRegister = emailRegister_Prefix + emailRegister_Suffix;
 //				System.out.println("Email random is created : " + emailRegister);
 
@@ -277,7 +332,7 @@ public class AutoLike_CoinGecko {
 //		click(submitBtn);
 //	}
 
-	static void startAutoLike() {
+	static void startDriver() {
 		driverPath = "Drivers/chromedriver.exe";
 		System.setProperty("webdriver.chrome.driver", driverPath);
 		System.setProperty("webdriver.chrome.silentOutput", "true");
@@ -293,7 +348,12 @@ public class AutoLike_CoinGecko {
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().implicitlyWait(8, TimeUnit.SECONDS);
-		driver.get(cgHomePage);
+//		driver.manage().addCookie(new Cookie("session", cookie_session));
+		
+		openURL(cookie_hCaptchaPage);
+		driver.manage().addCookie(new Cookie("__cfduid", cookie__cfduid));		
+		
+		openURL(cgHomePage);
 	}
 
 	static void switchWindow(int orderOfWindow) {
@@ -316,6 +376,15 @@ public class AutoLike_CoinGecko {
 //		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(durationInSecond));
 //		return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 //	}
+	
+	static WebElement getElement_ByFluentWait(By by, int timeoutInSecond, int repeatInSecond) {
+		Wait wait = new FluentWait(driver)
+				.withTimeout(Duration.ofSeconds(30))
+				.pollingEvery(Duration.ofSeconds(5))
+				.ignoring(NoSuchElementException.class);
+		return (WebElement) wait.until(ExpectedConditions.visibilityOf(getWebElement(by))); 
+	}
+
 
 	static void refreshCurrentPage() {
 //		driver.findElement(By.cssSelector("body")).sendKeys(Keys.F5);
@@ -327,6 +396,10 @@ public class AutoLike_CoinGecko {
 		driver.switchTo().newWindow(WindowType.TAB);
 	}
 
+	static void openURL(String url) {
+		driver.get(url);
+	}
+	
 	static String getCurrentURL() {
 		return driver.getCurrentUrl();
 	}
