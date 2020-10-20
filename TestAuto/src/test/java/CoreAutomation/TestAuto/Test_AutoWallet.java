@@ -173,7 +173,11 @@ public class Test_AutoWallet {
 //        options.merge(capabilities);
         String appPath = "C://Program Files (x86)/BeowulfWallet/BeowulfWallet.exe";
         options.setBinary(appPath);
-        options.setCapability("chromeOptions", options);
+//        options.addArguments("electron-port=5000");
+//        options.addArguments("webpack-port=3000");
+//        options.addArguments("access-token=12345‌​6789");
+        
+//        options.setCapability("chromeOptions", options);
 		
 		
 		
