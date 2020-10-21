@@ -194,8 +194,8 @@ public class Test_AutoWallet {
 //		options.setExperimentalOption("prefs", prefs);
 		driver = new ChromeDriver(options);
 //		driver.manage().window().maximize();
-//		driver.manage().deleteAllCookies();
-//		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		driver.manage().deleteAllCookies();
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
 		
 //		openURL(cookie_hCaptchaPage);

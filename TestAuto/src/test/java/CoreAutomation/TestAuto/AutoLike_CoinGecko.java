@@ -34,6 +34,7 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import DataManager.EmailManager;
 import DataManager.ExcelManager_Map;
 
 /**
@@ -53,8 +54,9 @@ public class AutoLike_CoinGecko {
 	static String cookie_hCaptchaPage = "https://dashboard.hcaptcha.com/welcome_accessibility";
 	static String cookie_session = "7021a4a1-1a04-4fe8-9acd-1e670ccf4b03";
 	static String cookie__cfduid = "d45ad1fab2804986ba4b9e0086ecf8adf1600941513";
-	static String gmail_ToGetCookie = "suzukihzt@gmail.com";
-	static String passGmail_ToGetCookie = "Docnhat1";
+	static String gmailHost_ToGetCookie = "imap.gmail.com";
+	static String gmailUser_ToGetCookie = "suzukihzt@gmail.com";
+	static String gmailPass_ToGetCookie = "Docnhat1";
 	
 	
 	
@@ -100,6 +102,9 @@ public class AutoLike_CoinGecko {
 	static String email_Signin = "https://accounts.google.com/signin";
 	static By gg_emailBox = By.name("identifier");
 	static By gg_NextBtn = By.xpath("//*[text()='Next']");
+	
+	static By setCookieBtn = By.xpath("//*[@data-cy='setAccessibilityCookie']");
+	
 
 	
 	
@@ -153,6 +158,8 @@ public class AutoLike_CoinGecko {
 				e.printStackTrace();
 			}
 			verifyAccAndLogin_InMailinator(pair.getFirst().toString());
+			
+			
 			clickStarBWF_CoinGecko();
 		}
 		
@@ -176,6 +183,7 @@ public class AutoLike_CoinGecko {
 	}
 	
 	static void verifyAccAndLogin_InMailinator(String emailRegister_Prefix) {
+		// Verify acc
 		linkMailinator = linkMailinator_part1 + emailRegister_Prefix + linkMailinator_part2;
 		openURL(linkMailinator);
 		try {
@@ -202,6 +210,9 @@ public class AutoLike_CoinGecko {
 			e.printStackTrace();
 		}
 		byPassHcaptcha();
+		
+		
+		
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
@@ -234,9 +245,29 @@ public class AutoLike_CoinGecko {
 		driver.switchTo().defaultContent();
 		checkNumberOfWindow();
 		switchWindow(2);		
-		input(emailCaptchaAccess, gmail_ToGetCookie);
+		input(emailCaptchaAccess, gmailUser_ToGetCookie);
 		click(submitBtn);
-		driver.switchTo().defaultContent();		
+		driver.switchTo().defaultContent();
+		
+		// set cookie
+		setCookie_FromGmail_ForThisChrome();
+		
+	}
+	
+	static void setCookie_FromGmail_ForThisChrome() {
+		System.out.println("Trying to access Gmail via IMAP");
+		EmailManager mail = new EmailManager(gmailHost_ToGetCookie, gmailUser_ToGetCookie, gmailPass_ToGetCookie);
+		String emailSubjectKeyword = "using hCaptcha Accessibility";
+		String emailLinkKeyword = "accounts.hcaptcha.com/verify_email";
+		String emailLink=null;
+		try {
+			emailLink = mail.getLink_FromAnEmail("hCaptcha", emailSubjectKeyword, emailLinkKeyword);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		openURL(emailLink);
+		click(accessibilityOption);
 	}
 	
 	static void checkNumberOfWindow() {
@@ -285,8 +316,8 @@ public class AutoLike_CoinGecko {
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
 		
-		openURL(cookie_hCaptchaPage);
-		driver.manage().addCookie(new Cookie("__cfduid", cookie__cfduid));		
+//		openURL(cookie_hCaptchaPage);
+//		driver.manage().addCookie(new Cookie("__cfduid", cookie__cfduid));		
 		
 		openURL(cgHomePage);
 	}
