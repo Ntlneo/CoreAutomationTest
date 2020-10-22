@@ -227,7 +227,37 @@ public class Test_AutoWallet {
 	
 
 
+<<<<<<< HEAD
 	// *********************** BASE TEST ***********************
+=======
+        
+//        options.merge(capabilities);
+        String appPath = "C://Program Files (x86)/BeowulfWallet/BeowulfWallet.exe";
+        options.setBinary(appPath);
+//        options.addArguments("electron-port=5000");
+//        options.addArguments("webpack-port=3000");
+//        options.addArguments("access-token=12345‌​6789");
+        
+//        options.setCapability("chromeOptions", options);
+		
+		
+		
+		driverPath = "Drivers/chromedriver.exe";
+		System.setProperty("webdriver.chrome.driver", driverPath);
+//		System.setProperty("webdriver.chrome.silentOutput", "true");
+//		
+//		options.setExperimentalOption("excludeSwitches", new String[] { "enable-automation" });
+//		options.setExperimentalOption("useAutomationExtension", false);
+//		Map<String, Object> prefs = new HashMap<String, Object>();
+//		prefs.put("credentials_enable_service", false);
+//		prefs.put("profile.password_manager_enabled", false);
+//		prefs.put("profile.default_content_setting_values.notifications", 2); // disable browser noti
+//		options.setExperimentalOption("prefs", prefs);
+		driver = new ChromeDriver(options);
+//		driver.manage().window().maximize();
+		driver.manage().deleteAllCookies();
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+>>>>>>> refs/heads/CoinGecko
 
 	
 	
