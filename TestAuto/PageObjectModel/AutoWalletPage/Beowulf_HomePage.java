@@ -1,8 +1,9 @@
-package AutoWallet;
+package AutoWalletPage;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import CoreAutomation.BaseAutoPage.BasePage;
 import kotlin.jvm.Synchronized;
 
 

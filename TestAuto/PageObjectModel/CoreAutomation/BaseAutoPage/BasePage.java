@@ -1,6 +1,8 @@
-package AutoWallet;
+package CoreAutomation.BaseAutoPage;
 
 import java.time.Duration;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,18 +17,25 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
+import kotlin.jvm.Synchronized;
+
+
 public class BasePage {
-	static WebDriver driver;
+	private WebDriver driver;
+	private BasePage instance;
 	
-	public BasePage() {
-		
-	}
-	
-	public WebDriver getDriver() {
-		if(null == driver) {
-			return ;
+	@Synchronized
+	public BasePage getInstance() {
+		if(null == instance) {
+			instance = new BasePage();
 		}
+		return instance;
 	}
+	
+	public void setDriver() {
+		driver =
+	}
+
 	
 	// *********************** BASE TEST ***********************	
 		// start from 1

@@ -1,6 +1,8 @@
-package AutoWallet;
+package AutoWalletPage;
 
 import org.openqa.selenium.By;
+
+import CoreAutomation.BaseAutoPage.BasePage;
 
 public class Wallet_HomePage extends BasePage{
 	//Home page

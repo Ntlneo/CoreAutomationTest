@@ -1,4 +1,4 @@
-package AutoWallet;
+package AutoWalletTest;
 
 import static org.junit.Assert.fail;
 
@@ -40,7 +40,7 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import AutoWallet.Beowulf_HomePage;
+import AutoWalletPage.Beowulf_HomePage;
 import CoreAutomation.BaseAutoTest.BaseTest;
 import DataManager.ExcelManager_Map;
 
@@ -48,7 +48,7 @@ import DataManager.ExcelManager_Map;
 /**
  * Unit test for simple App.
  */
-public class Test_Wallet_HomePage extends BaseTest{
+public class Test_Wallet_RegisterWallet extends BaseTest{
 	
 	// global
 
@@ -73,35 +73,25 @@ public class Test_Wallet_HomePage extends BaseTest{
 	
 	
 	// *********************** RUN TEST AUTO ***********************
-
-
-	@Test
-	public static void OpenWallet() {
-			// Before Test
-			System.out.println("\t*** STARTING TestCase 1\t***");			
-			// Star Test			
-			
-			Beowulf_HomePage.getInstance().;
-	}
 	
-	@Test
-	public void Test_LoginWallet() {
-		System.out.println("\t*** STARTING TestCase 2\t***");
-		click(pwalletBtn);
-		click(createOne_Link);		
-		input(walletName_Box, "lamwallet1");
-		input(walletPassword_Box, "12345678");
-		input(walletConfirmPassword_Box, "12345678");
-		click(submit_Btn);
-		// After Test
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
+//	@Test
+//	public void Test_LoginWallet() {
+//		System.out.println("\t*** STARTING TestCase 2\t***");
+//		click(pwalletBtn);
+//		click(createOne_Link);		
+//		input(walletName_Box, "lamwallet1");
+//		input(walletPassword_Box, "12345678");
+//		input(walletConfirmPassword_Box, "12345678");
+//		click(submit_Btn);
+//		// After Test
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//	}
 	
 	
 

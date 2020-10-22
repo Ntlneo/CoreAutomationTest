@@ -20,36 +20,24 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
-import AutoWallet.Beowulf_HomePage;
-import AutoWallet.Wallet_HomePage;
 
 
+public class BaseTest {	
+	public WebDriver driver;
+	public String driverPath;
 
-public class BaseTest {
-	WebDriver driver;
-	WebDriver driver2;
-	String driverPath;
-	
-	//Pages Test
-//	Beowulf_HomePage beowulf_HomePage;	
-//	Wallet_HomePage wallet_HomePage;
-	
-//	public void initialPages() {
-//		beowulf_HomePage = new Beowulf_HomePage();
-//		wallet_HomePage = new Wallet_HomePage();
-//	}
 	
 	// *********************** BEFORE & AFTER ***********************
 	@Before
 	public void startScript() {
 //		ExcelManager_Map excel = new ExcelManager_Map(pathToExcelFile);
-//		initialPages();
-		startDriver();
+		System.out.println("\t### STARTING SCRIPT \t###");
+		initDriver();		
 		
 	}
 
 	@After
-	public void sayGoodBye() {
+	public void endScript() {
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
@@ -65,7 +53,7 @@ public class BaseTest {
 	// *********************** SUPPORT Functions ***********************
 	
 	
-	public void startDriver() {
+	private void initDriver() {		
 		ChromeOptions options = new ChromeOptions();
         String appPath = "C://Program Files (x86)/BeowulfWallet/BeowulfWallet.exe";
         options.setBinary(appPath);
@@ -76,10 +64,9 @@ public class BaseTest {
 		System.setProperty("webdriver.chrome.driver", driverPath);
 		driver = new ChromeDriver(options);
 //		driver.manage().window().fullscreen();	//Bug no window found
-		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		
-		System.out.println("DRIVER START SUCCESSFUL");
-	}
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);			
+		System.out.println("DRIVER START SUCCESSFUL");		
+}
 
 	
 }
