@@ -1,4 +1,4 @@
-package CoreAutomation.TestAuto;
+package CoreAutomation.BaseAutoTest;
 
 import java.net.MalformedURLException;
 import java.net.URL;

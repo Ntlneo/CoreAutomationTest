@@ -1,4 +1,4 @@
-package CoreAutomation.TestAuto;
+package CoreAutomation.BaseAutoTest;
 
 import static org.junit.Assert.fail;
 
