@@ -15,8 +15,9 @@ public class Test_Wallet_RegisterWallet extends BaseTest{
 	
 	@Test
 	public void Test_LoginWallet() {
-		System.out.println("\tSTARTING TestCase 1\t");		
+		System.out.println("\tStarting TestCase 3\t");		
 		bHomePage.click_WalletButton();
+//		bHomePage.wrong_click_WalletButton();
 	}
 
 
