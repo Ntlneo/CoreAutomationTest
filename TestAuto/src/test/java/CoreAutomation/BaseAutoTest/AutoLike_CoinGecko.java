@@ -1,24 +1,17 @@
 package CoreAutomation.BaseAutoTest;
 
-import static org.junit.Assert.fail;
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.math3.analysis.solvers.NewtonRaphsonSolver;
 import org.apache.commons.math3.util.Pair;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -28,14 +21,11 @@ import org.openqa.selenium.chrome.ChromeOptions;
 //import org.openqa.selenium.devtools.browser.Browser;
 //import org.openqa.selenium.devtools.browser.model.PermissionType;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import DataManager.EmailManager;
-import DataManager.ExcelManager_Map;
 
 /**
  * Unit test for simple App.
@@ -136,7 +126,7 @@ public class AutoLike_CoinGecko {
 
 	// AUTO SCRIPT
 	// Before run script, must get cookie of hCaptcha via https://dashboard.hcaptcha.com/welcome_accessibility
-	@org.junit.Test
+	@Test
 	public void Test_CoinGecko() {
 
 		// Before Test

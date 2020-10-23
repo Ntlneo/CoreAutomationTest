@@ -76,7 +76,29 @@
     <version>3.11</version>
 </dependency>
 	
-	<!-- https://mvnrepository.com/artifact/junit/junit -->
+	<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-engine</artifactId>
+    <version>5.7.0</version>
+    <scope>test</scope>
+</dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-core</artifactId>
+		<version>2.13.3</version>
+	</dependency>
+	<!-- SLF4J Bridge https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-slf4j-impl</artifactId>
+		<version>2.13.3</version>
+		<scope>test</scope>
+	</dependency>
+	
+<!-- 	https://mvnrepository.com/artifact/junit/junit
 <dependency>
     <groupId>junit</groupId>
     <artifactId>junit</artifactId>
@@ -84,19 +106,14 @@
     <scope>test</scope>
 </dependency>
 
-<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-<dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-core</artifactId>
-    <version>2.13.3</version>
-</dependency>
 
-<!-- SLF4J Bridge -->
+
+SLF4J Bridge
 <dependency>
 	<groupId>org.apache.logging.log4j</groupId>
 	<artifactId>log4j-slf4j-impl</artifactId>
 	<version>2.11.2</version>
-</dependency> 
+</dependency>  -->
 	
 	<!-- to avoid bug -->
 <dependency>

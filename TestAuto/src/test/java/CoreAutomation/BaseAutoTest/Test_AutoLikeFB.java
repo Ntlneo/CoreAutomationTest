@@ -1,19 +1,16 @@
 package CoreAutomation.BaseAutoTest;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
@@ -22,10 +19,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 //import org.openqa.selenium.devtools.browser.Browser;
 //import org.openqa.selenium.devtools.browser.model.PermissionType;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import DataManager.ExcelManager_Map;
 
@@ -88,7 +81,7 @@ public class Test_AutoLikeFB {
 	ExcelManager_Map excel = new ExcelManager_Map(pathToExcelFile);
 
 	// Start Test
-	@org.junit.Test
+	@Test
 	public void TestAutoLike() {
 
 		// Before Test
