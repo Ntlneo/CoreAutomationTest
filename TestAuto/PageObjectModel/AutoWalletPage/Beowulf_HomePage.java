@@ -16,7 +16,7 @@ public class Beowulf_HomePage extends BasePage{
 	
 	// *********************** LOCATORS ***********************
 	private By bWalletBtn = By.xpath("//*[@class='btn btn-beowulf btn-danger btn-block']");
-
+//	private By wrongbWalletBtn = By.xpath("//*[@class='btn btn-beowulf btn-danger btn-block']zzz");
 	
 	
 	// *********************** ACTIONS ***********************
@@ -24,4 +24,7 @@ public class Beowulf_HomePage extends BasePage{
 		click(bWalletBtn);
 	}
 	
+//	public void wrong_click_WalletButton() {
+//		click(wrongbWalletBtn);
+//	}
 }

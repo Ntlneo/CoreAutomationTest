@@ -16,13 +16,13 @@ public class Test_Beowulf_HomePage extends BaseTest{
 	
 	@Test
 	public void OpenWalletHomePage() {
-			System.out.println("\tSTARTING TestCase 1\t");		
+			System.out.println("\tStarting TestCase 1\t");		
 			bHomePage.click_WalletButton();			
 	}
 	
 	@Test
 	public void OpenCreateWalletPage() {
-			System.out.println("\tSTARTING TestCase 2\t");		
+			System.out.println("\tStarting TestCase 2\t");		
 			bHomePage.click_WalletButton();	
 			wHomePage.click_CreateOneLik();		
 	}
