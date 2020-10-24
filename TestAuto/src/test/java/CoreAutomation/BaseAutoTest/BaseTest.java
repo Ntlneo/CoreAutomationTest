@@ -83,10 +83,7 @@ public class BaseTest {
 	private void initDriverWithSpecificPort() {
 		ChromeOptions options = new ChromeOptions();
 		String appPath = "C://Program Files (x86)/BeowulfWallet/BeowulfWallet.exe";
-		options.setBinary(appPath);
-//        options.addArguments("electronPort=5000");
-//        options.addArguments("webpackPort=3000");
-//        options.addArguments("accessToken=12345‌​6789");		
+		options.setBinary(appPath);	
 		driverPath = "Drivers/chromedriver.exe";
 		System.setProperty("webdriver.chrome.driver", driverPath);
 //		System.setProperty("webdriver.chrome.silentOutput", "true");
