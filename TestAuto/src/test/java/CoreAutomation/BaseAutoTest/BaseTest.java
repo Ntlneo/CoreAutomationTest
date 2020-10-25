@@ -2,7 +2,11 @@ package CoreAutomation.BaseAutoTest;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 
 import org.junit.jupiter.api.AfterAll;
@@ -17,6 +21,10 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import AutoWalletPage.Beowulf_HomePage;
 import AutoWalletPage.Wallet_HomePage;
+import DataManager.StringManager;
+import DataManager.StringManager;
+
+import org.junit.jupiter.api.TestInfo;
 
 
 
@@ -32,12 +40,24 @@ public class BaseTest {
 	
 	// *********************** BEFORE & AFTER ***********************
 	@BeforeEach
-	public void startScript() {
+	public void startScript(TestInfo testInfo) {
 //		ExcelManager_Map excel = new ExcelManager_Map(pathToExcelFile);
-		System.out.println("\t### STARTING SCRIPT \t###");
+		System.out.println("\t###  STARTING SCRIPT  ###");
 		initDriver();
-//		initDriverWithSpecificPort();
 		initPages();
+		
+		
+		
+		
+		
+		//only use with ChromeService
+//		initDriverWithSpecificPort();
+		System.out.println("Test File:\t" + testInfo.getTestClass().get().getSimpleName() + ".java");
+		System.out.println("Test Case:\t" +	addSpaceBetweenWords_OfTestcaseMethod(testInfo.getTestMethod().get().getName()));
+		
+		
+		
+		
 	}
 
 	@AfterEach
@@ -48,10 +68,10 @@ public class BaseTest {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
 		}
-		System.out.println("\t### END SCRIPT. SEE YA AGAIN !!!\t###\n");		
+		System.out.println("\t###  END SCRIPT. SEE YA AGAIN !!!  ###\n");		
 		driver.quit();
 		
-		// only use when start ChromeDriver by ChromeDriverService
+		//only use with ChromeService
 //		service.stop();
 	}
 	
@@ -77,7 +97,7 @@ public class BaseTest {
 		driver = new ChromeDriver(options);
 //		driver.manage().window().fullscreen();	//Bug no window found
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		System.out.println("\tDriver Start Success");
+		System.out.println("Driver Start Success");
 	}
 	
 	private void initDriverWithSpecificPort() {
@@ -113,5 +133,10 @@ public class BaseTest {
 	private void initPages() {
 		bHomePage = new Beowulf_HomePage(driver);
 		wHomePage = new Wallet_HomePage(driver);
+	}
+	
+	private String addSpaceBetweenWords_OfTestcaseMethod(String string) {
+		StringManager sm = new StringManager();
+		return sm.addSpaceBeforeCapitalCharacter(string);
 	}
 }

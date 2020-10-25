@@ -15,14 +15,12 @@ public class Test_Beowulf_HomePage extends BaseTest{
 	// *********************** CODE BELOW ***********************
 	
 	@Test
-	public void OpenWalletHomePage() {
-			System.out.println("\tStarting TestCase 1\t");		
+	public void OpenWalletHomePage() {					
 			bHomePage.click_WalletButton();			
 	}
 	
 	@Test
-	public void OpenCreateWalletPage() {
-			System.out.println("\tStarting TestCase 2\t");		
+	public void OpenCreateWalletPage() {		
 			bHomePage.click_WalletButton();	
 			wHomePage.click_CreateOneLik();		
 	}
