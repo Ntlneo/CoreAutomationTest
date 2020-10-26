@@ -1,5 +1,8 @@
 package CoreAutomation.BaseAutoPage;
 
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.time.Duration;
 
 import java.util.ArrayList;
@@ -16,7 +19,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
-import kotlin.jvm.Synchronized;
 
 public class BasePage {
 	private WebDriver driver;
@@ -25,6 +27,34 @@ public class BasePage {
 	}	
 	
 	// *********************** CODE BELOW ***********************
+	// DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
+	
+	public void addLog(Boolean conditionTrue, String messageFail) {		
+//		try {
+//			if (conditionTrue) {
+//				System.out.println("\t\t--> PASSED");
+//			}						
+//		}catch (Exception e) {
+////			e.printStackTrace();
+//			System.out.println("\t\t--> FAILED : " + messageFail);			
+//			assertTrue(messageFail, false );
+//		}	
+		
+		if (conditionTrue) {
+			System.out.println("\t\t--> PASSED");
+		}else {
+			System.out.println("\t\t--> FAILED : " + messageFail);
+			assertTrue(false, messageFail );
+		}
+	}
+	
+	protected Boolean isElementDisplayed(By by) {
+		return getWebElement(by).isDisplayed();
+	}
+	
+	protected Boolean isElementVisibleThenDisplayed(By by) {
+		return getElement_AfterFluentWait_Default(by).isDisplayed();
+	}
 	
 	// start from 1
 	protected void switchWindow(int orderOfWindow) {
@@ -34,10 +64,17 @@ public class BasePage {
 		driver.switchTo().window(listWindow.get(orderOfWindow - 1));
 	}
 
-	// DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
+	
 	protected WebElement getElement_AfterFluentWait(By by, int timeoutInSecond, int repeatInSecond) {
 		Wait wait = new FluentWait(driver).withTimeout(Duration.ofSeconds(timeoutInSecond))
 				.pollingEvery(Duration.ofSeconds(repeatInSecond)).ignoring(NoSuchElementException.class);
+		return (WebElement) wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+	}
+	
+	//Default fluent wait 15s timeout - 1s pooling
+	protected WebElement getElement_AfterFluentWait_Default(By by) {
+		Wait wait = new FluentWait(driver).withTimeout(Duration.ofSeconds(15))
+				.pollingEvery(Duration.ofSeconds(1)).ignoring(NoSuchElementException.class);
 		return (WebElement) wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 	}
 

@@ -1,5 +1,7 @@
 package CoreAutomation.BaseAutoTest;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -21,6 +23,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import AutoWalletPage.Beowulf_HomePage;
 import AutoWalletPage.Wallet_HomePage;
+import CoreAutomation.BaseAutoPage.BasePage;
 import DataManager.StringManager;
 import DataManager.StringManager;
 
@@ -39,12 +42,20 @@ public class BaseTest {
 	
 	
 	// *********************** BEFORE & AFTER ***********************
-	@BeforeEach
-	public void startScript(TestInfo testInfo) {
-//		ExcelManager_Map excel = new ExcelManager_Map(pathToExcelFile);
+	
+	@BeforeAll
+	public void startScript_ONCE() {
 		System.out.println("\t###  STARTING SCRIPT  ###");
 		initDriver();
 		initPages();
+	}
+	
+	@BeforeEach
+	public void startScript(TestInfo testInfo) {
+//		ExcelManager_Map excel = new ExcelManager_Map(pathToExcelFile);
+//		System.out.println("\t###  STARTING SCRIPT  ###");
+//		initDriver();
+//		initPages();
 		
 		
 		
@@ -53,7 +64,7 @@ public class BaseTest {
 		//only use with ChromeService
 //		initDriverWithSpecificPort();
 		System.out.println("Test File:\t" + testInfo.getTestClass().get().getSimpleName() + ".java");
-		System.out.println("Test Case:\t" +	addSpaceBetweenWords_OfTestcaseMethod(testInfo.getTestMethod().get().getName()));
+		System.out.print("Test Case:\t" +	addSpaceBetweenWords_OfTestcaseMethod(testInfo.getTestMethod().get().getName()));
 		
 		
 		
@@ -61,14 +72,17 @@ public class BaseTest {
 	}
 
 	@AfterEach
-	public void endScript() {
+
+	
+	@AfterAll
+	public void endScript_ONCE() {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
 		}
-		System.out.println("\t###  END SCRIPT. SEE YA AGAIN !!!  ###\n");		
+		System.out.println("\n\t###  END SCRIPT. SEE YA AGAIN !!!  ###\n");		
 		driver.quit();
 		
 		//only use with ChromeService
@@ -76,28 +90,27 @@ public class BaseTest {
 	}
 	
 	
-	
 	// *********************** SUPPORT Functions ***********************
 	
 	
 	private void initDriver() {
 		ChromeOptions options = new ChromeOptions();
-		String appPath = "C://Program Files (x86)/BeowulfWallet/BeowulfWallet.exe";
-		options.setBinary(appPath);
-//        options.addArguments("electronPort=5000");
-//        options.addArguments("webpackPort=3000");
-//        options.addArguments("accessToken=12345‌​6789");		
+		String appPath_Mainnet = "C://Program Files (x86)/BeowulfWallet/BeowulfWallet.exe";
+		String appPath_Testnet = "C://Program Files (x86)/BeowulfWalletTestnet/BeowulfWalletTestnet.exe";
+		options.setBinary(appPath_Testnet);
+//		options.setBinary(appPath);
+	
 		driverPath = "Drivers/chromedriver.exe";
 		System.setProperty("webdriver.chrome.driver", driverPath);
 		
 		// hide log of chromedriver and java selenium
-		System.setProperty("webdriver.chrome.silentOutput", "true");
-		java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.SEVERE);
+//		System.setProperty("webdriver.chrome.silentOutput", "true");
+//		java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.SEVERE);
 		
 		driver = new ChromeDriver(options);
 //		driver.manage().window().fullscreen();	//Bug no window found
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		System.out.println("Driver Start Success");
+//		System.out.println("Driver Start Success");
 	}
 	
 	private void initDriverWithSpecificPort() {
@@ -139,4 +152,6 @@ public class BaseTest {
 		StringManager sm = new StringManager();
 		return sm.addSpaceBeforeCapitalCharacter(string);
 	}
+	
+
 }
