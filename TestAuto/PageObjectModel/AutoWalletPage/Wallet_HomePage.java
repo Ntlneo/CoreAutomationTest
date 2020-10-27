@@ -27,27 +27,13 @@ public class Wallet_HomePage extends BasePage{
 	
 	
 	// *********************** ACTIONS ***********************
-	
-//	@Test
-//	public void Test_LoginWallet() {
-//		System.out.println("\t*** STARTING TestCase 2\t***");
-//		click(pwalletBtn);
-//		click(createOne_Link);		
-//		input(walletName_Box, "lamwallet1");
-//		input(walletPassword_Box, "12345678");
-//		input(walletConfirmPassword_Box, "12345678");
-//		click(submit_Btn);
-//		// After Test
-//		try {
-//			Thread.sleep(5000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//	}
+	public void showPopup() {
+		showPopupUntilClickOK();
+	}
 
-	
+	public void switchFromAppToChrome() {
+		switchToChrome();
+	}
 
 	public void verifyWalletHomePageDisplay() {
 		addLog(isWalletHomePageDisplay(), "Wallet HomePage doesn't displayed");

@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -22,6 +26,9 @@ import org.openqa.selenium.support.ui.Wait;
 
 public class BasePage {
 	private WebDriver driver;
+//	public String commandOpenChromeInDebug = "chrome --remote-debugging-port=9222";
+	public String commandOpenChromeInDebug = "chrome";
+	
 	public BasePage(WebDriver driver) {
 		this.driver = driver;
 	}	
@@ -29,17 +36,26 @@ public class BasePage {
 	// *********************** CODE BELOW ***********************
 	// DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
 	
+	
+	
+	protected void showPopupUntilClickOK() {
+		JFrame jf=new JFrame();
+		jf.setAlwaysOnTop(true);
+		JOptionPane jop = new JOptionPane();
+		jop.showMessageDialog(jf, "Please verify captcha manually then click OK", "WAITING TO VERIFY CAPTCHA",jop.INFORMATION_MESSAGE);
+	}
+	
+	public void runCmdComand(String command) {		
+		try
+		{
+		    Process process = Runtime.getRuntime().exec("cmd /c start " + command);
+		} catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+	}
+	
 	public void addLog(Boolean conditionTrue, String messageFail) {		
-//		try {
-//			if (conditionTrue) {
-//				System.out.println("\t\t--> PASSED");
-//			}						
-//		}catch (Exception e) {
-////			e.printStackTrace();
-//			System.out.println("\t\t--> FAILED : " + messageFail);			
-//			assertTrue(messageFail, false );
-//		}	
-		
 		if (conditionTrue) {
 			System.out.println("\t\t--> PASSED");
 		}else {
@@ -63,7 +79,19 @@ public class BasePage {
 		listWindow.addAll(windows);
 		driver.switchTo().window(listWindow.get(orderOfWindow - 1));
 	}
-
+	
+	protected int getNumberOfWindow() {
+		return driver.getWindowHandles().size();
+	}
+	
+	protected void switchToChrome() {
+		Set<String> windows = driver.getWindowHandles();
+		for (String string : windows) {
+			System.out.println(string);
+			driver.switchTo().window(string);
+		}
+	}
+	
 	
 	protected WebElement getElement_AfterFluentWait(By by, int timeoutInSecond, int repeatInSecond) {
 		Wait wait = new FluentWait(driver).withTimeout(Duration.ofSeconds(timeoutInSecond))

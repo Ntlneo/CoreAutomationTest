@@ -13,7 +13,7 @@ import CoreAutomation.BaseAutoTest.BaseTest;
 /**
  * Unit test for simple App.
  */
-@TestInstance(Lifecycle.PER_CLASS)
+//@TestInstance(Lifecycle.PER_CLASS)
 public class Test_Beowulf_HomePage extends BaseTest{
 
 
@@ -23,7 +23,7 @@ public class Test_Beowulf_HomePage extends BaseTest{
 	public void OpenWalletHomePage() {					
 			bHomePage.clickWalletButton();
 			wHomePage.verifyWalletHomePageDisplay();
-//			assertTrue(wHomePage.isWalletHomePageDisplay(),"sdafsadfdsafsda");
+//			assertTrue(wHomePage.isWalletHomePageDisplay(),"sdafsadfdsafsda")
 	}
 	
 

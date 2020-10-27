@@ -1,198 +1,154 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>CoreAutomation</groupId>
-  <artifactId>TestAuto</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+	<groupId>CoreAutomation</groupId>
+	<artifactId>TestAuto</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 
-  <name>TestAuto</name>
-  <url>http://maven.apache.org</url>
+	<name>TestAuto</name>
+	<url>http://maven.apache.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
-<build>
+	<build>
 		<plugins>
-			<!-- Compiler plug-in -->
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M5</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<encoding>UTF-8</encoding>
+					<properties>
+						<configurationParameters>
+							junit.jupiter.conditions.deactivate = *
+							junit.jupiter.extensions.autodetection.enabled = true
+							junit.jupiter.testinstance.lifecycle.default = per_class
+						</configurationParameters>
+					</properties>
 				</configuration>
 			</plugin>
-			<!-- Below plug-in is used to execute tests -->
-<!--  			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.0</version>
-				<configuration>
-					<suiteXmlFiles>
-						TestNG suite XML files
-						<suiteXmlFile>${project.basedir}\TestRunAndData\TestCryptonoWeb-groups.xml</suiteXmlFile>
-						<file>src/test/resources/suite.xml</file>
-					</suiteXmlFiles>
-				</configuration>
-			</plugin>  -->
-			
-			<!-- use maven-jar-plugin to create a manifest file and package it by adding it to the JAR file. -->
-<!-- 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.1.1</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>AutoLikeFB.App</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin> -->
+
 		</plugins>
 	</build>
 
+
+
 	<dependencies>
-	
-	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
-<dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-email</artifactId>
-    <version>1.5</version>
-</dependency>
-	
-	
-	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 
-		Use to create Random String
-	-->
-<dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-lang3</artifactId>
-    <version>3.11</version>
-</dependency>
-	
-	<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-engine</artifactId>
-    <version>5.7.0</version>
-    <scope>test</scope>
-</dependency>
 
-	<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-core</artifactId>
-		<version>2.13.3</version>
-	</dependency>
-	<!-- SLF4J Bridge https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
-	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-slf4j-impl</artifactId>
-		<version>2.13.3</version>
-		<scope>test</scope>
-	</dependency>
-	
-<!-- 	https://mvnrepository.com/artifact/junit/junit
-<dependency>
-    <groupId>junit</groupId>
-    <artifactId>junit</artifactId>
-    <version>4.13</version>
-    <scope>test</scope>
-</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>1.5</version>
+		</dependency>
 
 
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 
+			Use to create Random String -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.11</version>
+		</dependency>
 
-SLF4J Bridge
-<dependency>
-	<groupId>org.apache.logging.log4j</groupId>
-	<artifactId>log4j-slf4j-impl</artifactId>
-	<version>2.11.2</version>
-</dependency>  -->
-	
-	<!-- to avoid bug -->
-<dependency>
-  <groupId>com.google.guava</groupId>
-  <artifactId>guava</artifactId>
-  <version>29.0-jre</version>
-</dependency>
-	
-	<!-- https://mvnrepository.com/artifact/org.apache.maven/maven-plugin-api -->
-<dependency>
-    <groupId>org.apache.maven</groupId>
-    <artifactId>maven-plugin-api</artifactId>
-    <version>3.6.3</version>
-</dependency>
-	
-	<!-- https://mvnrepository.com/artifact/org.apache.maven/maven-core -->
-<dependency>
-    <groupId>org.apache.maven</groupId>
-    <artifactId>maven-core</artifactId>
-    <version>3.6.3</version>
-</dependency>
-	
-	<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin  -->
-<dependency>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-compiler-plugin</artifactId>
-    <version>3.8.0</version>
-</dependency>
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.7.0</version>
+			<scope>test</scope>
+		</dependency>
 
-<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
-<dependency>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-jar-plugin</artifactId>
-    <version>3.1.1</version>
-</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.13.3</version>
+		</dependency>
 
-<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
-<dependency>
-    <groupId>org.apache.poi</groupId>
-    <artifactId>poi-ooxml</artifactId>
-    <version>4.1.2</version>
-</dependency>
+		<!-- SLF4J Bridge https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>2.13.3</version>
+			<scope>test</scope>
+		</dependency>
 
-<!--	https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
-	<dependency>
-		<groupId>com.sun.mail</groupId>
-		<artifactId>javax.mail</artifactId>
-		<version>1.6.1</version>
-	</dependency>
+		<!-- to avoid bug -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>29.0-jre</version>
+		</dependency>
 
-	<!-- https://mvnrepository.com/artifact/com.aventstack/extentreports 
-	<dependency>
-		<groupId>com.aventstack</groupId>
-		<artifactId>extentreports</artifactId>
-		<version>3.1.5</version>
-	</dependency> -->
-	
-<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-<!-- <dependency>
-    <groupId>com.google.code.gson</groupId>
-    <artifactId>gson</artifactId>
-    <version>2.8.6</version>
-</dependency> -->
+		<!-- https://mvnrepository.com/artifact/org.apache.maven/maven-plugin-api -->
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-plugin-api</artifactId>
+			<version>3.6.3</version>
+		</dependency>
 
-<!-- DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound -->
-<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
-<dependency>
-    <groupId>org.seleniumhq.selenium</groupId>
-    <artifactId>selenium-java</artifactId>
-    <version>4.0.0-alpha-6</version>  
-</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.maven/maven-core -->
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-core</artifactId>
+			<version>3.6.3</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>3.8.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-jar-plugin</artifactId>
+			<version>3.1.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>4.1.2</version>
+		</dependency>
 
 
-<!-- https://mvnrepository.com/artifact/io.appium/java-client -->
-<!-- <dependency>
-    <groupId>io.appium</groupId>
-    <artifactId>java-client</artifactId>
-    <version>7.3.0</version>
-</dependency> -->
+		<!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.aventstack/extentreports <dependency> 
+			<groupId>com.aventstack</groupId> <artifactId>extentreports</artifactId> 
+			<version>3.1.5</version> </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<!-- <dependency> <groupId>com.google.code.gson</groupId> <artifactId>gson</artifactId> 
+			<version>2.8.6</version> </dependency> -->
+
+		<!-- DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound -->
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>4.0.0-alpha-6</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/io.appium/java-client -->
+		<!-- <dependency> <groupId>io.appium</groupId> <artifactId>java-client</artifactId> 
+			<version>7.3.0</version> </dependency> -->
 
 
 	</dependencies>
