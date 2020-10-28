@@ -139,15 +139,27 @@ public class AutoLike_CoinGecko {
 		// Star Test
 		startDriver();
 		
-		for (Pair pair : listPairEmail ) {
-			registerAcc_CoinGecko(pair.getSecond().toString(), passwordRegister);
+		// listPairEmail(Prefix-Email, email)
+		for (int i = 0 ; i < listPairEmail.size(); i++) {			
+			registerAcc_WithoutClickSignUp_CoinGecko(listPairEmail.get(i).getSecond().toString(), passwordRegister);
+			if(i == 0) {
+				byPassHcaptcha();				
+				openURL(cgHomePage);
+				registerAcc_WithoutClickSignUp_CoinGecko(listPairEmail.get(i).getSecond().toString(), passwordRegister);
+				click(signUpBtn);
+			}else {
+				click(signUpBtn);
+			}
+			
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			verifyAccAndLogin_InMailinator(pair.getFirst().toString());
+			
+			verifyAccAndLogin_InMailinator(listPairEmail.get(i).getFirst().toString());
+			
 			
 			
 			clickStarBWF_CoinGecko();
@@ -187,34 +199,26 @@ public class AutoLike_CoinGecko {
 		click(loginBtn);		
 	}
 	
-	static void registerAcc_CoinGecko(String email, String password) {
+	static void registerAcc_WithoutClickSignUp_CoinGecko(String email, String password) {	
 		click(signUpMenuBtn);
 		input(emailBox, email);
 		input(passBox, password);
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		click(checkBox1);
 		click(checkBox2);
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		byPassHcaptcha();
 		
-		
-		
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		click(signUpBtn);		
-	}
-	
-	static void byPassHcaptcha() {
-		
-		//switch to new frame
 		driver.switchTo().frame(getElement_ByFluentWait(captchaFrame, 10, 1));
 		click(captchaCheckBox);
 		try {
@@ -222,7 +226,22 @@ public class AutoLike_CoinGecko {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}		
+		
+//		click(signUpBtn);		
+	}
+	
+	static void byPassHcaptcha() {
+		
+		//switch to new frame
+//		driver.switchTo().frame(getElement_ByFluentWait(captchaFrame, 10, 1));
+//		click(captchaCheckBox);
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		// switch back to default window then switch to new frame
 		driver.switchTo().defaultContent();
@@ -239,7 +258,13 @@ public class AutoLike_CoinGecko {
 		click(submitBtn);
 		driver.switchTo().defaultContent();
 		
-		// set cookie
+		// wait 30s to email come then access gmail to set cookie via link in email
+		try {
+			Thread.sleep(30000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setCookie_FromGmail_ForThisChrome();
 		
 	}
@@ -257,7 +282,13 @@ public class AutoLike_CoinGecko {
 			e.printStackTrace();
 		}
 		openURL(emailLink);
-		click(accessibilityOption);
+		click(setCookieBtn);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	static void checkNumberOfWindow() {
@@ -289,7 +320,7 @@ public class AutoLike_CoinGecko {
 	}
 
 	static void startDriver() {
-		driverPath = "Drivers/chromedriver.exe";
+		driverPath = "Drivers/WebChromeDriver/chromedriver.exe";
 		System.setProperty("webdriver.chrome.driver", driverPath);
 		System.setProperty("webdriver.chrome.silentOutput", "true");
 		ChromeOptions options = new ChromeOptions();
