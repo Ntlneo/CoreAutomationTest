@@ -1,7 +1,11 @@
 package AutoWalletTest;
 
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import CoreAutomation.BaseAutoTest.BaseTest;
 
@@ -9,23 +13,22 @@ import CoreAutomation.BaseAutoTest.BaseTest;
 /**
  * Unit test for simple App.
  */
+//@TestInstance(Lifecycle.PER_CLASS)
 public class Test_Beowulf_HomePage extends BaseTest{
 
 
 	// *********************** CODE BELOW ***********************
 	
 	@Test
-	public void OpenWalletHomePage() {
-			System.out.println("\tStarting TestCase 1\t");		
-			bHomePage.click_WalletButton();			
+	public void OpenWalletHomePage() {					
+			bHomePage.clickWalletButton();
+			wHomePage.verifyWalletHomePageDisplay();
+//			assertTrue(wHomePage.isWalletHomePageDisplay(),"sdafsadfdsafsda")
 	}
 	
-	@Test
-	public void OpenCreateWalletPage() {
-			System.out.println("\tStarting TestCase 2\t");		
-			bHomePage.click_WalletButton();	
-			wHomePage.click_CreateOneLik();		
-	}
+
+	
+
 	
 
 	

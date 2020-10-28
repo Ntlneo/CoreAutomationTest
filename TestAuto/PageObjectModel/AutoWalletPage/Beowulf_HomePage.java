@@ -15,16 +15,25 @@ public class Beowulf_HomePage extends BasePage{
 	}	
 	
 	// *********************** LOCATORS ***********************
-	private By bWalletBtn = By.xpath("//*[@class='btn btn-beowulf btn-danger btn-block']");
-//	private By wrongbWalletBtn = By.xpath("//*[@class='btn btn-beowulf btn-danger btn-block']zzz");
+	private By testNet_Txt = By.xpath("//*[@class='text-capitalize mr-2']");
+	private By manageBeowulfWallet_Txt = By.xpath("//*[@class='h3 h-saraburn text-center font-weight-normal']");
+	private By wallet_Btn = By.xpath("//*[@class='btn btn-beowulf btn-danger btn-block']");
+	
 	
 	
 	// *********************** ACTIONS ***********************
-	public void click_WalletButton() {
-		click(bWalletBtn);
+	
+	public Boolean isBeowulfHomePage() {
+		return isElementDisplayed(manageBeowulfWallet_Txt) && isElementDisplayed(wallet_Btn);
 	}
 	
-//	public void wrong_click_WalletButton() {
-//		click(wrongbWalletBtn);
-//	}
+	public String getTestEnv() {
+		return getWebElement(testNet_Txt).getText();		
+	}
+	
+	public void clickWalletButton() {
+		click(wallet_Btn);
+	}
+	
+
 }
