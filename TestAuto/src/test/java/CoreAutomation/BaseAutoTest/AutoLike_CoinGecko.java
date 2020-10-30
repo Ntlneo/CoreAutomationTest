@@ -143,12 +143,23 @@ public class AutoLike_CoinGecko {
 		for (int i = 0 ; i < listPairEmail.size(); i++) {			
 			registerAcc_WithoutClickSignUp_CoinGecko(listPairEmail.get(i).getSecond().toString(), passwordRegister);
 			if(i == 0) {
-				byPassHcaptcha();				
-				openURL(cgHomePage);
+				driver.switchTo().defaultContent();
+				byPassHcaptcha();
+				
+				driver.switchTo().defaultContent();
+				setCookie_FromGmail_ForThisChrome();
+				
+				driver.switchTo().defaultContent();
+				System.out.println("Trying to register again");
+				openURL(cgHomePage);				
 				registerAcc_WithoutClickSignUp_CoinGecko(listPairEmail.get(i).getSecond().toString(), passwordRegister);
+				
+				driver.switchTo().defaultContent();
 				click(signUpBtn);
+				System.out.println("SignUp CoinGecko success");
 			}else {
 				click(signUpBtn);
+				System.out.println("SignUp CoinGecko success");
 			}
 			
 			try {
@@ -195,7 +206,8 @@ public class AutoLike_CoinGecko {
 			e.printStackTrace();
 		}
 		getElement_ByFluentWait(titleEmail_CoinGecko, 180, 5).click();
-		click(confirmAccBtn);
+		getElement_ByFluentWait(confirmAccBtn, 180, 5).click();
+//		click(confirmAccBtn);
 		click(loginBtn);		
 	}
 	
@@ -233,22 +245,11 @@ public class AutoLike_CoinGecko {
 	
 	static void byPassHcaptcha() {
 		
-		//switch to new frame
-//		driver.switchTo().frame(getElement_ByFluentWait(captchaFrame, 10, 1));
-//		click(captchaCheckBox);
-//		try {
-//			Thread.sleep(5000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
 		// switch back to default window then switch to new frame
-		driver.switchTo().defaultContent();
 		driver.switchTo().frame(getWebElement(captchaFrame_Main));		
 		click(helpBtn);		
 		click(accessibilityOption);
-		click(cookieLink);
+		click(cookieLink);		
 		
 		// switch back to default window then switch to new Window
 		driver.switchTo().defaultContent();
@@ -256,17 +257,16 @@ public class AutoLike_CoinGecko {
 		switchWindow(2);		
 		input(emailCaptchaAccess, gmailUser_ToGetCookie);
 		click(submitBtn);
-		driver.switchTo().defaultContent();
+//		driver.switchTo().defaultContent();
 		
-		// wait 30s to email come then access gmail to set cookie via link in email
+		// wait 60s to email come then access gmail to set cookie via link in email
+		System.out.println("Begin waiting 60s for the setCookie email");
 		try {
-			Thread.sleep(30000);
+			Thread.sleep(60000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		setCookie_FromGmail_ForThisChrome();
-		
+		}		
 	}
 	
 	static void setCookie_FromGmail_ForThisChrome() {
@@ -280,8 +280,18 @@ public class AutoLike_CoinGecko {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}		
+		
+		
+		openNewTab_thenSwitch();
 		openURL(emailLink);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Trying to click setCookie Button");
 		click(setCookieBtn);
 		try {
 			Thread.sleep(5000);
@@ -289,6 +299,7 @@ public class AutoLike_CoinGecko {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+//		driver.close();
 	}
 	
 	static void checkNumberOfWindow() {
