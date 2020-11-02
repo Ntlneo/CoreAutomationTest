@@ -46,13 +46,10 @@ public class AutoLike_CoinGecko {
 	static String cookie_session = "7021a4a1-1a04-4fe8-9acd-1e670ccf4b03";
 	static String cookie__cfduid = "d45ad1fab2804986ba4b9e0086ecf8adf1600941513";
 	static String gmailHost_ToGetCookie = "imap.gmail.com";
-//	static String gmailUser_ToGetCookie = "suzukihzt@gmail.com";
-//	static String gmailPass_ToGetCookie = "Docnhat1";
-	static String gmailUser_ToGetCookie = "lamnguyeneditor@gmail.com";
-	static String gmailPass_ToGetCookie = "Xzsawq8487!@#";
-	
-	
-	
+	static String gmailUser_ToGetCookie = "suzukihzt@gmail.com";
+	static String gmailPass_ToGetCookie = "Docnhat1";
+//	static String gmailUser_ToGetCookie = "lamnguyeneditor@gmail.com";
+//	static String gmailPass_ToGetCookie = "Xzsawq8487!@#";	
 	
 	static String pathToExcelFile = "DataTest/DataCoinGecko.xlsx";
 	static String sheetName = "CoinGecko";
@@ -101,7 +98,7 @@ public class AutoLike_CoinGecko {
 	
 	
 	//bwf page
-	static By starIcon = By.xpath("//i[@data-coin-id='12586']");
+	static By starIcon = By.xpath("//i[@data-source='star_button']");
 	
 	//mailinator email
 	static String linkMailinator_part1 = "https://www.mailinator.com/v3/index.jsp?zone=public&query=";
@@ -119,6 +116,10 @@ public class AutoLike_CoinGecko {
 	static By emailBox_Login = By.id("user_email");
 	static By passBox_Login = By.id("user_password");	
 	static By loginBtn_Login = By.name("commit");
+	
+	//CoinGecko Menu
+	static By accIcon = By.xpath("//*[@class='hover-to-dropdown']");
+	static By signOutBtn = By.xpath("(//a[@data-method='delete'])[1]");
 	
 	
 
@@ -141,6 +142,15 @@ public class AutoLike_CoinGecko {
 		
 		// Star Test
 		startDriver();
+		
+//		openNewTab_thenSwitch();
+//		openURL("https://www.google.com");
+//		
+//		openNewTab_thenCloseOldTabs();
+//		openURL("https://www.youtube.com");
+
+		
+		
 		
 		// listPairEmail(Prefix-Email, email)
 		for (int i = 0 ; i < listPairEmail.size(); i++) {			
@@ -176,7 +186,27 @@ public class AutoLike_CoinGecko {
 			
 			loginNewTab_CoinGecko(listPairEmail.get(i).getSecond().toString(), passwordRegister);			
 			
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			clickStarBWF_CoinGecko();
+			
+			signOut_CoinGecko();
+			
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			openNewTab_thenCloseOldTabs();
+			openURL(cgHomePage);
+			
 		}
 		
 		// After Test
@@ -184,6 +214,8 @@ public class AutoLike_CoinGecko {
 
 		
 	}
+
+
 
 	// After Script
 	public void sayGoodBye() {
@@ -193,7 +225,12 @@ public class AutoLike_CoinGecko {
 
 	// *********************** TASKS ***********************
 	
-	static void clickStarBWF_CoinGecko() {
+	
+	private void signOut_CoinGecko() {
+		hoverAndClick(accIcon, signOutBtn);		
+	}
+	
+	void clickStarBWF_CoinGecko() {
 		openURL(cgBwfPage);
 		click(starIcon);
 		try {
@@ -204,14 +241,14 @@ public class AutoLike_CoinGecko {
 		}
 	}
 	
-	static void loginNewTab_CoinGecko(String email, String password) {
+	void loginNewTab_CoinGecko(String email, String password) {
 		switchWindow(4);
 		input(emailBox_Login, email);	
 		input(passBox_Login, password);
 		click(loginBtn_Login);
 	}
 	
-	static void verifyAcc_InMailinator(String emailRegister_Prefix) {
+	void verifyAcc_InMailinator(String emailRegister_Prefix) {
 		// Verify acc
 		linkMailinator = linkMailinator_part1 + emailRegister_Prefix + linkMailinator_part2;
 		openURL(linkMailinator);
@@ -228,7 +265,7 @@ public class AutoLike_CoinGecko {
 		click(confirmAccBtn);		
 	}
 	
-	static void registerAcc_WithoutClickSignUp_CoinGecko(String email, String password) {	
+	void registerAcc_WithoutClickSignUp_CoinGecko(String email, String password) {	
 		click(signUpMenuBtn);
 		input(emailBox, email);
 		input(passBox, password);
@@ -260,7 +297,7 @@ public class AutoLike_CoinGecko {
 //		click(signUpBtn);		
 	}
 	
-	static void byPassHcaptcha() {
+	void byPassHcaptcha() {
 		
 		// switch back to default window then switch to new frame
 		driver.switchTo().frame(getWebElement(captchaFrame_Main));		
@@ -286,7 +323,7 @@ public class AutoLike_CoinGecko {
 		}		
 	}
 	
-	static void setCookie_FromGmail_ForThisChrome() {
+	void setCookie_FromGmail_ForThisChrome() {
 		System.out.println("Trying to access Gmail via IMAP");
 		EmailManager mail = new EmailManager(gmailHost_ToGetCookie, gmailUser_ToGetCookie, gmailPass_ToGetCookie);
 		String emailSubjectKeyword = "using hCaptcha Accessibility";
@@ -319,7 +356,7 @@ public class AutoLike_CoinGecko {
 //		driver.close();
 	}
 	
-	static void checkNumberOfWindow() {
+	void checkNumberOfWindow() {
 		Set<String> windows = driver.getWindowHandles();
 		for (String window : windows) {
 			System.out.println(window);
@@ -347,7 +384,7 @@ public class AutoLike_CoinGecko {
 		} while (listGeneratedEmailPrefix.size() < numberOfAcc);		
 	}
 
-	static void startDriver() {
+	void startDriver() {
 		driverPath = "Drivers/WebChromeDriver/chromedriver.exe";
 		System.setProperty("webdriver.chrome.driver", driverPath);
 		System.setProperty("webdriver.chrome.silentOutput", "true");
@@ -371,35 +408,59 @@ public class AutoLike_CoinGecko {
 		openURL(cgHomePage);
 	}
 	
-	// start from 1
-	static void switchWindow(int orderOfWindow) {
-		Set<String> windows = driver.getWindowHandles();
-		List<String> listWindow = new ArrayList<String>();
-		listWindow.addAll(windows);
-		driver.switchTo().window(listWindow.get(orderOfWindow-1));
-	}
+
 
 	// *********************** BASE TEST ***********************
 
 	//DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
+	
+	
+	void openNewTab_thenCloseOldTabs() {
+		driver.switchTo().newWindow(WindowType.TAB);
+		String currentWindow = driver.getWindowHandle();
+//		System.out.println("Current Window: " + currentWindow);
+		Set<String> windowSet = driver.getWindowHandles();
+		for (String window : windowSet) {
+			if(!window.equals(currentWindow)) {
+//				System.out.println("Other Window: " + window);
+				driver.switchTo().window(window).close();
+//				System.out.println("CLOSED : " + window);
+//				try {
+//					Thread.sleep(3000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+			}
+			else {
+//				System.out.println("TRYING TO SWITCH : " + window);				
+				driver = driver.switchTo().window(window);				
+			}
+		}
+	}
+	
+	
 //	static WebElement waitElementClickable(By by,int durationInSecond) {
 //		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(durationInSecond));
 //		return wait.until(ExpectedConditions.elementToBeClickable(by));
 //	}
-//	
-//	//DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
-//	static WebElement waitElementVisible(By by,int durationInSecond) {
-//		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(durationInSecond));
-//		return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
-//	}
+
 	
-	static void clickByJavaScript(By byXpath) {
+	void clickByJavaScript(By byXpath) {
 		WebElement element = driver.findElement(byXpath);
 		JavascriptExecutor executor = (JavascriptExecutor)driver;
 		executor.executeScript("arguments[0].click();", element);
 	}
 	
-	static WebElement getElement_ByFluentWait(By by, int timeoutInSecond, int repeatInSecond) {
+	// start from 1
+	void switchWindow(int orderOfWindow) {
+		Set<String> windows = driver.getWindowHandles();
+		List<String> listWindow = new ArrayList<String>();
+		listWindow.addAll(windows);
+		driver = driver.switchTo().window(listWindow.get(orderOfWindow-1));
+	}
+	
+	WebElement getElement_ByFluentWait(By by, int timeoutInSecond, int repeatInSecond) {
 		Wait wait = new FluentWait(driver)
 				.withTimeout(Duration.ofSeconds(timeoutInSecond))
 				.pollingEvery(Duration.ofSeconds(repeatInSecond))
@@ -408,51 +469,51 @@ public class AutoLike_CoinGecko {
 	}
 
 
-	static void refreshCurrentPage() {
+	void refreshCurrentPage() {
 //		driver.findElement(By.cssSelector("body")).sendKeys(Keys.F5);
 		driver.navigate().refresh();
 	}
 
 	//DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
-	static void openNewTab_thenSwitch() {
+	void openNewTab_thenSwitch() {
 		driver.switchTo().newWindow(WindowType.TAB);
 	}
 
-	static void openURL(String url) {
+	void openURL(String url) {
 		driver.get(url);
 	}
 	
-	static String getCurrentURL() {
+	String getCurrentURL() {
 		return driver.getCurrentUrl();
 	}
 
-	static List<WebElement> getListWebElement(By by) {
+	List<WebElement> getListWebElement(By by) {
 		return driver.findElements(by);
 	}
 
-	static WebElement getWebElement(By by) {
+	WebElement getWebElement(By by) {
 		return driver.findElement(by);
 	}
 
-	static void click(By by) {
+	void click(By by) {
 		getWebElement(by).click();
 	}
 
-	static void input(By by, String text) {
+	void input(By by, String text) {
 		getWebElement(by).sendKeys(text);
 	}
 
-	static void hover(By by) {
+	void hover(By by) {
 		Actions acts = new Actions(driver);
 		acts.moveToElement(getWebElement(by)).perform();
 	}
 
-	static void hoverAndClick(By by1, By by2) {
+	void hoverAndClick(By by1, By by2) {
 		Actions acts = new Actions(driver);
 		acts.moveToElement(getWebElement(by1)).click(getWebElement(by2)).perform();
 	}
 
-	static void doubleClick(By by) {
+	void doubleClick(By by) {
 		Actions acts = new Actions(driver);
 		acts.doubleClick(getWebElement(by));
 	}
