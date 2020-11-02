@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -38,12 +39,22 @@ public class BasePage {
 	
 	
 	
+	
+	protected void clickByJavaScript(String xpathString) {
+		WebElement element = driver.findElement(By.xpath(xpathString));
+		JavascriptExecutor executor = (JavascriptExecutor)driver;
+		executor.executeScript("arguments[0].click();", element);
+	}
+	
+	
 	protected void showPopupUntilClickOK() {
 		JFrame jf=new JFrame();
 		jf.setAlwaysOnTop(true);
 		JOptionPane jop = new JOptionPane();
 		jop.showMessageDialog(jf, "Please verify captcha manually then click OK", "WAITING TO VERIFY CAPTCHA",jop.INFORMATION_MESSAGE);
 	}
+	
+	
 	
 	public void runCmdComand(String command) {		
 		try

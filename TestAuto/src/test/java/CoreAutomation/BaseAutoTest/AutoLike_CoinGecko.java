@@ -12,6 +12,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -45,8 +46,10 @@ public class AutoLike_CoinGecko {
 	static String cookie_session = "7021a4a1-1a04-4fe8-9acd-1e670ccf4b03";
 	static String cookie__cfduid = "d45ad1fab2804986ba4b9e0086ecf8adf1600941513";
 	static String gmailHost_ToGetCookie = "imap.gmail.com";
-	static String gmailUser_ToGetCookie = "suzukihzt@gmail.com";
-	static String gmailPass_ToGetCookie = "Docnhat1";
+//	static String gmailUser_ToGetCookie = "suzukihzt@gmail.com";
+//	static String gmailPass_ToGetCookie = "Docnhat1";
+	static String gmailUser_ToGetCookie = "lamnguyeneditor@gmail.com";
+	static String gmailPass_ToGetCookie = "Xzsawq8487!@#";
 	
 	
 	
@@ -93,11 +96,7 @@ public class AutoLike_CoinGecko {
 	static By gg_emailBox = By.name("identifier");
 	static By gg_NextBtn = By.xpath("//*[text()='Next']");
 	
-	static By setCookieBtn = By.xpath("//*[@data-cy='setAccessibilityCookie']");
-	
-
-	
-	
+	static By setCookieBtn = By.xpath("//*[@data-cy='setAccessibilityCookie']");	
 	
 	
 	
@@ -111,11 +110,15 @@ public class AutoLike_CoinGecko {
 	static By sender1stEmail = By.xpath("((//*[@id='inboxpane']//tr[contains(@id,row_lam)])[2]/td[@class='ng-binding'])[2]");
 	static By senderEmail_CoinGecko = By.xpath("//*[contains(text(),'CoinGecko')]");
 	static By titleEmail_CoinGecko = By.xpath("//*[contains(text(),'Confirmation instructions')]");
-	static By listRowEmail = By.xpath("//*[@ng-repeat='email in emails']");	
+	static By listRowEmail = By.xpath("//*[@ng-repeat='email in emails']");
+	static By frameEmail_Mailinator = By.xpath("//*[@id='msg_body']");
 	static By confirmAccBtn = By.xpath("(//*[@target='_other'])[2]");
 	
-	//redirect from Mailinator to login Coingecko
-	static By loginBtn = By.name("commit");
+	
+	//redirect from Mailinator to new tab login Coingecko
+	static By emailBox_Login = By.id("user_email");
+	static By passBox_Login = By.id("user_password");	
+	static By loginBtn_Login = By.name("commit");
 	
 	
 
@@ -169,9 +172,9 @@ public class AutoLike_CoinGecko {
 				e.printStackTrace();
 			}
 			
-			verifyAccAndLogin_InMailinator(listPairEmail.get(i).getFirst().toString());
+			verifyAcc_InMailinator(listPairEmail.get(i).getFirst().toString());
 			
-			
+			loginNewTab_CoinGecko(listPairEmail.get(i).getSecond().toString(), passwordRegister);			
 			
 			clickStarBWF_CoinGecko();
 		}
@@ -193,9 +196,22 @@ public class AutoLike_CoinGecko {
 	static void clickStarBWF_CoinGecko() {
 		openURL(cgBwfPage);
 		click(starIcon);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	static void verifyAccAndLogin_InMailinator(String emailRegister_Prefix) {
+	static void loginNewTab_CoinGecko(String email, String password) {
+		switchWindow(4);
+		input(emailBox_Login, email);	
+		input(passBox_Login, password);
+		click(loginBtn_Login);
+	}
+	
+	static void verifyAcc_InMailinator(String emailRegister_Prefix) {
 		// Verify acc
 		linkMailinator = linkMailinator_part1 + emailRegister_Prefix + linkMailinator_part2;
 		openURL(linkMailinator);
@@ -206,9 +222,10 @@ public class AutoLike_CoinGecko {
 			e.printStackTrace();
 		}
 		getElement_ByFluentWait(titleEmail_CoinGecko, 180, 5).click();
-		getElement_ByFluentWait(confirmAccBtn, 180, 5).click();
-//		click(confirmAccBtn);
-		click(loginBtn);		
+		
+		//switch to email frame
+		driver.switchTo().frame(getElement_ByFluentWait(frameEmail_Mailinator, 10, 1));
+		click(confirmAccBtn);		
 	}
 	
 	static void registerAcc_WithoutClickSignUp_CoinGecko(String email, String password) {	
@@ -375,6 +392,12 @@ public class AutoLike_CoinGecko {
 //		Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(durationInSecond));
 //		return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 //	}
+	
+	static void clickByJavaScript(By byXpath) {
+		WebElement element = driver.findElement(byXpath);
+		JavascriptExecutor executor = (JavascriptExecutor)driver;
+		executor.executeScript("arguments[0].click();", element);
+	}
 	
 	static WebElement getElement_ByFluentWait(By by, int timeoutInSecond, int repeatInSecond) {
 		Wait wait = new FluentWait(driver)
