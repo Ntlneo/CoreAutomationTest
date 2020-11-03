@@ -38,18 +38,18 @@ public class AutoLike_CoinGecko {
 	static String driverPath;
 
 	// changed
-	static int numberOfAcc = 10;
-	static int lengthOfUsername = 5;
+	static int numberOfAcc = 100;
+	static int lengthOfUsername = 7;
 	
 	//cookie register as suzukihzt@gmail.com
 	static String cookie_hCaptchaPage = "https://dashboard.hcaptcha.com/welcome_accessibility";
 	static String cookie_session = "7021a4a1-1a04-4fe8-9acd-1e670ccf4b03";
 	static String cookie__cfduid = "d45ad1fab2804986ba4b9e0086ecf8adf1600941513";
 	static String gmailHost_ToGetCookie = "imap.gmail.com";
-	static String gmailUser_ToGetCookie = "suzukihzt@gmail.com";
-	static String gmailPass_ToGetCookie = "Docnhat1";
-//	static String gmailUser_ToGetCookie = "lamnguyeneditor@gmail.com";
-//	static String gmailPass_ToGetCookie = "Xzsawq8487!@#";	
+//	static String gmailUser_ToGetCookie = "suzukihzt@gmail.com";
+//	static String gmailPass_ToGetCookie = "Docnhat1";
+	static String gmailUser_ToGetCookie = "lamnguyeneditor@gmail.com";
+	static String gmailPass_ToGetCookie = "Xzsawq8487!@#";	
 	
 	static String pathToExcelFile = "DataTest/DataCoinGecko.xlsx";
 	static String sheetName = "CoinGecko";
