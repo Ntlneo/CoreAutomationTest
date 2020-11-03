@@ -141,21 +141,14 @@ public class AutoLike_CoinGecko {
 		}
 		
 		// Star Test
-		startDriver();
-		
-//		openNewTab_thenSwitch();
-//		openURL("https://www.google.com");
-//		
-//		openNewTab_thenCloseOldTabs();
-//		openURL("https://www.youtube.com");
-
-		
+		startDriver();		
 		
 		
 		// listPairEmail(Prefix-Email, email)
 		for (int i = 0 ; i < listPairEmail.size(); i++) {			
-			registerAcc_WithoutClickSignUp_CoinGecko(listPairEmail.get(i).getSecond().toString(), passwordRegister);
+//			registerAcc_WithoutClickSignUp_CoinGecko(listPairEmail.get(i).getSecond().toString(), passwordRegister);
 			if(i == 0) {
+				registerAcc_WithoutClickSignUp_CoinGecko(listPairEmail.get(i).getSecond().toString(), passwordRegister);
 				driver.switchTo().defaultContent();
 				byPassHcaptcha();
 				
@@ -171,6 +164,16 @@ public class AutoLike_CoinGecko {
 				click(signUpBtn);
 				System.out.println("SignUp CoinGecko success");
 			}else {
+				//wait 60s before register acc CoinGecko again
+				System.out.println("Waiting 60s before register new acc CoinGecko again");
+				try {
+					Thread.sleep(60000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				registerAcc_WithoutClickSignUp_CoinGecko(listPairEmail.get(i).getSecond().toString(), passwordRegister);
 				driver.switchTo().defaultContent();
 				click(signUpBtn);
 				System.out.println("SignUp CoinGecko success");
