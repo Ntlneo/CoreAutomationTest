@@ -39,7 +39,7 @@ public class AutoLike_CoinGecko {
 
 	// changed
 	static int numberOfAcc = 10;
-	static int lengthOfUsername = 6;
+	static int lengthOfUsername = 5;
 	
 	//cookie register as suzukihzt@gmail.com
 	static String cookie_hCaptchaPage = "https://dashboard.hcaptcha.com/welcome_accessibility";
@@ -171,6 +171,7 @@ public class AutoLike_CoinGecko {
 				click(signUpBtn);
 				System.out.println("SignUp CoinGecko success");
 			}else {
+				driver.switchTo().defaultContent();
 				click(signUpBtn);
 				System.out.println("SignUp CoinGecko success");
 			}
@@ -233,6 +234,7 @@ public class AutoLike_CoinGecko {
 	void clickStarBWF_CoinGecko() {
 		openURL(cgBwfPage);
 		click(starIcon);
+		System.out.println("Liked BWF success");		
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
@@ -242,15 +244,18 @@ public class AutoLike_CoinGecko {
 	}
 	
 	void loginNewTab_CoinGecko(String email, String password) {
-		switchWindow(4);
+//		switchWindow(4);
+		switchLatestWindow();
 		input(emailBox_Login, email);	
 		input(passBox_Login, password);
 		click(loginBtn_Login);
+		System.out.println("Login CoinGecko success with acc " + email + " / " + password);
 	}
 	
 	void verifyAcc_InMailinator(String emailRegister_Prefix) {
 		// Verify acc
-		linkMailinator = linkMailinator_part1 + emailRegister_Prefix + linkMailinator_part2;
+		System.out.println("Verifying CoinGecko acc in mailinator acc: " + emailRegister_Prefix);
+		linkMailinator = linkMailinator_part1 + emailRegister_Prefix + linkMailinator_part2;		
 		openURL(linkMailinator);
 		try {
 			Thread.sleep(5000);
@@ -265,7 +270,9 @@ public class AutoLike_CoinGecko {
 		click(confirmAccBtn);		
 	}
 	
-	void registerAcc_WithoutClickSignUp_CoinGecko(String email, String password) {	
+	void registerAcc_WithoutClickSignUp_CoinGecko(String email, String password) {		
+		System.out.println("\n----------------------------------------------------------------");
+		System.out.println("Registering new CoinGecko acc: " + email + " / " + password);
 		click(signUpMenuBtn);
 		input(emailBox, email);
 		input(passBox, password);
@@ -288,7 +295,7 @@ public class AutoLike_CoinGecko {
 		driver.switchTo().frame(getElement_ByFluentWait(captchaFrame, 10, 1));
 		click(captchaCheckBox);
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -450,6 +457,14 @@ public class AutoLike_CoinGecko {
 		WebElement element = driver.findElement(byXpath);
 		JavascriptExecutor executor = (JavascriptExecutor)driver;
 		executor.executeScript("arguments[0].click();", element);
+	}
+	
+	void switchLatestWindow() {
+		Set<String> windows = driver.getWindowHandles();
+		for (String window : windows) {
+			driver = driver.switchTo().window(window);
+		}
+		
 	}
 	
 	// start from 1

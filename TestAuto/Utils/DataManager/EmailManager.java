@@ -125,25 +125,24 @@ public class EmailManager {
 	    FlagTerm unseenFlagTerm = new FlagTerm(seen, false);		
 		Message[] messages = inboxFolder.search(unseenFlagTerm);
 		System.out.println("The total of unread mail is : " + messages.length);
+		String Subject_term = emailSubject_Keyword;
 		for (int i = 0; i < messages.length; i++) {			
-			String emailSubject = messages[i].getSubject();
+			String emailSubject = messages[i].getSubject();			
+			String emailSender;			
 			
-			String emailSender; 
 			Address[] add = messages[i].getFrom();
 			for (Address address : add) {
-				System.out.println("Email Sender is " + address.toString());
-				emailSender = address.toString();				
-			}
+//				System.out.println("Email Sender is " + address.toString());
+				emailSender = address.toString();
+			}			
 			
-			
-			System.out.println("Subject of the email " + (i+1) + " is : " + emailSubject );
-			
-			String Subject_term = emailSubject_Keyword;
+//			System.out.println("Subject of the email " + (i+1) + " is : " + emailSubject );			
+
 //			String Sender_term = emailSender_Keyword;
 			
 			//Search for Subject contains a Subject_term. Ex: 'Password Reset'
 			if (emailSubject.contains(Subject_term)) {
-				System.out.println("There's a '" + Subject_term + "' email");			
+//				System.out.println("There's a '" + Subject_term + "' email");			
 				Message message = messages[i];				
 		
 				// getText from String or MimeMultipart message
@@ -163,7 +162,7 @@ public class EmailManager {
 					//Get only link contains linkKeyword. Ex: 'Reset password'
 					for(String temp : links) {
 						if (temp.contains(linkInEmail_Keyword)) {
-							System.out.println("Link of '" + Subject_term + "' is : " + temp);
+//							System.out.println("Link of '" + Subject_term + "' is : " + temp);
 							link_FromEmail = temp;
 							break;
 						}									
@@ -178,7 +177,7 @@ public class EmailManager {
 					//Get only link contains linkKeyword. Ex: 'Reset password'
 					for(String temp : lines) {
 						if (temp.contains(linkInEmail_Keyword)) {
-							System.out.println("Link of '" + Subject_term + "' is : " + temp);
+//							System.out.println("Link of '" + Subject_term + "' is : " + temp);
 							link_FromEmail = temp;
 							break;
 						}									
@@ -189,6 +188,7 @@ public class EmailManager {
 				System.out.println("There's no '" + Subject_term + "' email ");
 			}
 		}
+		System.out.println("Link of '" + Subject_term + "' is : " + link_FromEmail);
 		//close the store and folder objects
 		inboxFolder.close(false);
 	    store.close();
