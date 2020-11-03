@@ -1,0 +1,5 @@
+{
+  "name": "lamwallet1",
+  "public_key": "BEO69u2k9R4SNB5xNXUUH4BQCtfYFgaNsLDDGjamHzw1JYXfsjQCG",
+  "private_key": "5JqRCYBF4LgkQPxompdWxtTsgmXRDWgmLFSqRY5siDfH7jM3w1z"
+}

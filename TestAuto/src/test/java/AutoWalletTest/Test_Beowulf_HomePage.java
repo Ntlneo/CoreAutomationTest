@@ -23,7 +23,6 @@ public class Test_Beowulf_HomePage extends BaseTest{
 	public void OpenWalletHomePage() {					
 			bHomePage.clickWalletButton();
 			wHomePage.verifyWalletHomePageDisplay();
-//			assertTrue(wHomePage.isWalletHomePageDisplay(),"sdafsadfdsafsda")
 	}
 	
 

@@ -1,5 +1,7 @@
 package CoreAutomation.TestAuto;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -13,12 +15,49 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+
 /**
  * Hello world!
  *
  */
 public class AutoLikeFB {
 
+    public static void main( String[] args )
+    {
+    	
+        System.out.println( "WELCOME TO MY AUTO-LIKE SCRIPT" ); 
+        getDataFromJson();
+        
+    	
+	}
+	
+
+    
+
+	
+	static public void getDataFromJson() {
+		String acc1_TxtFile = "WalletAccountFile/lamwallet1-account.txt";
+		JsonObject jsonObject = null;
+		String name_TxtFile = "name";
+		String privateKey_TxtFile = "private_key";
+		
+		
+		Gson gs = new Gson();		
+		try {
+			jsonObject = gs.fromJson(new FileReader(acc1_TxtFile), JsonObject.class);
+		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("NAME: " + jsonObject.get(name_TxtFile) + "\nPRIVATE KEY: " + jsonObject.get(privateKey_TxtFile));		
+	}
+
+
+  
 	String x = "ToiDiHoc";	
 	
 	public String addSpaceBeforeCapitalCharacter(String string) {
@@ -46,21 +85,6 @@ public class AutoLikeFB {
 //	        System.out.println("After search : " + string);
 	        return string;
 	}
-	
-    public static void main( String[] args )
-    {
-    	
-        System.out.println( "WELCOME TO MY AUTO-LIKE SCRIPT" );
-//        addSpaceBeforeCapitalCharacter("OpenCreateWalletPage");
-        
-        
-        
-    	
-	}
-
-        
-  
-    
     
     
 }
