@@ -37,6 +37,7 @@ public class BaseTest {
 	public ChromeDriverService service;
 	public WebDriver driverElectron;
 	public WebDriver driverChrome;
+	public int portDebugChrome = 6789;
 	
 	private String driverChromeForWebPath = "Drivers/WebChromeDriver/chromedriver.exe";
 	private String driverChromeForElectronPath = "Drivers/ElectronChromeDriver/chromedriver.exe";
@@ -44,14 +45,16 @@ public class BaseTest {
 	private String appPath_Testnet = "C://Program Files (x86)/BeowulfWalletTestnet/BeowulfWalletTestnet.exe";
 
 	// use for init Pages
-	public Beowulf_HomePage bHomePage;
-	public Wallet_HomePage wHomePage;
-	public Wallet_SignUpPage wSignUpPage;
+	public Beowulf_HomePage bHomePage_Electron;
+	public Wallet_HomePage wHomePage_Electron;
 	
+	public Wallet_SignUpPage wSignUpPage_Electron;
+	public Wallet_SignUpPage wSignUpPage_Web;
 	private void initPages() {
-		bHomePage = new Beowulf_HomePage(driverElectron);
-		wHomePage = new Wallet_HomePage(driverElectron);
-		wSignUpPage = new Wallet_SignUpPage(driverChrome);
+		bHomePage_Electron = new Beowulf_HomePage(driverElectron);
+		wHomePage_Electron = new Wallet_HomePage(driverElectron);
+		wSignUpPage_Electron = new Wallet_SignUpPage(driverElectron);
+//		wSignUpPage_Web = new Wallet_SignUpPage(driverChrome);
 	}
 	
 	// *********************** BEFORE & AFTER ***********************
@@ -101,15 +104,22 @@ public class BaseTest {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
 		}
-		System.out.println("\t###  END SCRIPT. SEE YA AGAIN !!!  ###\n");		
-		if (null !=driverElectron) {
+		System.out.println("\t###  END SCRIPT. SEE YA AGAIN !!!  ###\n");
+		if (null != driverChrome) {
+			System.out.println("Đang quit Chrome");			
+			driverChrome.quit();
+		}	
+		
+		if (null != driverElectron) {
+			System.out.println("Đang quit Electron");
 			driverElectron.quit();			
 		}
 		
-		if (null != driverChrome) {
-			driverChrome.quit();
-		}
+	
 		
+		if ( service != null ) {
+			service.stop();
+		}
 		
 		
 		
@@ -122,23 +132,41 @@ public class BaseTest {
 	
 	// *********************** SUPPORT Functions ***********************
 	
+	public void initServiceChromeDriverWithSpecificPort(int port) {
+		ChromeOptions options = new ChromeOptions();
+//	    options.setExperimentalOption("debuggerAddress", "127.0.0.1:9999");
+//	    options.addArguments("--remote-debugging-port=1557");
+		System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "false");
+//		java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.SEVERE);
+		
+		service = new ChromeDriverService.Builder()
+				.usingDriverExecutable(new File(driverChromeForWebPath))
+				.usingPort(port)
+				.build();
+		
+		try {
+			service.start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+//			e.printStackTrace();
+		}
+		
+		driverChrome = new RemoteWebDriver(service.getUrl(), options);
+		driverChrome.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);		
+		driverChrome.manage().window().fullscreen();
+		
+		System.out.println("Pre-Test: CHROME Driver SERVICE Start Success");
+	}
 	
 	public void initDriverChrome() {
 		System.setProperty("webdriver.chrome.driver", driverChromeForWebPath);
-		System.setProperty("webdriver.chrome.silentOutput", "true");
-		ChromeOptions options = new ChromeOptions();
-//		options.addArguments("--remote-debugging-address = 127.0.0.1");
-//		options.addArguments("--remote-debugging-port = 9222");
-//		options.setExperimentalOption("debuggerAddress", "localhost:9222");
+		System.setProperty("webdriver.chrome.silentOutput", "false");;
+	    ChromeOptions options = new ChromeOptions();
+	    options.setExperimentalOption("debuggerAddress", "localhost:" + portDebugChrome);
 		
 		driverChrome = new ChromeDriver(options);
-//		driver.manage().window().fullscreen();	//Bug no window found
-//		driverChrome = new ChromeDriver();
 		driverChrome.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-//		driverChrome.get("Google.com");
-		System.out.println("Driver Chrome Start Success");
-		System.out.println(driverChrome.getTitle());
-		driverChrome.get("google.com");
+		System.out.println("Pre-Test: CHROME Driver Start Success");
 		
 	}
 	
@@ -160,7 +188,7 @@ public class BaseTest {
 		JavascriptExecutor js = (JavascriptExecutor) driverElectron;  
 		js.executeScript("require('electron').remote.BrowserWindow.getFocusedWindow().maximize();");		
 
-		System.out.println("Pre-Test: Driver Electron Start Success");
+		System.out.println("Pre-Test: ELECTRON Driver Start Success");
 	}
 	
 	private void initDriverElectronWithSpecificPort() {

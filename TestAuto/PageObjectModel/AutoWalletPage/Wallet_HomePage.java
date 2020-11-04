@@ -27,13 +27,13 @@ public class Wallet_HomePage extends BasePage{
 	
 	
 	// *********************** ACTIONS ***********************
-	public void showPopup() {
-		showPopupUntilClickOK();
-	}
+//	public void showPopup() {
+//		showPopupUntilClickOK();
+//	}
 
-	public void switchFromAppToChrome() {
-		switchToChrome();
-	}
+//	public void switchFromAppToChrome() {
+//		switchToChrome();
+//	}
 
 	public void verifyWalletHomePageDisplay() {
 		addLog(isWalletHomePageDisplay(), "Wallet HomePage doesn't displayed");

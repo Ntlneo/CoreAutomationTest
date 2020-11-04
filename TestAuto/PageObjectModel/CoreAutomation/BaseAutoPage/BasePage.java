@@ -27,8 +27,12 @@ import org.openqa.selenium.support.ui.Wait;
 
 public class BasePage {
 	private WebDriver driver;
-//	public String commandOpenChromeInDebug = "chrome --remote-debugging-port=9222";
-	public String commandOpenChromeInDebug = "chrome";
+	static public Process process;
+	static public String commandOpenChromeInDebug = "cmd /c start chrome --remote-debugging-port=6789";
+//	static public String commandCloseChromeInDebug = "cmd /c kill chrome --remote-debugging-port=6789";
+//	static public String commandCloseChromeInDebug = "cmd /c taskkill /F /IM \"chrome.exe\" /T";
+	
+//	static public String commandCloseChromeInDebug = "cmd /c stop chrome";
 	
 	public BasePage(WebDriver driver) {
 		this.driver = driver;
@@ -39,40 +43,57 @@ public class BasePage {
 	
 	
 	
-	
-	protected void clickByJavaScript(String xpathString) {
-		WebElement element = driver.findElement(By.xpath(xpathString));
-		JavascriptExecutor executor = (JavascriptExecutor)driver;
-		executor.executeScript("arguments[0].click();", element);
-	}
-	
-	
-	protected void showPopupUntilClickOK() {
+	// *********************** PUBLIC Function	
+	static public void showPopupUntilClickOK() {
 		JFrame jf=new JFrame();
 		jf.setAlwaysOnTop(true);
-		JOptionPane jop = new JOptionPane();
-		jop.showMessageDialog(jf, "Please verify captcha manually then click OK", "WAITING TO VERIFY CAPTCHA",jop.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(jf, "Please verify captcha manually then click OK", "WAITING TO VERIFY CAPTCHA",JOptionPane.INFORMATION_MESSAGE);
+//		JOptionPane jop = new JOptionPane();
+//		jop.showMessageDialog(jf, "Please verify captcha manually then click OK", "WAITING TO VERIFY CAPTCHA",jop.INFORMATION_MESSAGE);
 	}
 	
+	public void switchLatestWindow() {
+		Set<String> windows = driver.getWindowHandles();
+		System.out.println("Number of tabs: " + windows.size());
+		for (String window : windows) {
+			System.out.println(window);
+			driver.switchTo().window(window);
+//			driver = driver.switchTo().window(window);
+		}		
+	}	
 	
-	
-	public void runCmdComand(String command) {		
+	static public void runCmdComand(String command) {		
 		try
 		{
-		    Process process = Runtime.getRuntime().exec("cmd /c start " + command);
+		    process = Runtime.getRuntime().exec(command);
 		} catch (Exception e)
 		{
 		    e.printStackTrace();
 		}
 	}
 	
-	public void addLog(Boolean conditionTrue, String messageFail) {		
+	static public void addLog(Boolean conditionTrue, String messageFail) {		
 		if (conditionTrue) {
 			System.out.println("\t\t--> PASSED");
 		}else {
 			System.out.println("\t\t--> FAILED : " + messageFail);
 			assertTrue(false, messageFail );
 		}
+	}
+	
+	
+	// *********************** PROTECTED Function	
+	
+	protected void executeByJavaScript(String javaScript) {
+		JavascriptExecutor js = (JavascriptExecutor)driver;  
+		js.executeScript(javaScript);		
+	}
+
+	
+	protected void clickByJavaScript(String xpathString) {
+		WebElement element = driver.findElement(By.xpath(xpathString));
+		JavascriptExecutor executor = (JavascriptExecutor)driver;
+		executor.executeScript("arguments[0].click();", element);
 	}
 	
 	protected Boolean isElementDisplayed(By by) {
@@ -88,21 +109,12 @@ public class BasePage {
 		Set<String> windows = driver.getWindowHandles();
 		List<String> listWindow = new ArrayList<String>();
 		listWindow.addAll(windows);
-		driver.switchTo().window(listWindow.get(orderOfWindow - 1));
+		driver = driver.switchTo().window(listWindow.get(orderOfWindow - 1));
 	}
 	
 	protected int getNumberOfWindow() {
 		return driver.getWindowHandles().size();
-	}
-	
-	protected void switchToChrome() {
-		Set<String> windows = driver.getWindowHandles();
-		for (String string : windows) {
-			System.out.println(string);
-			driver.switchTo().window(string);
-		}
-	}
-	
+	}	
 	
 	protected WebElement getElement_AfterFluentWait(By by, int timeoutInSecond, int repeatInSecond) {
 		Wait wait = new FluentWait(driver).withTimeout(Duration.ofSeconds(timeoutInSecond))

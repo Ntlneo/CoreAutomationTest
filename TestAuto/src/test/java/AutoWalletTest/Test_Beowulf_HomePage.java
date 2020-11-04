@@ -21,8 +21,8 @@ public class Test_Beowulf_HomePage extends BaseTest{
 	
 	@Test
 	public void OpenWalletHomePage() {					
-			bHomePage.clickWalletButton();
-			wHomePage.verifyWalletHomePageDisplay();
+			bHomePage_Electron.clickWalletButton();
+			wHomePage_Electron.verifyWalletHomePageDisplay();
 	}
 	
 
