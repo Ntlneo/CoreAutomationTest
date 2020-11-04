@@ -29,10 +29,8 @@ public class BasePage {
 	private WebDriver driver;
 	static public Process process;
 	static public String commandOpenChromeInDebug = "cmd /c start chrome --remote-debugging-port=6789";
-//	static public String commandCloseChromeInDebug = "cmd /c kill chrome --remote-debugging-port=6789";
-//	static public String commandCloseChromeInDebug = "cmd /c taskkill /F /IM \"chrome.exe\" /T";
-	
-//	static public String commandCloseChromeInDebug = "cmd /c stop chrome";
+//	static public String commandCloseChromeInDebug = "cmd /c kill chrome --remote-debugging-port=6789";	//not work
+//	static public String commandCloseChromeInDebug = "cmd /c taskkill /F /IM \"chrome.exe\" /T";	//force close chrome --> chrome ask restore when relaunch
 	
 	public BasePage(WebDriver driver) {
 		this.driver = driver;
@@ -52,13 +50,20 @@ public class BasePage {
 //		jop.showMessageDialog(jf, "Please verify captcha manually then click OK", "WAITING TO VERIFY CAPTCHA",jop.INFORMATION_MESSAGE);
 	}
 	
+	public void closeAllWindow() {
+		Set<String> windows = driver.getWindowHandles();
+		System.out.println("Number of tabs: " + windows.size());
+		for (String window : windows) {			
+			driver.switchTo().window(window).close();
+		}
+	}
+	
 	public void switchLatestWindow() {
 		Set<String> windows = driver.getWindowHandles();
 		System.out.println("Number of tabs: " + windows.size());
 		for (String window : windows) {
-			System.out.println(window);
-			driver.switchTo().window(window);
-//			driver = driver.switchTo().window(window);
+			System.out.println(window);			
+			driver = driver.switchTo().window(window);
 		}		
 	}	
 	

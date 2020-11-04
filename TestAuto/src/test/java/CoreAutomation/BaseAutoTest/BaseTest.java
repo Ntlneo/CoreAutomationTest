@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.logging.Level;
@@ -106,8 +107,8 @@ public class BaseTest {
 		}
 		System.out.println("\t###  END SCRIPT. SEE YA AGAIN !!!  ###\n");
 		if (null != driverChrome) {
-			System.out.println("Đang quit Chrome");			
-			driverChrome.quit();
+			System.out.println("Đang quit Chrome");
+			driverChrome.quit();	//not Work			
 		}	
 		
 		if (null != driverElectron) {
