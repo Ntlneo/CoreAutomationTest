@@ -36,9 +36,9 @@ public class Test_Wallet_HomePage extends BaseTest{
 		
 		wHomePage_Electron.clickCreateOneLink();
 
-//		BasePage.showPopupUntilClickOK();
+		//wait new tab opened
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -46,25 +46,25 @@ public class Test_Wallet_HomePage extends BaseTest{
 		
 		//switch to lastest tab
 		wSignUpPage_Web.switchLatestWindow();
-		wSignUpPage_Web.inputWalletName(walletName);
+		
+		//wait to lastest tab is selected
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+		wSignUpPage_Web.inputWalletName(walletName);
+//		try {
+//			Thread.sleep(3000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		wSignUpPage_Web.clickCheckBtn();
 		System.out.println("Register success: " + walletName);
-		
-
-		
-		//close Chrome in debug mode
-
-//		driverChrome.get("google.com");
-		
-		
-		
-		
 	}
 
 

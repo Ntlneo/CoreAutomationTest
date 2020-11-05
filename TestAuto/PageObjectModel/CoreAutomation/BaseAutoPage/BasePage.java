@@ -34,7 +34,11 @@ public class BasePage {
 	
 	public BasePage(WebDriver driver) {
 		this.driver = driver;
-	}	
+	}
+	
+	public WebDriver getDriver() {
+		return driver;
+	}
 	
 	// *********************** CODE BELOW ***********************
 	// DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
@@ -51,19 +55,25 @@ public class BasePage {
 	}
 	
 	public void closeAllWindow() {
+		String currentWindow = driver.getWindowHandle();
 		Set<String> windows = driver.getWindowHandles();
+		System.out.println("Current Tab: " + currentWindow);
 		System.out.println("Number of tabs: " + windows.size());
 		for (String window : windows) {			
-			driver.switchTo().window(window).close();
-		}
+			driver = driver.switchTo().window(window);
+			driver.close();
+			System.out.println(window);
+		}		
 	}
 	
 	public void switchLatestWindow() {
 		Set<String> windows = driver.getWindowHandles();
+		String currentWindow = driver.getWindowHandle();
+		System.out.println("Current Tab: " + currentWindow);
 		System.out.println("Number of tabs: " + windows.size());
-		for (String window : windows) {
-			System.out.println(window);			
+		for (String window : windows) {						
 			driver = driver.switchTo().window(window);
+			System.out.println(window);
 		}		
 	}	
 	

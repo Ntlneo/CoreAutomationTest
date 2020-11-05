@@ -40,10 +40,10 @@ public class BaseTest {
 	public WebDriver driverChrome;
 	public int portDebugChrome = 6789;
 	
-	private String driverChromeForWebPath = "Drivers/WebChromeDriver/chromedriver.exe";
-	private String driverChromeForElectronPath = "Drivers/ElectronChromeDriver/chromedriver.exe";
-	private String appPath_Mainnet = "C://Program Files (x86)/BeowulfWallet/BeowulfWallet.exe";
-	private String appPath_Testnet = "C://Program Files (x86)/BeowulfWalletTestnet/BeowulfWalletTestnet.exe";
+	private String path_DriverChromeForWeb = "Drivers/WebChromeDriver/chromedriver.exe";
+	private String path_DriverChromeForElectron = "Drivers/ElectronChromeDriver/chromedriver.exe";
+	private String path_AppMainnet = "C://Program Files (x86)/BeowulfWallet/BeowulfWallet.exe";
+	private String path_AppTestnet = "C://Program Files (x86)/BeowulfWalletTestnet/BeowulfWalletTestnet.exe";
 
 	// use for init Pages
 	public Beowulf_HomePage bHomePage_Electron;
@@ -88,9 +88,7 @@ public class BaseTest {
 		System.out.println("\t###  STARTING SCRIPT  ###");
 		initDriverElectron();
 		initPages();		
-//		initDriverChrome();
-		//only use with ChromeService
-//		initDriverWithSpecificPort();
+
 		
 		System.out.println("Test File:\t" + testInfo.getTestClass().get().getSimpleName() + ".java");
 		System.out.println("Test Case:\t" +	addSpaceBetweenWords_OfTestcaseMethod(testInfo.getTestMethod().get().getName()));
@@ -108,6 +106,8 @@ public class BaseTest {
 		System.out.println("\t###  END SCRIPT. SEE YA AGAIN !!!  ###\n");
 		if (null != driverChrome) {
 			System.out.println("Đang quit Chrome");
+			wSignUpPage_Web.closeAllWindow();			
+//			System.out.println("Đã close last window");
 			driverChrome.quit();	//not Work			
 		}	
 		
@@ -133,7 +133,7 @@ public class BaseTest {
 	
 	// *********************** SUPPORT Functions ***********************
 	
-	public void initServiceChromeDriverWithSpecificPort(int port) {
+	public void initServiceChromeDriver_WithSpecificPort(int port) {
 		ChromeOptions options = new ChromeOptions();
 //	    options.setExperimentalOption("debuggerAddress", "127.0.0.1:9999");
 //	    options.addArguments("--remote-debugging-port=1557");
@@ -141,7 +141,7 @@ public class BaseTest {
 //		java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.SEVERE);
 		
 		service = new ChromeDriverService.Builder()
-				.usingDriverExecutable(new File(driverChromeForWebPath))
+				.usingDriverExecutable(new File(path_DriverChromeForWeb))
 				.usingPort(port)
 				.build();
 		
@@ -160,7 +160,7 @@ public class BaseTest {
 	}
 	
 	public void initDriverChrome() {
-		System.setProperty("webdriver.chrome.driver", driverChromeForWebPath);
+		System.setProperty("webdriver.chrome.driver", path_DriverChromeForWeb);
 		System.setProperty("webdriver.chrome.silentOutput", "false");;
 	    ChromeOptions options = new ChromeOptions();
 	    options.setExperimentalOption("debuggerAddress", "localhost:" + portDebugChrome);
@@ -173,10 +173,10 @@ public class BaseTest {
 	
 	private void initDriverElectron() {
 		ChromeOptions options = new ChromeOptions();
-		options.setBinary(appPath_Testnet);
+		options.setBinary(path_AppTestnet);
 	
 		
-		System.setProperty("webdriver.chrome.driver", driverChromeForElectronPath);
+		System.setProperty("webdriver.chrome.driver", path_DriverChromeForElectron);
 		
 		// hide log of chromedriver and java selenium
 		System.setProperty("webdriver.chrome.silentOutput", "true");
@@ -192,19 +192,19 @@ public class BaseTest {
 		System.out.println("Pre-Test: ELECTRON Driver Start Success");
 	}
 	
-	private void initDriverElectronWithSpecificPort() {
+	private void initDriverElectron_WithSpecificPort() {
 		ChromeOptions options = new ChromeOptions();
 
-		options.setBinary(appPath_Testnet);	
+		options.setBinary(path_AppTestnet);	
 
-		System.setProperty("webdriver.chrome.driver", driverChromeForElectronPath);
+		System.setProperty("webdriver.chrome.driver", path_DriverChromeForElectron);
 //		System.setProperty("webdriver.chrome.silentOutput", "true");
 		System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
 		java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.SEVERE);
 
 		
 		service = new ChromeDriverService.Builder()
-				.usingDriverExecutable(new File(driverChromeForWebPath))
+				.usingDriverExecutable(new File(path_DriverChromeForWeb))
 				.usingPort(9999)
 				.build();
 		

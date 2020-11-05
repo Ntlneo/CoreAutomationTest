@@ -47,5 +47,5 @@ public class Wallet_SignUpPage extends BasePage{
 		click(check_Btn);		
 	}
 	
-	
+
 }
