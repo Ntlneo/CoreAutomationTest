@@ -93,8 +93,9 @@ public class AutoLike_CoinGecko {
 	static By gg_emailBox = By.name("identifier");
 	static By gg_NextBtn = By.xpath("//*[text()='Next']");
 	
-	static By setCookieBtn = By.xpath("//*[@data-cy='setAccessibilityCookie']");	
-	
+	static By setCookieBtn = By.xpath("//*[@data-cy='setAccessibilityCookie']");
+//	static By cookieSetSuccess_Txt = By.xpath("//*[text()='Set Cookie']");
+	static By cookieSetSuccess_Txt = By.xpath("//*[@data-cy='fetchStatus']");
 	
 	
 	//bwf page
@@ -165,9 +166,9 @@ public class AutoLike_CoinGecko {
 				System.out.println("SignUp CoinGecko success");
 			}else {
 				//wait 60s before register acc CoinGecko again
-				System.out.println("Waiting 60s before register new acc CoinGecko again");
+				System.out.println("Waiting 2' before register new acc CoinGecko again");
 				try {
-					Thread.sleep(60000);
+					Thread.sleep(120000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -198,7 +199,7 @@ public class AutoLike_CoinGecko {
 			}
 			
 			clickStarBWF_CoinGecko();
-			
+			System.out.println("COUNT LIKE SUCCESS: " + (i+1));
 			signOut_CoinGecko();
 			
 			try {
@@ -266,7 +267,7 @@ public class AutoLike_CoinGecko {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		getElement_ByFluentWait(titleEmail_CoinGecko, 180, 5).click();
+		getElement_ByFluentWait(titleEmail_CoinGecko, 60, 5).click();
 		
 		//switch to email frame
 		driver.switchTo().frame(getElement_ByFluentWait(frameEmail_Mailinator, 10, 1));
@@ -295,7 +296,7 @@ public class AutoLike_CoinGecko {
 			e.printStackTrace();
 		}
 		
-		driver.switchTo().frame(getElement_ByFluentWait(captchaFrame, 10, 1));
+		driver.switchTo().frame(getElement_ByFluentWait(captchaFrame, 20, 1));
 		click(captchaCheckBox);
 		try {
 			Thread.sleep(3000);
@@ -320,7 +321,11 @@ public class AutoLike_CoinGecko {
 		checkNumberOfWindow();
 		switchWindow(2);		
 		input(emailCaptchaAccess, gmailUser_ToGetCookie);
-		click(submitBtn);
+		
+		//try to click 2 times
+		tryToClickManyTime(2, submitBtn);
+//		click(submitBtn);
+		
 //		driver.switchTo().defaultContent();
 		
 		// wait 60s to email come then access gmail to set cookie via link in email
@@ -356,7 +361,12 @@ public class AutoLike_CoinGecko {
 			e.printStackTrace();
 		}
 		System.out.println("Trying to click setCookie Button");
-		click(setCookieBtn);
+		
+		//try 3 time click 'Set Cookie' button
+		tryToClickManyTime(3,setCookieBtn,cookieSetSuccess_Txt,"Set Cookie");
+
+		
+		
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
@@ -423,6 +433,33 @@ public class AutoLike_CoinGecko {
 	// *********************** BASE TEST ***********************
 
 	//DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
+	
+	public void tryToClickManyTime_(int limitTimes, By elementToClick, By textElementToStopClick, String expectedText) {
+		int tryTimes = 0;zz
+		do {			
+			click(elementToClick);
+			tryTimes += 1;
+			System.out.println("TRIED CLICK: " + tryTimes);
+		} while (!getElement_ByFluentWait(textElementToStopClick, 6, 1).getText().equalsIgnoreCase(expectedText) && tryTimes < limitTimes);
+	}
+	
+	public void tryToClickManyTime(int limitTimes, By elementToClick, By textElementToStopClick, String expectedText) {
+		int tryTimes = 0;
+		do {			
+			click(elementToClick);
+			tryTimes += 1;
+			System.out.println("TRIED CLICK: " + tryTimes);
+		} while (!getElement_ByFluentWait(textElementToStopClick, 6, 1).getText().equalsIgnoreCase(expectedText) && tryTimes < limitTimes);
+	}
+	
+	public void tryToClickManyTime(int limitTimes, By elementToClick) {
+		int tryTimes = 0;
+		do {			
+			getElement_ByFluentWait(elementToClick, 6, 1).click();
+			tryTimes += 1;
+			System.out.println("TRIED CLICK: " + tryTimes);
+		} while (tryTimes < limitTimes);
+	}
 	
 	
 	void openNewTab_thenCloseOldTabs() {
