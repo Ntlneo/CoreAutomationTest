@@ -15,25 +15,24 @@ public class Beowulf_HomePage extends BasePage{
 	}	
 	
 	// *********************** LOCATORS ***********************
-	private By testNet_Txt = By.xpath("//*[@class='text-capitalize mr-2']");
-	private By manageBeowulfWallet_Txt = By.xpath("//*[@class='h3 h-saraburn text-center font-weight-normal']");
+
+	private By beowulfBlockChainTitle_Txt = By.xpath("//*[@class='h1 text-center h-saraburn text-danger mb-0']");
+	private By logoWallet_Img = By.xpath("//img[contains(@src,'wallet')]");
 	private By wallet_Btn = By.xpath("//*[@class='btn btn-beowulf btn-danger btn-block']");
 	
 	
 	
 	// *********************** ACTIONS ***********************
-	
-	public Boolean isBeowulfHomePage() {
-		return isElementDisplayed(manageBeowulfWallet_Txt) && isElementDisplayed(wallet_Btn);
+		
+	public String getTitle() {
+		return getWebElement(beowulfBlockChainTitle_Txt).getText();		
 	}
 	
-	public String getTestEnv() {
-		return getWebElement(testNet_Txt).getText();		
+	public boolean isWalletLogoDisplay() {
+		return getWebElement(logoWallet_Img).isDisplayed();
 	}
 	
 	public void clickWalletButton() {
 		click(wallet_Btn);
 	}
-	
-
 }

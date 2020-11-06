@@ -23,6 +23,7 @@ import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import AutoWalletPage.All_TopMenuPage;
 import AutoWalletPage.Beowulf_HomePage;
 import AutoWalletPage.Wallet_HomePage;
 import AutoWalletPage.Wallet_SignUpPage;
@@ -46,12 +47,13 @@ public class BaseTest {
 	private String path_AppTestnet = "C://Program Files (x86)/BeowulfWalletTestnet/BeowulfWalletTestnet.exe";
 
 	// use for init Pages
+	public All_TopMenuPage aTopMenu_Electron;
 	public Beowulf_HomePage bHomePage_Electron;
-	public Wallet_HomePage wHomePage_Electron;
-	
+	public Wallet_HomePage wHomePage_Electron;	
 	public Wallet_SignUpPage wSignUpPage_Electron;
 	public Wallet_SignUpPage wSignUpPage_Web;
 	private void initPages() {
+		aTopMenu_Electron = new All_TopMenuPage(driverElectron);
 		bHomePage_Electron = new Beowulf_HomePage(driverElectron);
 		wHomePage_Electron = new Wallet_HomePage(driverElectron);
 		wSignUpPage_Electron = new Wallet_SignUpPage(driverElectron);
