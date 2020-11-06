@@ -3,6 +3,7 @@ package CoreAutomation.BaseAutoTest;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -87,6 +88,7 @@ public class AutoLike_CoinGecko {
 	static By cookieLink = By.xpath("//*[contains(text(),'Retrieve accessibility cookie')]");
 	static By emailCaptchaAccess = By.id("email");
 	static By submitBtn = By.xpath("//*[@data-cy='button-submit']");
+	static By submitFailTxt = By.xpath("//*[@data-cy='form-feedback']");
 	// use: suzukihzt@gmail.com
 	
 	static String email_Signin = "https://accounts.google.com/signin";
@@ -297,7 +299,7 @@ public class AutoLike_CoinGecko {
 		}
 		
 		driver.switchTo().frame(getElement_ByFluentWait(captchaFrame, 20, 1));
-		click(captchaCheckBox);
+		tryToClickManyTime_IfFail(2, captchaCheckBox);
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
@@ -323,7 +325,9 @@ public class AutoLike_CoinGecko {
 		input(emailCaptchaAccess, gmailUser_ToGetCookie);
 		
 		//try to click 2 times
-		tryToClickManyTime(2, submitBtn);
+		String submitFail = "Sign up failed.. If you are having issues signing up, please email support@hcaptcha.com";
+		tryToClickManyTime_IfFail(2, submitBtn);
+//		tryToClickManyTime_StopWhenTextDisappear(3,submitBtn,submitFailTxt,submitFail);
 //		click(submitBtn);
 		
 //		driver.switchTo().defaultContent();
@@ -362,8 +366,9 @@ public class AutoLike_CoinGecko {
 		}
 		System.out.println("Trying to click setCookie Button");
 		
-		//try 3 time click 'Set Cookie' button
-		tryToClickManyTime(3,setCookieBtn,cookieSetSuccess_Txt,"Set Cookie");
+		//try 4 time click 'Set Cookie' button
+		String setCookieSuccess = "Set Cookie";
+		tryToClickManyTime_StopWhenTextAppear(4,setCookieBtn,cookieSetSuccess_Txt,setCookieSuccess);
 
 		
 		
@@ -434,31 +439,47 @@ public class AutoLike_CoinGecko {
 
 	//DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
 	
-	public void tryToClickManyTime_(int limitTimes, By elementToClick, By textElementToStopClick, String expectedText) {
-		int tryTimes = 0;zz
-		do {			
-			click(elementToClick);
-			tryTimes += 1;
-			System.out.println("TRIED CLICK: " + tryTimes);
-		} while (!getElement_ByFluentWait(textElementToStopClick, 6, 1).getText().equalsIgnoreCase(expectedText) && tryTimes < limitTimes);
-	}
-	
-	public void tryToClickManyTime(int limitTimes, By elementToClick, By textElementToStopClick, String expectedText) {
+	public void tryToClickManyTime_StopWhenTextDisappear(int limitTimes, By elementToClick, By textElementToStopClick, String expectedText) {
 		int tryTimes = 0;
 		do {			
 			click(elementToClick);
 			tryTimes += 1;
 			System.out.println("TRIED CLICK: " + tryTimes);
-		} while (!getElement_ByFluentWait(textElementToStopClick, 6, 1).getText().equalsIgnoreCase(expectedText) && tryTimes < limitTimes);
+		} while (getElement_ByFluentWait(textElementToStopClick, 10, 1).getText().equalsIgnoreCase(expectedText) && tryTimes < limitTimes);
+	}
+	
+	public void tryToClickManyTime_StopWhenTextAppear(int limitTimes, By elementToClick, By textElementToStopClick, String expectedText) {
+		int tryTimes = 0;
+		do {			
+			click(elementToClick);
+			tryTimes += 1;
+			System.out.println("TRIED CLICK: " + tryTimes);
+		} while (!getElement_ByFluentWait(textElementToStopClick, 10, 1).getText().equalsIgnoreCase(expectedText) && tryTimes < limitTimes);
 	}
 	
 	public void tryToClickManyTime(int limitTimes, By elementToClick) {
 		int tryTimes = 0;
 		do {			
-			getElement_ByFluentWait(elementToClick, 6, 1).click();
+			click(elementToClick);
 			tryTimes += 1;
 			System.out.println("TRIED CLICK: " + tryTimes);
 		} while (tryTimes < limitTimes);
+	}
+	
+	//limitTimes >= 2
+	public void tryToClickManyTime_IfFail(int limitTimes, By elementToClick) {
+		int tryTimes = 1;
+		for (int i = 0; i < limitTimes-1; i++) {
+			try {
+				click(elementToClick);
+				tryTimes += i;
+				System.out.println("TRIED CLICK: " + tryTimes);
+			} catch (Exception e) {
+				click(elementToClick);
+				tryTimes += 1;
+				System.out.println("TRIED CLICK: " + tryTimes);
+			}
+		}		
 	}
 	
 	
