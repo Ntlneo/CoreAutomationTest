@@ -203,7 +203,7 @@ public class BasePage {
 	}
 	
 	protected Boolean isElementDisplayed(By by) {
-		return getWebElement(by).isDisplayed();
+		return getElement(by).isDisplayed();
 	}
 	
 	protected Boolean isElementVisibleThenDisplayed(By by) {
@@ -221,6 +221,13 @@ public class BasePage {
 		Wait wait = new FluentWait(driver).withTimeout(Duration.ofSeconds(15))
 				.pollingEvery(Duration.ofSeconds(1)).ignoring(NoSuchElementException.class);
 		return (WebElement) wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+	}
+	
+	//Default fluent wait 15s timeout - 1s pooling
+	protected List<WebElement> getListElement_AfterFluentWait_Default(By by) {
+		Wait wait = new FluentWait(driver).withTimeout(Duration.ofSeconds(15))
+				.pollingEvery(Duration.ofSeconds(1)).ignoring(NoSuchElementException.class);
+		return (List<WebElement>) wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
 	}
 
 	protected void refreshCurrentPage() {
@@ -241,34 +248,34 @@ public class BasePage {
 		return driver.getCurrentUrl();
 	}
 
-	protected List<WebElement> getListWebElement(By by) {
+	protected List<WebElement> getListElement(By by) {
 		return driver.findElements(by);
 	}
 
-	protected WebElement getWebElement(By by) {
+	protected WebElement getElement(By by) {
 		return driver.findElement(by);
 	}
 
 	protected void click(By by) {
-		getWebElement(by).click();
+		getElement(by).click();
 	}
 
 	protected void input(By by, String text) {
-		getWebElement(by).sendKeys(text);
+		getElement(by).sendKeys(text);
 	}
 
 	protected void hover(By by) {
 		Actions acts = new Actions(driver);
-		acts.moveToElement(getWebElement(by)).perform();
+		acts.moveToElement(getElement(by)).perform();
 	}
 
 	protected void hoverAndClick(By by1, By by2) {
 		Actions acts = new Actions(driver);
-		acts.moveToElement(getWebElement(by1)).click(getWebElement(by2)).perform();
+		acts.moveToElement(getElement(by1)).click(getElement(by2)).perform();
 	}
 
 	protected void doubleClick(By by) {
 		Actions acts = new Actions(driver);
-		acts.doubleClick(getWebElement(by));
+		acts.doubleClick(getElement(by));
 	}
 }

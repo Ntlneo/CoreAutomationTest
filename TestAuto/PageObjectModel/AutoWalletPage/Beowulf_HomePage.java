@@ -25,11 +25,11 @@ public class Beowulf_HomePage extends BasePage{
 	// *********************** ACTIONS ***********************
 		
 	public String getTitle() {
-		return getWebElement(beowulfBlockChainTitle_Txt).getText();		
+		return getElement(beowulfBlockChainTitle_Txt).getText();		
 	}
 	
 	public boolean isWalletLogoDisplay() {
-		return getWebElement(logoWallet_Img).isDisplayed();
+		return getElement(logoWallet_Img).isDisplayed();
 	}
 	
 	public void clickWalletButton() {

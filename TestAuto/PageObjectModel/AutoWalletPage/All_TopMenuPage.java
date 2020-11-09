@@ -49,7 +49,7 @@ public class All_TopMenuPage extends BasePage{
 	}
 	
 	public String getTestEnv() {
-		return getWebElement(server_Txt).getText();		
+		return getElement(server_Txt).getText();		
 	}
 	
 

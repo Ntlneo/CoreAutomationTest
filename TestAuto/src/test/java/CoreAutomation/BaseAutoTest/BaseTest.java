@@ -88,7 +88,7 @@ public class BaseTest {
 	public void startScript(TestInfo testInfo) {
 //		ExcelManager_Map excel = new ExcelManager_Map(pathToExcelFile);
 		System.out.println("\t###  STARTING SCRIPT  ###");
-		initDriverElectron();
+		initDriverElectron(path_AppMainnet);
 		initPages();		
 
 		
@@ -173,9 +173,9 @@ public class BaseTest {
 		
 	}
 	
-	private void initDriverElectron() {
+	private void initDriverElectron(String pathAppEnvironment) {
 		ChromeOptions options = new ChromeOptions();
-		options.setBinary(path_AppTestnet);
+		options.setBinary(pathAppEnvironment);
 	
 		
 		System.setProperty("webdriver.chrome.driver", path_DriverChromeForElectron);
