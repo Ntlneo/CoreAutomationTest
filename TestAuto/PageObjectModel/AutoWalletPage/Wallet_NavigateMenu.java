@@ -5,8 +5,8 @@ import org.openqa.selenium.WebDriver;
 
 import CoreAutomation.BaseAutoPage.BasePage;
 
-public class Wallet_NavigatePage extends BasePage{
-	public Wallet_NavigatePage(WebDriver driver) {
+public class Wallet_NavigateMenu extends BasePage{
+	public Wallet_NavigateMenu(WebDriver driver) {
 		super(driver);
 	}
 
@@ -22,23 +22,27 @@ public class Wallet_NavigatePage extends BasePage{
 	
 	// *********************** ACTIONS ***********************
 
-	public void openDashboardTab() {
+	public String getWalletName() {
+		return getElement(walletName_Txt).getText();
+	}
+	
+	public void clickDashboardTab() {
 		click(dashboard_Tab);
 	}
 	
-	public void openTransactionsTab() {
+	public void clickTransactionsTab() {
 		click(transactions_Tab);
 	}
 
-	public void openSendTab() {
+	public void clickSendTab() {
 		click(send_Tab);
 	}
 	
-	public void openMultisigAccountTab() {
+	public void clickMultisigAccountTab() {
 		click(multisigAccount_Tab);
 	}
 	
-	public void openMultisigTransactionTab() {
+	public void clickMultisigTransactionTab() {
 		click(multisigTransaction_Tab);
 	}
 }
