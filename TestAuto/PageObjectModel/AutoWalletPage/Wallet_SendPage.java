@@ -51,7 +51,7 @@ public class Wallet_SendPage extends BasePage{
 		input(fee_Box, textFee);
 	}
 	
-	public String feeCoinUnit() {
+	public String getFeeCoinUnit() {
 		return getElement(feeCoinUnit).getText();
 	}
 	
