@@ -14,13 +14,22 @@ public class Wallet_MultisigAccountPage extends BasePage{
 
 	private By refresh_Icon = By.xpath("(//*[contains(@src,'refresh')])[3]");
 	private By createMultisigAccount_Btn = By.xpath("(//*[@class='text'])[2]");
+	private By importAccount_Btn = By.xpath("(//*[@class='text'])[3]");
+	
 
 	
 	
 	// *********************** ACTIONS ***********************
 	
-	public void clickNext() {
-		click(next_Btn);
-		
+	public void clickRefreshButton() {
+		click(refresh_Icon);		
+	}
+	
+	public void clickCreateMultisigAccount() {
+		click(createMultisigAccount_Btn);		
+	}
+	
+	public void clickImportAccountButton() {
+		click(importAccount_Btn);		
 	}
 }
