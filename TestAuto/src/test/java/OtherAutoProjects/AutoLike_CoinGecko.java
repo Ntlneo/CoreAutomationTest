@@ -1,4 +1,4 @@
-package CoreAutomation.BaseAutoTest;
+package OtherAutoProjects;
 
 import java.time.Duration;
 import java.util.ArrayList;

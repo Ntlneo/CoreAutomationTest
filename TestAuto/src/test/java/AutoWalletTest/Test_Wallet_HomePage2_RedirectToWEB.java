@@ -16,7 +16,7 @@ import CoreAutomation.BaseAutoTest.BaseTest;
  * Unit test for simple App.
  */
 //@TestInstance(Lifecycle.PER_CLASS)
-public class Test_Wallet_HomePage extends BaseTest{	
+public class Test_Wallet_HomePage2_RedirectToWEB extends BaseTest{	
 	
 	String walletName = "lamwallet9";
 

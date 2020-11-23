@@ -1,4 +1,4 @@
-package CoreAutomation.BaseAutoTest;
+package OtherAutoProjects;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
