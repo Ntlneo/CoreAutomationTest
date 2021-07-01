@@ -29,6 +29,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import CoreAutomation.BaseAutoPage.BasePage;
 import DataManager.StringManager;
+//import Fan8.ChangeProxy;
 //import Fan8_CMC.User_Proxy_To_Access_CMC;
 import DataManager.StringManager;
 
@@ -39,35 +40,41 @@ import org.junit.jupiter.api.TestInfo;
 public class BaseTest {
 	public ChromeDriverService service;
 	public WebDriver driverElectron;
-	public WebDriver driverChrome;
+	static public WebDriver driverChrome;
 	public int portDebugChrome = 6789;
 	
-	private String path_DriverChromeForWeb = "Drivers/WebChromeDriver/chromedriver.exe";
+	static private String path_DriverChromeForWeb = "Drivers/WebChromeDriver/chromedriver.exe";
 	private String path_DriverChromeForElectron = "Drivers/ElectronChromeDriver/chromedriver.exe";
 	private String path_AppMainnet = "C://Program Files (x86)/BeowulfWallet/BeowulfWallet.exe";
 	private String path_AppTestnet = "C://Program Files (x86)/BeowulfWalletTestnet/BeowulfWalletTestnet.exe";
 
+//	static public ChangeProxy pageChangeProxy;
 	
+	public static void initPages() {
+//		pageChangeProxy = new ChangeProxy(driverChrome);
+	}
 	
 	
 	// *********************** BEFORE & AFTER ***********************	
 
 	
-	@BeforeEach
-	public void startScript(TestInfo testInfo) {
+	@BeforeAll
+	public static void startScript(TestInfo testInfo) {
 //		ExcelManager_Map excel = new ExcelManager_Map(pathToExcelFile);
 		System.out.println("\t###  STARTING SCRIPT  ###");
+		
+		
 		initChromeWithProxy();
-//		initPages();		
+		initPages();		
 
 		
-		System.out.println("Test File:\t" + testInfo.getTestClass().get().getSimpleName() + ".java");
-		System.out.println("Test Case:\t" +	addSpaceBetweenWords_OfTestcaseMethod(testInfo.getTestMethod().get().getName()));
+//		System.out.println("Test File:\t" + testInfo.getTestClass().get().getSimpleName() + ".java");
+//		System.out.println("Test Case:\t" +	addSpaceBetweenWords_OfTestcaseMethod(testInfo.getTestMethod().get().getName()));
 
 	}
 
-	@AfterEach
-	public void endScript() {
+	@AfterAll
+	public static void endScript() {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -82,15 +89,15 @@ public class BaseTest {
 			driverChrome.quit();	//not Work			
 		}	
 		
-		if (null != driverElectron) {
-			System.out.println("Đang quit Electron");
-			driverElectron.quit();			
-		}		
-	
-		
-		if ( null != service) {
-			service.stop();
-		}
+//		if (null != driverElectron) {
+//			System.out.println("Đang quit Electron");
+//			driverElectron.quit();			
+//		}		
+//	
+//		
+//		if ( null != service) {
+//			service.stop();
+//		}
 		
 
 	}
@@ -100,15 +107,20 @@ public class BaseTest {
 	
 	// *********************** SUPPORT Functions ***********************
 	
-	String proxyhttp = "82.165.105.48:80";
-	public void initChromeWithProxy() {
+	static String proxyhttp = "82.165.105.48:80";
+	public static void initChromeWithProxy() {
+		System.setProperty("webdriver.chrome.driver", path_DriverChromeForWeb);
+		System.setProperty("webdriver.chrome.silentOutput", "false");
 		ChromeOptions chromeOptions = new ChromeOptions();
 		Proxy proxy = new Proxy();
 		proxy.setAutodetect(false);
 		proxy.setHttpProxy(proxyhttp);
-//		proxy.setSslProxy("https_proxy-url:port");
 		chromeOptions.setCapability("proxy", proxy); 
 		driverChrome = new ChromeDriver(chromeOptions);
+		driverChrome = new ChromeDriver();
+		driverChrome.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);		
+		driverChrome.manage().window().fullscreen();
+		System.out.println("Pre-Test: CHROME Driver Start Success");
 	}
 	
 	
@@ -140,7 +152,7 @@ public class BaseTest {
 	
 	public void initDriverChrome() {
 		System.setProperty("webdriver.chrome.driver", path_DriverChromeForWeb);
-		System.setProperty("webdriver.chrome.silentOutput", "false");;
+		System.setProperty("webdriver.chrome.silentOutput", "false");
 	    ChromeOptions options = new ChromeOptions();
 	    options.setExperimentalOption("debuggerAddress", "localhost:" + portDebugChrome);
 		
