@@ -1,5 +1,8 @@
 package OtherAutoProjects;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BOMInputStream;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -317,23 +321,77 @@ public class Test_Pump_Fan8_InCMC {
 		System.out.println("Pre-Test: CHROME Driver Start Success\r");
 	}
 
-	// ------------HANDLE
-	// code------------------------------------------------------------------------
+	// ------------HANDLE_ACTIONS------------------------------------------------------------------------
 
-	// tr[1]/td[1]
-	// https://free-proxy-list.net/
-	public void getListIPandPort() {
+	//The syntax of ScrollBy() methods is :
+	//executeScript("window.scrollBy(x-pixels,y-pixels)");
+	//x-pixels : horizontal, left if number is positive, right if number is negative
+	//y-pixels : vertical, down if number is positive, up if number is in negative
+    	
+	
 
-//		By listProxyRow = By.xpath("//tbody/tr"); //from 1 - 20
-//		By listProxyColumn = By.xpath("//tbody/tr[1]/td[1]"); //from 1-2-3
-		String listRow = "//tbody/tr";
 
-		for (int i = 0; i < 20; i++) {
-			String listRowWithIndex = listRow + "[" + i + "]";
-			String sIP = listRowWithIndex;
-		}
-
+	// This will scroll the web page till end.
+    public void scrollUpToTopPage() throws AWTException {    	
+//    	String jsScript = "window.scrollTo(0, -document.body.scrollHeight)";
+    	String jsScript = "window.scrollTo(0, document.body.scrollTop)"; 
+    	executeByJavaScript(jsScript);
+    }
+	
+	// This will scroll the web page till end.
+    public void scrollDownToEndPage() throws AWTException {    	
+    	String jsScript = "window.scrollTo(0, document.body.scrollHeight)";    	
+    	executeByJavaScript(jsScript);
+    	
+//    	driver.findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL, Keys.END);
+//    	Robot robot = new Robot();
+//    	robot.keyPress(KeyEvent.VK_CONTROL);
+//    	robot.keyPress(KeyEvent.VK_END);
+//    	robot.keyRelease(KeyEvent.VK_END);
+//    	robot.keyRelease(KeyEvent.VK_CONTROL);
+    }
+	
+	
+	// This will scroll the page till the element is found
+    public void scrollToElementVisible(By by) {
+    	WebElement webElement = getWebElement(by);
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+    	js.executeScript("arguments[0].scrollIntoView();",webElement );
+    }
+	
+	
+	// horizontal scroll right
+    public void scrollRight_ByPixel(int negative) {    	
+    	executeByJavaScript("window.scrollBy(" + negative + ",0)" );
+    }
+    
+	// horizontal scroll left
+    public void scrollLeft_ByPixel(int positive) {    	
+    	executeByJavaScript("window.scrollBy(" + positive + ",0)" );
+    }
+    
+	// vertical scroll up 
+    public void scrollUp_ByPixel(int negative) {    	
+    	executeByJavaScript("window.scrollBy(0," + negative + ")" );
+    }
+    
+	// vertical scroll down 
+    public void scrollDownPixel(int positive) {
+    	executeByJavaScript("window.scrollBy(0," + positive + ")" );
+    	
+//    	executeByJavaScript("window.scrollBy(0,250)");
+//    	executeByJavaScript("scroll(0, 250);");
+//    	Robot robot = new Robot();
+//    	robot.keyPress(KeyEvent.VK_PAGE_DOWN);
+//    	robot.keyRelease(KeyEvent.VK_PAGE_DOWN);
+    }
+	
+    public void executeByJavaScript(String javaScript) {
+		JavascriptExecutor js = (JavascriptExecutor)driver;  
+		js.executeScript(javaScript);		
 	}
+	
+
 
 	public void input(By by, String text) {
 		getWebElement(by).sendKeys(text);
