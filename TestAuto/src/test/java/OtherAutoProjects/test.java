@@ -11,14 +11,18 @@ public class test {
 		int round = 1;
 		while(true) {
 			try {
-				System.out.println("######### Round : " + round + " #########");
+				System.out.println("######### Round : " + round + " #########\n");
 //				cmc.testOpenFan8_FromGoogle();
 //				cmc.testOpenFan8_FromSearchCMC();
 //				cmc.testOpenFan8_FromGoogle_Multi();
-				cmc.testOpenFan8_FromSearchCMC_Multi();
+//				cmc.testOpenFan8_FromSearchCMC_Multi();
+				
+				//1:Google - 2:CoinMarketCap
+				cmc.testOpenFan8_FromMultiProxy(1);
+				cmc.testOpenFan8_FromMultiProxy(2);
 				round++;
 
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				System.out.println("### Round error : " + round);
 				e.printStackTrace();
 			}	

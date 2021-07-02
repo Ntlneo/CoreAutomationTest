@@ -14,12 +14,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BOMInputStream;
@@ -33,6 +35,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Test_Pump_Fan8_InCMC {
 	WebDriver driver;
@@ -72,6 +76,65 @@ public class Test_Pump_Fan8_InCMC {
 
 	// ------------RUNTEST------------------------------------------------------------------------
 
+	@Test
+	public void testOpenFan8_FromMultiProxy(int numb) {
+		printRunningCaseTest(numb);
+		System.out.println();
+		try {
+			listProxy_Global = getListProxy_FromListURL();
+			printListProxy(listProxy_Global);
+
+			if (!isRestarting()) {
+				int countSuccess = 0;
+				for (String proxy : listProxy_Global) {
+					int countProxy = countSuccess + 1;
+					initChromeWithProxyHTTP(proxy);
+					System.out.println("Using proxy " + countProxy + ":\t " + proxy);
+
+					try {
+						selectCaseTest(numb);
+						scrollBotAndTopPage();
+						scrollToVolumeFan8();
+						// check url fan8 CMC appears
+						int number = 0;
+						do {
+							System.out.println("Verified link:   " + driver.getCurrentUrl());
+							Thread.sleep(5000);
+							number++;
+
+						} while (!driver.getCurrentUrl().contains("/currencies/fan8") && number < 12);
+
+						// Count if wait < 60s
+						if (number < 12) {
+							countSuccess += 1;
+							System.out.println("Count Success:\t " + countSuccess);
+							driver.quit();
+						}
+						
+					} catch (Exception e) {
+						driver.quit();
+						if (isRestarting_InURL(url1_PhuongCao)) {
+							sleep(30);
+							testOpenFan8_FromMultiProxy(numb);
+						} else if (isRestarting_InURL(url2_PhuongCao)) {
+							sleep(30);
+							testOpenFan8_FromMultiProxy(numb);
+						}
+						// testOpenFan8CMC_FromSearchCMC();
+					}
+
+				}
+			} else {
+				sleep(30);				
+				testOpenFan8_FromMultiProxy(numb);
+
+			}
+		} catch (Exception e) {
+			sleep(30);
+			testOpenFan8_FromMultiProxy(numb);
+		}
+	}
+
 	public void testOpenFan8_FromGoogle_Multi() throws InterruptedException {
 		System.out.println("### Running: Open Fan8 page from Google Search");
 		try {
@@ -86,7 +149,7 @@ public class Test_Pump_Fan8_InCMC {
 					System.out.println("Using proxy " + countProxy + ":\t" + proxy);
 
 					try {
-						openFan8_FromGoogle();
+						case1_OpenFan8_FromGoogle();
 						scrollBotAndTopPage();
 						scrollToVolumeFan8();
 						// check url fan8 CMC appears
@@ -128,7 +191,8 @@ public class Test_Pump_Fan8_InCMC {
 			testOpenFan8_FromGoogle_Multi();
 		}
 	}
-	
+
+
 	public void testOpenFan8_FromSearchCMC_Multi() throws InterruptedException {
 		System.out.println("### Running: Open Fan8 page from Coinmarket Cap");
 		try {
@@ -140,16 +204,16 @@ public class Test_Pump_Fan8_InCMC {
 				for (String proxy : listProxy_Global) {
 					int countProxy = countSuccess + 1;
 					initChromeWithProxyHTTP(proxy);
-					System.out.println("Using proxy " + countProxy + ":\t" + proxy);
+					System.out.println("Using proxy " + countProxy + ":\t " + proxy);
 
 					try {
-						openFan8_FromSearchCMC();
+						case2_OpenFan8_FromSearchCMC();
 						scrollBotAndTopPage();
 						scrollToVolumeFan8();
 						// check url fan8 CMC appears
 						int number = 0;
 						do {
-							System.out.println(driver.getCurrentUrl());
+							System.out.println("Verified link:   " + driver.getCurrentUrl());
 							Thread.sleep(5000);
 							number++;
 
@@ -158,7 +222,7 @@ public class Test_Pump_Fan8_InCMC {
 						// Count if wait < 60s
 						if (number < 12) {
 							countSuccess += 1;
-							System.out.println("Count Success " + countSuccess + ":\t" + proxy);
+							System.out.println("Count Success:\t " + countSuccess + "\n");
 							driver.quit();
 						}
 
@@ -200,7 +264,7 @@ public class Test_Pump_Fan8_InCMC {
 					System.out.println("Using proxy " + countProxy + ":\t" + proxy);
 
 					try {
-						openFan8_FromGoogle();
+						case1_OpenFan8_FromGoogle();
 						scrollBotAndTopPage();
 						scrollToVolumeFan8();
 						// check url fan8 CMC appears
@@ -240,7 +304,6 @@ public class Test_Pump_Fan8_InCMC {
 		}
 	}
 
-	@Test
 	public void testOpenFan8_FromSearchCMC() throws InterruptedException {
 		System.out.println("### Running: Open Fan8 page from Coinmarket Cap");
 		try {
@@ -255,7 +318,7 @@ public class Test_Pump_Fan8_InCMC {
 					System.out.println("Using proxy " + countProxy + ":\t" + proxy);
 
 					try {
-						openFan8_FromSearchCMC();
+						case2_OpenFan8_FromSearchCMC();
 						scrollBotAndTopPage();
 						scrollToVolumeFan8();
 						// check url fan8 CMC appears
@@ -418,7 +481,8 @@ public class Test_Pump_Fan8_InCMC {
 		}
 	}
 
-	// ------------------------------------------------------------------
+	// --------------ACTIONS IN CASE
+	// TEST----------------------------------------------------
 	public void scrollBotAndTopPage() throws InterruptedException {
 		scrollDownToEndPage();
 		Thread.sleep(3000);
@@ -430,32 +494,80 @@ public class Test_Pump_Fan8_InCMC {
 		scrollToElementVisible(iconCoinVolume);
 	}
 
-	public void openFan8_FromGoogle() throws InterruptedException {
+	public void printRunningCaseTest(int numb) {
+		switch (numb) {
+		case 1:
+			System.out.println("### Running: Open Fan8 page from Google Search");
+			break;
+		case 2:
+			System.out.println("### Running: Open Fan8 page from Coinmarket Cap");
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void selectCaseTest(int numb) {
+		switch (numb) {
+		case 1:
+			case1_OpenFan8_FromGoogle();
+			break;
+		case 2:
+			case2_OpenFan8_FromSearchCMC();
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+
+
+	public void case1_OpenFan8_FromGoogle() {
 //		initChromeNoProxy();		
 		driver.get(webGoogleWithSearch + searchKey_Fan8CMC);
-		Thread.sleep(5000);
+//		sleep(3);
+		
+		// close Cookie popup
+		try {
+			By byAgree = By.xpath("(//div[@class='jyfHyd'])[2]");
+			waitUntilElementClickable(byAgree).click();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+//		try {
+//		By byAgree = By.xpath("(//div[@class='jyfHyd'])[2]");
+//		if(driver.findElement(byAgree).isDisplayed()) {
+//			click(byAgree);
+//		}
+//		}catch (Exception e) {
+//			// TODO: handle exception
+//		}
+
+		// for both mini + maxi web
 		By by1stSearchResult = By.xpath("(//*[@class='LC20lb DKV0Md'])[1]");
 		click(by1stSearchResult);
-		// *[@class='LC20lb DKV0Md']
+		sleep(3);
 
 		// will wait later
-//		By symbolFan8 = By.xpath("//*[@class = 'nameSymbol___1arQV']");	
-		Thread.sleep(5000);
-
+//		By symbolFan8 = By.xpath("//*[@class = 'nameSymbol___1arQV']");
 	}
 
-	public void openFan8_FromSearchCMC() throws InterruptedException {
-
+	public void case2_OpenFan8_FromSearchCMC() {
 		driver.get(webCMC);
-		By search = By.xpath("//div[contains(@class,'sc-266vnq-1')]");
-		By inputFan8 = By.xpath("//input[contains(@class,'bzyaeu-3')]");
-		// for not maximize web
-//		By search = By.xpath("(//div[@class='sc-1xvlii-0 dQjfsE']/*[@class='sc-16r8icm-0 fNFbRb'])[1]");
-//		By inputFan8 = By.xpath("//input[@class='bzyaeu-3 exjgFJ']");
+
+		// for maxi web
+//		By search = By.xpath("//div[contains(@class,'sc-266vnq-1')]");
+//		By inputFan8 = By.xpath("//input[contains(@class,'bzyaeu-3')]");
+
+		// for not mini web
+		By search = By.xpath("(//div[@class='sc-1xvlii-0 dQjfsE']/*[@class='sc-16r8icm-0 fNFbRb'])[1]");
+		By inputFan8 = By.xpath("//input[@class='bzyaeu-3 exjgFJ']");
 
 		click(search);
 		driver.findElement(inputFan8).sendKeys(coinSearch, Keys.RETURN);
-		Thread.sleep(5000);
+		sleep(3);
 	}
 
 	// not using
@@ -484,17 +596,6 @@ public class Test_Pump_Fan8_InCMC {
 			System.out.println("Proxy " + countProxy + ":\t" + proxy);
 		}
 	}
-
-//	public String getTextResultFromURL(String url) {
-//		URL url = new URL(link);
-//		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//		InputStream responseStream = connection.getInputStream();
-//		BufferedReader rd = new BufferedReader(new InputStreamReader(responseStream));
-//		String line;
-//		while ((line = rd.readLine()) != null) {
-//			return line;
-//		}
-//	}
 
 	public List<String> getListProxy_FromListURL() throws Exception {
 		List<String> listLocal = new ArrayList<>();
@@ -565,8 +666,13 @@ public class Test_Pump_Fan8_InCMC {
 
 	// using 2
 	public void initChromeWithProxyHTTP(String httpProxy) {
+		System.out.println();
 		System.setProperty("webdriver.chrome.driver", path_DriverChromeForWeb);
+
+		// hide log of chromedriver and java selenium
 		System.setProperty("webdriver.chrome.silentOutput", "true");
+		java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.SEVERE);
+
 		ChromeOptions chromeOptions = new ChromeOptions();
 		chromeOptions.setExperimentalOption("excludeSwitches", new String[] { "enable-automation", "enable-logging" });
 		chromeOptions.setExperimentalOption("useAutomationExtension", false);
@@ -582,15 +688,14 @@ public class Test_Pump_Fan8_InCMC {
 
 		chromeOptions.addArguments("--proxy-server=" + httpProxy);
 
-		chromeOptions.addArguments("start-maximized");
+//		chromeOptions.addArguments("start-maximized");
 
 		driver = new ChromeDriver(chromeOptions);
-		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		 driver.manage().deleteAllCookies();
-		
+		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+		driver.manage().deleteAllCookies();
+
 //		driver.manage().window().maximize();
-//		driver.manage().window().fullscreen();
-		System.out.println("Pre-Test: CHROME Driver Start Success\r");
+//		System.out.println("\rPre-Test: CHROME Driver Start Success");
 	}
 
 	// ssl proxy : not using
@@ -618,7 +723,8 @@ public class Test_Pump_Fan8_InCMC {
 		System.out.println("Pre-Test: CHROME Driver Start Success\r");
 	}
 
-	// ------------HANDLE_ACTIONS------------------------------------------------------------------------
+	// ------------HANDLE_USER
+	// ACTIONS------------------------------------------------------------------------
 
 	// The syntax of ScrollBy() methods is :
 	// executeScript("window.scrollBy(x-pixels,y-pixels)");
@@ -698,4 +804,21 @@ public class Test_Pump_Fan8_InCMC {
 	public WebElement getWebElement(By by) {
 		return driver.findElement(by);
 	}
+
+	public void sleep(int second) {
+		try {
+			Thread.sleep(second * 1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public WebElement waitUntilElementClickable(By by) {
+		//WebDriverWait is a subclass of FluentWait
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+		return wait.until(ExpectedConditions.elementToBeClickable(by));		
+	}
+
 }
