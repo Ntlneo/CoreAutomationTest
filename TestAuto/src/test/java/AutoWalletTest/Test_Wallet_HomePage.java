@@ -34,7 +34,7 @@ public class Test_Wallet_HomePage extends BaseTest{
 		initDriverChrome();
 		wSignUpPage_Web = new Wallet_SignUpPage(driverChrome);		
 		
-		wHomePage_Electron.clickCreateOneLink();
+//		wHomePage_Electron.clickCreateOneLink();
 
 		//wait new tab opened
 		try {
