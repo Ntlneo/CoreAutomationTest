@@ -435,7 +435,7 @@ public class AutoLike_CoinGecko {
 	//DONT USE selenium-java and appium java-client TO AVOID BUG NoClassDefFound
 	
 	public void tryToClickManyTime_(int limitTimes, By elementToClick, By textElementToStopClick, String expectedText) {
-		int tryTimes = 0;zz
+		int tryTimes = 0;
 		do {			
 			click(elementToClick);
 			tryTimes += 1;
