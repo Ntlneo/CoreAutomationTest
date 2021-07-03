@@ -34,6 +34,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverLogLevel;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -671,11 +672,17 @@ public class Test_Pump_Fan8_InCMC {
 
 		// hide log of chromedriver and java selenium
 		System.setProperty("webdriver.chrome.silentOutput", "true");
-		java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.SEVERE);
+		java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
 
 		ChromeOptions chromeOptions = new ChromeOptions();
+		
+		//run without browser
+//		chromeOptions.addArguments("headless");
+		
 		chromeOptions.setExperimentalOption("excludeSwitches", new String[] { "enable-automation", "enable-logging" });
 		chromeOptions.setExperimentalOption("useAutomationExtension", false);
+		//a little weaker than System.setProperty("webdriver.chrome.silentOutput", "true");
+//		chromeOptions.setLogLevel(ChromeDriverLogLevel.OFF);
 		Map<String, Object> prefs = new HashMap<String, Object>();
 		prefs.put("credentials_enable_service", false);
 		prefs.put("profile.password_manager_enabled", false);
@@ -689,12 +696,13 @@ public class Test_Pump_Fan8_InCMC {
 		chromeOptions.addArguments("--proxy-server=" + httpProxy);
 
 //		chromeOptions.addArguments("start-maximized");
+//		chromeOptions.addArguments("start-minimized");
 
 		driver = new ChromeDriver(chromeOptions);
 		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 		driver.manage().deleteAllCookies();
 
-//		driver.manage().window().maximize();
+//		driver.manage().window().minimize();
 //		System.out.println("\rPre-Test: CHROME Driver Start Success");
 	}
 
