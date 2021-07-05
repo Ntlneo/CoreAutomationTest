@@ -8,50 +8,55 @@ import java.util.List;
 
 public class test {
 	static String coin_Default = "Fan8";
-	static String url_Default = "Default Servers of Phuong Cao";		
+	static String url_Default;
 	static String url1_PhuongCao = "https://teamcity.quickom.com/proxy1.txt";
 	static String url2_PhuongCao = "https://teamcity.quickom.com/proxy2.txt";
 //	static String url3_PhuongCao = "https://teamcity.quickom.com/proxy3.txt";
 //	static String url4_PhuongCao = "https://teamcity.quickom.com/proxy4.txt";
 //	static String url5_PhuongCao = "https://teamcity.quickom.com/proxy5.txt";
 	static List<String> listURL_Default = new ArrayList<>();
+	
+//	static Test_Pump_Fan8_InCMC cmc = new Test_Pump_Fan8_InCMC();
 
 	public static void main(String[] args) {
-		setDefault_Coin_Url(coin_Default, url_Default);
 		listURL_Default = getListUrl_Default(url1_PhuongCao, url2_PhuongCao);
-		
-		//		forTestonly();		
+
+		// forTestonly();
 		try {
 //			if (null != args[0] && null != args[1]) {
-//				coinToTest = args[0];
-//				proxyUserInput = args[1];
-//				listURL_PhuongCao.clear();
-//				listURL_PhuongCao.add(proxyUserInput);
-//			} else if (null != args[1]) {
-				if (args[0].contains("http")) {
-					url_Default = args[0];
-					listURL_Default.clear();
-					listURL_Default.add(url_Default);
-				} else {
-					coin_Default = args[0];
-				}
+//				coin_Default = args[0];
+//				url_Default = args[1];
+//				listURL_Default.clear();
+//				listURL_Default.add(url_Default);
+//			} else
+		if (null != args[0] && args[0].contains("http")) {
+				url_Default = args[0];
+				listURL_Default.clear();
+				listURL_Default.add(url_Default);
+			} else {
+				coin_Default = args[0];
+			}
+//		}
 
 		} catch (ArrayIndexOutOfBoundsException e) {
 //			System.out.println("ArrayIndexOutOfBoundsException caught");
 //			System.out.println("\tYou're currently Run test with values:");
 //			System.out.println("\tCoin: " + coinToTest + "- Proxy: " + proxyUserInput);
 		} finally {
+			setDefault_Coin_ListUrl(coin_Default, listURL_Default);
+
 			System.out.println("\tRuning test with values:");
-			System.out.println("\tCoin: " + coin_Default + " --- Proxy: " + url_Default + "\n");
-			runTest();
+			System.out.println("\tCoin: " + coin_Default + " --- Proxy Server: " + listURL_Default);
+
+			runTest(coin_Default, listURL_Default);
 		}
 	}
-	
-	static void setDefault_Coin_Url(String coin, String url) {
+
+	static void setDefault_Coin_ListUrl(String coin, List<String> listUrl) {
 		coin_Default = coin;
-		url_Default = url;		
+		listURL_Default = listUrl;
 	}
-	
+
 	static List<String> getListUrl_Default(String... urls) {
 		List<String> localList = new ArrayList<>();
 		for (String url : urls) {
@@ -59,27 +64,26 @@ public class test {
 		}
 		return localList;
 	}
-	
-	static void runTest() {
-		Test_Pump_Fan8_InCMC cmc = new Test_Pump_Fan8_InCMC();
-		int maxRound = 10;
 
+	static void runTest(String coin, List<String> listUrl) {
+		Test_Pump_Fan8_InCMC cmc = new Test_Pump_Fan8_InCMC();
+//		int maxRound = 10;
 		int round = 1;
 		while (true) {
 			try {
-				System.out.println("######### Round : " + round + " #########\n");
+				System.out.println("######### Round : " + round + " #########");
 
-				// 1:CoinMarketCap - 2:Google 
-				cmc.testOpenFan8_FromMultiProxy(1, coin_Default, listURL_Default);
-				cmc.testOpenFan8_FromMultiProxy(2, coin_Default, listURL_Default);
+				// 1:CoinMarketCap - 2:Google
+				cmc.testOpenFan8_FromMultiProxy(1, coin, listUrl);
+				cmc.testOpenFan8_FromMultiProxy(2, coin, listUrl);
 				round++;
 
 			} catch (Exception e) {
 				System.out.println("### Round error : " + round);
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		}
-}
+	}
 
 //	static void forTestonly() {
 //		cmc.initChromeNoProxy();
@@ -93,9 +97,5 @@ public class test {
 //		System.out.println("END");
 //		cmc.driver.quit();
 //	}
-
-	
-
-
 
 }

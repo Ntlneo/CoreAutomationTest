@@ -1,30 +1,19 @@
 package OtherAutoProjects;
 
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.input.BOMInputStream;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -32,9 +21,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverLogLevel;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -65,7 +52,7 @@ public class Test_Pump_Fan8_InCMC {
 	String webGoogle = "https://www.google.com/";
 	String webGoogleWithSearch = "https://www.google.com/search?q=";
 //	String coinSearch = "Fan8";
-	String webSearchCMC = "coinmarketcap";
+	String keyworld_ToSearchInWeb = "coinmarketcap";
 
 	String webDefiatoTesting = "https://testing.defiato.com/";
 	String email = "defitest1@mailinator.com";
@@ -81,15 +68,19 @@ public class Test_Pump_Fan8_InCMC {
 	@Test
 	public void testOpenFan8_FromMultiProxy(int numb, String coin, List<String> listUrl) {
 		printRunningCaseTest(numb, coin);
-		System.out.println();
+//		System.out.println();
 
 		try {
 			// List Proxy now is sure no Restarting
 			listProxy = getListProxy_FromListURL(listUrl);
-			printListProxy(listProxy);
-
-			
-			for (int i=0; i < listProxy.size(); i++) {				
+			if(listProxy.size() > 0) {
+				printListProxy(listProxy);
+			}else {
+				System.out.println("No proxy on servers now. Trying to get proxy after 30s...");
+				sleep(30);
+			}			
+			for (int i=0; i < listProxy.size(); i++) {
+				System.out.println("\r");
 				initChromeWithProxyHTTP(listProxy.get(i));
 				int countProxy = i + 1;
 				System.out.println("Using proxy " + countProxy + ":\t " + listProxy.get(i));
@@ -102,14 +93,30 @@ public class Test_Pump_Fan8_InCMC {
 
 					// Only overview can click Rate Good
 					clickOverview();
-
+					sleep(3);
+					
 					scrollBotAndTopPage();
 //						srcollToCoinAtEndPage();
-
+					
+					clickTokenFan8Page();
+					sleep(5);
+					
+					switchWindow(1);
+					
 					scrollToVoteBanner();
+					
 					clickRateGood();
+					sleep(2);
 
-					clickPairMarket();
+					clickPancakeSwap_Pair();
+					sleep(5);
+					switchWindow(1);
+					sleep(2);
+					
+					clickDextools_Pair();
+					sleep(5);
+					switchWindow(1);
+					sleep(2);
 
 					int timeInSecond = 0;
 					// check url fan8 CMC appears
@@ -140,6 +147,8 @@ public class Test_Pump_Fan8_InCMC {
 						System.out.println("A server is in RESTARTING status. Restarting script...");
 						sleep(30);
 						testOpenFan8_FromMultiProxy(numb, coin, listUrl);					
+					}else {
+						System.out.println("No RESTARTING status in servers. Continue to the next Proxy.");
 					}					
 				}
 			}
@@ -297,6 +306,18 @@ public class Test_Pump_Fan8_InCMC {
 	// --------------ACTIONS IN CASE
 	// TEST----------------------------------------------------
 
+	public void clickTokenFan8Page() {
+		By byTokenFan8 = By.xpath("//a[contains(@class,'button___2MvNi')]");
+		click(byTokenFan8);
+//		sleep(3);
+	}
+	
+	public void clickDextools_Pair() {
+		By byDextools = By.xpath("//a[@title='dextools']");
+		click(byDextools);
+//		sleep(3);
+	}
+	
 	// click ReCaptcha if exist
 	public void clickReCaptchaCheckbox_IfExist() {
 
@@ -321,11 +342,6 @@ public class Test_Pump_Fan8_InCMC {
 		}
 	}
 
-	public void srcollToCoinAtEndPage() {
-		By byCoinAtTheEndpage = By.xpath("//div[contains(@class,'sc-14a9h6a-0')]");
-		scrollDownUntilSeeElement(500, byCoinAtTheEndpage);
-	}
-
 	public void closeCMCPolicyBanner() {
 		By byPolicyBanner = By.xpath("//div[@class='cmc-cookie-policy-banner__close']");
 		click(byPolicyBanner);
@@ -337,7 +353,7 @@ public class Test_Pump_Fan8_InCMC {
 //		By byTabSwitcher = By.xpath("//div[contains(@class,'container routeSwitcher')]");
 		By byOverview = By.xpath("//a[contains(@class,'x0o17e-0')][1]");
 		click(byOverview);
-		sleep(2);
+//		sleep(2);
 	}
 
 	public void scrollToVoteBanner() {
@@ -349,19 +365,20 @@ public class Test_Pump_Fan8_InCMC {
 	public void clickRateGood() {
 		By byVoteGood = By.xpath("(//button[contains(@class,'iv7acg-0')])[1]");
 		click(byVoteGood);
-		sleep(2);
+//		sleep(2);
 	}
 
-	public void clickPairMarket() {
+	public void clickPancakeSwap_Pair() {
 		By byPairMarket = By.xpath("//a[contains(@class,'qh9zi5')]");
 		click(byPairMarket);
-		sleep(3);
+//		sleep(3);
 	}
 
 	public void scrollBotAndTopPage() {
 		scrollDownToEndPage();
-		sleep(2);
+		sleep(3);
 		scrollUpToTopPage();
+		sleep(3);
 	}
 
 //	public void scrollToVolumeFan8() {
@@ -372,10 +389,10 @@ public class Test_Pump_Fan8_InCMC {
 	public void printRunningCaseTest(int numb, String coin) {
 		switch (numb) {
 		case 1:
-			System.out.println("### Running: Open " + coin.toUpperCase() + " page from Google Search");
+			System.out.println("### Running: Open " + coin.toUpperCase() + " page from Coinmarket Cap");
 			break;
 		case 2:
-			System.out.println("### Running: Open " + coin.toUpperCase() + " page from Coinmarket Cap");
+			System.out.println("### Running: Open " + coin.toUpperCase() + " page from Google Search");
 			break;
 
 		default:
@@ -405,7 +422,7 @@ public class Test_Pump_Fan8_InCMC {
 	}
 
 	public void case2_OpenCoinPage_FromGoogle(String coin) {
-		driver.get(webGoogleWithSearch + coin + " " + webSearchCMC);
+		driver.get(webGoogleWithSearch + coin + " " + keyworld_ToSearchInWeb);
 
 		// close Cookie popup
 		clickCookiePopup_IfExist();
@@ -468,7 +485,7 @@ public class Test_Pump_Fan8_InCMC {
 	// using 1
 	// Make sure no restarting in List
 	public List<String> getListProxy_FromListURL(List<String> listURL) {
-		List<String> listURL_ToGetProxy = new ArrayList<>();
+		List<String> listLocal = new ArrayList<>();
 		try {
 			for (int i = 0; i < listURL.size(); i++) {
 				URL url = new URL(listURL.get(i));
@@ -478,19 +495,19 @@ public class Test_Pump_Fan8_InCMC {
 				String line;
 				while ((line = rd.readLine()) != null) {
 					if (!line.equalsIgnoreCase("restarting")) {
-						listURL_ToGetProxy.add(line);
+						listLocal.add(line);
 					} else {
 						break;
 					}
 				}
-				listURL_Total.add(listURL_ToGetProxy);
+//				listURL_Total.add(listLocal);
 				connection.disconnect();
 			}
 //			connection.disconnect();
 		} catch (Exception e) {
-			System.out.println("Unable to get list Proxy now");
+			System.out.println("Unable to get list Proxy now, maybe servers died.");
 		}
-		return listURL_ToGetProxy;
+		return listLocal;
 	}
 
 	public boolean isProxyInURL(String proxy, List<List<String>> listURLToTal) {
@@ -551,9 +568,9 @@ public class Test_Pump_Fan8_InCMC {
 //		System.out.println("Success add Proxy");
 //	}
 
-	// using 2
+	// using 1
 	public void initChromeWithProxyHTTP(String httpProxy) {
-		System.out.println();
+//		System.out.println();
 		System.setProperty("webdriver.chrome.driver", path_DriverChromeForWeb);
 
 		// hide log of chromedriver and java selenium
@@ -738,6 +755,29 @@ public class Test_Pump_Fan8_InCMC {
 		// WebDriverWait is a subclass of FluentWait
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(second));
 		return wait.until(ExpectedConditions.elementToBeClickable(by));
+	}
+	
+	// start from 1
+	public void switchWindow(int orderOfWindow) {
+		Set<String> windows = driver.getWindowHandles();
+		List<String> listWindow = new ArrayList<String>();
+		listWindow.addAll(windows);
+		driver = driver.switchTo().window(listWindow.get(orderOfWindow - 1));
+	}
+	
+	public int getNumberOfWindow() {
+		return driver.getWindowHandles().size();
+	}	
+	
+	public Process process;
+	public void runCmdComand(String command) {		
+		try
+		{
+		    process = Runtime.getRuntime().exec(command);
+		} catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
 	}
 
 }
