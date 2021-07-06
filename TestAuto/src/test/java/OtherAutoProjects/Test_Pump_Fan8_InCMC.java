@@ -7,6 +7,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -25,7 +29,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Sleeper;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.google.common.collect.Lists;
 
 public class Test_Pump_Fan8_InCMC {
 	WebDriver driver;
@@ -59,31 +66,77 @@ public class Test_Pump_Fan8_InCMC {
 	String pass = "12345678";
 
 //	String path_FileProxy = "DataTest/httpproxies.txt";
-	List<String> listProxy = new ArrayList<>();
+	List<String> listProxy_Origin = new ArrayList<>();
+	List<String> listProxy_DidRun = new ArrayList<>();
+	List<String> listProxy_New = new ArrayList<>();
+	List<String> listProxy_Remain = new ArrayList<>();	
 
 	int countTotalSuccess = 0;
+	
+	// To set Stop Time at CMC and TokenFan8 pages
+	List<Integer> list_RandomSecond_StopAtCMC = Lists.newArrayList(60, 120);
+	List<Integer> list_RandomSecond_StopAtTokenFan8 = Lists.newArrayList(30, 60);
+//	List<Integer> list_RandomSecond_StopAtCMC = Lists.newArrayList(0, 0);
+//	List<Integer> list_RandomSecond_StopAtTokenFan8 = Lists.newArrayList(0, 0);
 
 	// ------------RUNTEST------------------------------------------------------------------------
 
+	public List<String> addProxyToList(String proxy, List<String> list){
+		List<String> listLocal = new ArrayList<>();
+		listLocal.add(proxy);
+		list.clear();
+		list = listLocal;
+		return list;
+	}
+	
+//	public void clearAllListProxy() {
+//		listProxy_Origin.clear();
+//		listProxy_DidRun.clear();
+//		listProxy_New.clear();
+//		listProxy_Remain.clear();
+//	}
+	
 	@Test
 	public void testOpenFan8_FromMultiProxy(int numb, String coin, List<String> listUrl) {
 		printRunningCaseTest(numb, coin);
-//		System.out.println();
 
+		
+//		System.out.println();
+		
+		//clear all list
+//		clearAllListProxy();
+		
 		try {
 			// List Proxy now is sure no Restarting
-			listProxy = getListProxy_FromListURL(listUrl);
-			if(listProxy.size() > 0) {
-				printListProxy(listProxy);
+			// get list Proxy mới
+			listProxy_Origin = getListProxy_FromListURL(listUrl);
+			if(listProxy_Origin.size() > 0) {
+				Collections.shuffle(listProxy_Origin);
+				printListProxy(listProxy_Origin);
+//				Collections.shuffle(listProxy_Origin);
+//				System.out.println("After shuffle:");
+//				printListProxy(listProxy_Origin);
 			}else {
 				System.out.println("No proxy on servers now. Trying to get proxy after 30s...");
 				sleep(30);
-			}			
-			for (int i=0; i < listProxy.size(); i++) {
+			}
+			
+			// nếu đã từng chay thì remove những proxy đã chạy 
+			if(listProxy_DidRun.size() > 0) {
+				Collection collection_ofListDidRun = new ArrayList(listProxy_DidRun);
+				listProxy_Origin.removeAll(collection_ofListDidRun);
+				listProxy_DidRun.clear();
+				
+			}
+			
+			for (int i=0; i < listProxy_Origin.size(); i++) {
 				System.out.println("\r");
-				initChromeWithProxyHTTP(listProxy.get(i));
+				initChromeWithProxyHTTP(listProxy_Origin.get(i));
 				int countProxy = i + 1;
-				System.out.println("Using proxy " + countProxy + ":\t " + listProxy.get(i));
+				System.out.println("Using proxy " + countProxy + ":\t" + listProxy_Origin.get(i));
+				
+				String userAgent = (String) ((JavascriptExecutor) driver).executeScript("return navigator.userAgent");
+				System.out.println("UserAgent:\t" + userAgent);
 				
 				try {
 					selectCaseTest(numb, coin);
@@ -96,16 +149,19 @@ public class Test_Pump_Fan8_InCMC {
 					sleep(3);
 					
 					scrollBotAndTopPage();
-//						srcollToCoinAtEndPage();
 					
 					clickTokenFan8Page();
-					sleep(5);
-					
+					System.out.print("TokenFan8 web:\t");
+					sleepRandom(list_RandomSecond_StopAtTokenFan8.get(0), list_RandomSecond_StopAtTokenFan8.get(1));
+										
 					switchWindow(1);
 					
 					scrollToVoteBanner();
 					
 					clickRateGood();
+					sleep(2);
+					
+					scrollToViewAllMarkets();
 					sleep(2);
 
 					clickPancakeSwap_Pair();
@@ -124,7 +180,7 @@ public class Test_Pump_Fan8_InCMC {
 						
 						// verify Fan8 link when wait < 10s
 						do {
-							System.out.println("Verified link:   " + driver.getCurrentUrl());
+							System.out.println("Verified link:\t" + driver.getCurrentUrl());
 							sleep(1);
 							timeInSecond++;
 						} while (!driver.getCurrentUrl().contains("/currencies/fan8") && timeInSecond < 10);
@@ -132,14 +188,17 @@ public class Test_Pump_Fan8_InCMC {
 						// Count success if wait < 10s
 						if (timeInSecond < 10) {
 							countTotalSuccess += 1;							
-							System.out.println("Count Success:\t " + countTotalSuccess);
-							driver.quit();
+							System.out.println("Count Success:\t" + countTotalSuccess);
+//							driver.quit();
 						}
 					} else {
 						countTotalSuccess += 1;
-						System.out.println("Count Success:\t " + countTotalSuccess);
-						driver.quit();
+						System.out.println("Count Success:\t" + countTotalSuccess);
+//						driver.quit();
 					}
+					
+					listProxy_DidRun.add(listProxy_Origin.get(i));
+					driver.quit();
 
 				} catch (Exception e) {
 					driver.quit();
@@ -148,10 +207,12 @@ public class Test_Pump_Fan8_InCMC {
 						sleep(30);
 						testOpenFan8_FromMultiProxy(numb, coin, listUrl);					
 					}else {
-						System.out.println("No RESTARTING status in servers. Continue to the next Proxy.");
+						System.out.println("Something went wrong (proxy die, proxy slow...) but no RESTARTING status in servers. Continue to the next Proxy.");
 					}					
 				}
 			}
+			
+			listProxy_Origin.clear();
 //			} else {
 //				sleep(30);				
 //				testOpenFan8_FromMultiProxy(numb, coin, listUrl);
@@ -306,6 +367,8 @@ public class Test_Pump_Fan8_InCMC {
 	// --------------ACTIONS IN CASE
 	// TEST----------------------------------------------------
 
+
+	
 	public void clickTokenFan8Page() {
 		By byTokenFan8 = By.xpath("//a[contains(@class,'button___2MvNi')]");
 		click(byTokenFan8);
@@ -323,13 +386,12 @@ public class Test_Pump_Fan8_InCMC {
 
 		// try to click 2 times
 		try {
-			By byReCaptchaText = By.xpath("//label[@id='recaptcha-anchor-label']");
-			waitUntilElementClickable(byReCaptchaText, 3).click();
-//			
-		} catch (Exception e) {
-			// TODO: handle exception
 			By byReCaptchaBox = By.xpath("//div[@class='recaptcha-checkbox-border']");
 			waitUntilElementClickable(byReCaptchaBox, 3).click();
+			By byReCaptchaText = By.xpath("//label[@id='recaptcha-anchor-label']");
+			waitUntilElementClickable(byReCaptchaText, 3).click();
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 
@@ -354,6 +416,11 @@ public class Test_Pump_Fan8_InCMC {
 		By byOverview = By.xpath("//a[contains(@class,'x0o17e-0')][1]");
 		click(byOverview);
 //		sleep(2);
+	}
+	
+	public void scrollToViewAllMarkets() {
+		By byAllMarkets = By.xpath("(//a[contains(@class,'sc-10p9viq-4')])");
+		scrollDownUntilSeeElement(1000, byAllMarkets);
 	}
 
 	public void scrollToVoteBanner() {
@@ -424,24 +491,29 @@ public class Test_Pump_Fan8_InCMC {
 	public void case2_OpenCoinPage_FromGoogle(String coin) {
 		driver.get(webGoogleWithSearch + coin + " " + keyworld_ToSearchInWeb);
 
-		// close Cookie popup
-		clickCookiePopup_IfExist();
-
 		// click ReCaptcha
 		clickReCaptchaCheckbox_IfExist();
+		
+		// close Cookie popup
+		clickCookiePopup_IfExist();	
 
 		// for both mini + maxi web
 		By by1stSearchResult = By.xpath("(//*[@class='LC20lb DKV0Md'])[1]");
 		click(by1stSearchResult);
-		sleep(3);
+		System.out.print("CoinmarketCap:\t");
+		sleepRandom(list_RandomSecond_StopAtCMC.get(0), list_RandomSecond_StopAtCMC.get(1));
+		
 
 		// will wait later
 //		By symbolFan8 = By.xpath("//*[@class = 'nameSymbol___1arQV']");
 	}
+	
 
 	public void case1_OpenCoinPage_FromSearchCMC(String coin) {
 		driver.get(webCMC);
-
+		System.out.print("CoinmarketCap:\t");
+		sleepRandom(list_RandomSecond_StopAtCMC.get(0), list_RandomSecond_StopAtCMC.get(1));
+	
 		// for maxi web
 //		By search = By.xpath("//div[contains(@class,'sc-266vnq-1')]");
 //		By inputFan8 = By.xpath("//input[contains(@class,'bzyaeu-3')]");
@@ -523,11 +595,8 @@ public class Test_Pump_Fan8_InCMC {
 		return bo;
 	}
 
-	public List<String> getNewListProxy_AfterDeleteRestartingProxy() {
-		List<String> localList = new ArrayList<String>();
 
-		return localList;
-	}
+
 
 	// using 1
 //	public List<String> getListProxy_FromURL() {
@@ -581,7 +650,7 @@ public class Test_Pump_Fan8_InCMC {
 
 		// run without browser
 //		chromeOptions.addArguments("headless");
-
+		chromeOptions.addArguments("user-agent="+getRandomString());
 		chromeOptions.setExperimentalOption("excludeSwitches", new String[] { "enable-automation", "enable-logging" });
 		chromeOptions.setExperimentalOption("useAutomationExtension", false);
 		// a little weaker than System.setProperty("webdriver.chrome.silentOutput",
@@ -667,13 +736,13 @@ public class Test_Pump_Fan8_InCMC {
 	public void scrollUpToTopPage() {
 //    	String jsScript = "window.scrollTo(0, -document.body.scrollHeight)";
 		String jsScript = "window.scrollTo(0, document.body.scrollTop)";
-		executeByJavaScript(jsScript);
+		javaScriptRunner(jsScript);
 	}
 
 	// This will scroll the web page till end.
 	public void scrollDownToEndPage() {
 		String jsScript = "window.scrollTo(0, document.body.scrollHeight)";
-		executeByJavaScript(jsScript);
+		javaScriptRunner(jsScript);
 
 //    	driver.findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL, Keys.END);
 //    	Robot robot = new Robot();
@@ -701,22 +770,22 @@ public class Test_Pump_Fan8_InCMC {
 
 	// horizontal scroll right
 	public void scrollRight_ByPixel(int negative) {
-		executeByJavaScript("window.scrollBy(" + negative + ",0)");
+		javaScriptRunner("window.scrollBy(" + negative + ",0)");
 	}
 
 	// horizontal scroll left
 	public void scrollLeft_ByPixel(int positive) {
-		executeByJavaScript("window.scrollBy(" + positive + ",0)");
+		javaScriptRunner("window.scrollBy(" + positive + ",0)");
 	}
 
 	// vertical scroll up
 	public void scrollUp_ByPixel(int negative) {
-		executeByJavaScript("window.scrollBy(0," + negative + ")");
+		javaScriptRunner("window.scrollBy(0," + negative + ")");
 	}
 
 	// vertical scroll down
 	public void scrollDown_ByPixel(int positive) {
-		executeByJavaScript("window.scrollBy(0," + positive + ")");
+		javaScriptRunner("window.scrollBy(0," + positive + ")");
 
 //    	executeByJavaScript("window.scrollBy(0,250)");
 //    	executeByJavaScript("scroll(0, 250);");
@@ -725,9 +794,16 @@ public class Test_Pump_Fan8_InCMC {
 //    	robot.keyRelease(KeyEvent.VK_PAGE_DOWN);
 	}
 
-	public void executeByJavaScript(String javaScript) {
+	public void javaScriptRunner(String javaScript) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript(javaScript);
+	}
+	
+	public String javaScriptRunner_ToString(String javaScript) {
+		String s;
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		s = js.executeScript(javaScript).toString();
+		return s;
 	}
 
 	public void input(By by, String text) {
@@ -742,6 +818,18 @@ public class Test_Pump_Fan8_InCMC {
 		return driver.findElement(by);
 	}
 
+	public int sleepRandom(int begin_inSecond, int end_inSecond) {
+		int x = RandomUtils.nextInt(begin_inSecond, end_inSecond+1);
+		System.out.println("Waiting " + x + "s...");
+		sleep(x);
+		return x;
+	}
+	
+	public String getRandomString() {
+		String x = RandomStringUtils.randomAlphanumeric(10);
+		return x;
+	}
+	
 	public void sleep(int second) {
 		try {
 			Thread.sleep(second * 1000);
