@@ -118,7 +118,7 @@ public class Test_Pump_Fan8_InCMC {
 		try {
 
 			// List Proxy now is sure no Restarting
-			// get list Proxy mới
+			// get list Proxy mới phải clear list cũ trc
 			listProxy_Origin.clear();
 			listProxy_Origin = getListProxy_FromListURL(listUrl);
 			if (listProxy_Origin.size() > 0) {
@@ -180,6 +180,7 @@ public class Test_Pump_Fan8_InCMC {
 
 //			}
 		} catch (Exception e) {
+			driver.quit();
 			System.out.println("Something went wrong. Restarting script...");
 			sleep(30);
 			testOpenFan8_FromMultiProxy(numb, coin, listUrl);
@@ -551,7 +552,7 @@ public class Test_Pump_Fan8_InCMC {
 //		By inputFan8 = By.xpath("//input[contains(@class,'bzyaeu-3')]");
 
 		// for not mini web
-		By search = By.xpath("(//div[@class='sc-1xvlii-0 dQjfsE']/*[@class='sc-16r8icm-0 fNFbRb'])[1]");
+		By search = By.xpath("(//*[@class='sc-16r8icm-0 fNFbRb'])[1]");
 		By inputFan8 = By.xpath("//input[@class='bzyaeu-3 exjgFJ']");
 
 		click(search);
@@ -772,6 +773,7 @@ public class Test_Pump_Fan8_InCMC {
 				scrollDown_ByPixel(positive);
 				sleep(2);
 				if (driver.findElement(byElementToFind).isDisplayed()) {
+//					System.out.println("Đã scroll và thấy element");
 					break;
 				}
 			} catch (Exception e) {
@@ -859,7 +861,8 @@ public class Test_Pump_Fan8_InCMC {
 	}
 
 	public void click(By by) {
-		getWebElement(by).click();
+		getWebElement(by).click();	
+//		System.out.println("Đã thấy element và Click xong");
 	}
 
 	public WebElement getWebElement(By by) {
