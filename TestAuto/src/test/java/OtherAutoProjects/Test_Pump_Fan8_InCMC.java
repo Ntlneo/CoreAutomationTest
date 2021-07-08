@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -99,14 +100,13 @@ public class Test_Pump_Fan8_InCMC {
 //		listProxy_Remain.clear();
 //	}
 
-
-
 	
 
+	
 	// run case:
 	// - Go to Fan8, From CMC search
 	// - Go to Fan8, From Google Search
-	// - Go to CMC, From Token Fan8
+	// - Go to CMC, From Token Fan8	
 	public void testOpenFan8_FromMultiProxy(int numb, String coin, List<String> listUrl) {
 		printRunningCaseTest(numb, coin);
 
@@ -119,13 +119,11 @@ public class Test_Pump_Fan8_InCMC {
 
 			// List Proxy now is sure no Restarting
 			// get list Proxy mới
+			listProxy_Origin.clear();
 			listProxy_Origin = getListProxy_FromListURL(listUrl);
 			if (listProxy_Origin.size() > 0) {
 				Collections.shuffle(listProxy_Origin);
 				printListProxy(listProxy_Origin);
-//				Collections.shuffle(listProxy_Origin);
-//				System.out.println("After shuffle:");
-//				printListProxy(listProxy_Origin);
 			} else {
 				System.out.println("No proxy on servers now. Trying to get proxy after 30s...");
 				sleep(30);
@@ -149,20 +147,21 @@ public class Test_Pump_Fan8_InCMC {
 				System.out.println("UserAgent:\t" + userAgent);
 
 				try {
-					
-					//Can't run 3 cases at the same time
-					
-					//Run case 1 and 2 : Must open this
+
+					// Can't run 3 cases at the same time
+
+					// Run case 1 and 2 : Must open this
 					case1_2_OpenFan8_FromCMC_AndFromGG(numb, coin);
-					
-					//Run case 3
+
+					// Run case 3
 //					selectCaseTest(3, coin);
 
 					listProxy_DidRun.add(listProxy_Origin.get(i));
 					driver.quit();
 
-				} catch (Exception e) {
+				} catch (Exception e) {					
 					driver.quit();
+					
 					if (isRestarting_WhenGetListProxyAgain_FromListURL(listUrl)) {
 						System.out.println("A server is in RESTARTING status. Restarting script...");
 						sleep(30);
@@ -233,8 +232,7 @@ public class Test_Pump_Fan8_InCMC {
 		}
 	}
 
-	// FOR test with Defiator
-	@Test
+	// FOR test with Defiator	
 	public void testLoginDefiatoTesting() {
 //		getListProxy_FromFile();
 		List<String> listlocal = new ArrayList<>();
@@ -288,18 +286,17 @@ public class Test_Pump_Fan8_InCMC {
 		By byFan8OnCMC = By.xpath("//a[@title='CMC']");
 		scrollDownUntilSeeElement(1000, byFan8OnCMC);
 	}
-	
-	
+
 	public void scrollTo_Fan8PlatformTxt() {
 		By byFan8Platform = By.xpath("//div[@class='title-3 mb-2']");
 		scrollDownUntilSeeElement(1000, byFan8Platform);
 	}
-	
+
 	public void scrollTo_About() {
 		By byAboutOnCMC = By.xpath("//a[@href='/about/']");
 		scrollDownUntilSeeElement(1000, byAboutOnCMC);
 	}
-	
+
 	public void clickAbout_OnCMC() {
 		By byAboutOnCMC = By.xpath("//a[@href='/about/']");
 		click(byAboutOnCMC);
@@ -330,7 +327,7 @@ public class Test_Pump_Fan8_InCMC {
 			By byReCaptchaBox = By.xpath("//div[@class='recaptcha-checkbox-border']");
 			waitUntilElementClickable(byReCaptchaBox, 3).click();
 			By byReCaptchaText = By.xpath("//label[@id='recaptcha-anchor-label']");
-			waitUntilElementClickable(byReCaptchaText, 3).click();
+			waitUntilElementClickable(byReCaptchaText, 3).click();			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -338,7 +335,8 @@ public class Test_Pump_Fan8_InCMC {
 
 	public void clickCookiePopup_IfExist() {
 		try {
-			By byAgree = By.xpath("(//div[@class='jyfHyd'])[2]");
+			// for noImage
+			By byAgree = By.xpath("(//input[@type='submit'])[1] | (//div[@class='jyfHyd'])[2]");
 			waitUntilElementClickable(byAgree, 3).click();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -354,7 +352,7 @@ public class Test_Pump_Fan8_InCMC {
 		By byMarket = By.xpath("//a[contains(@class,'x0o17e-0')][2]");
 		click(byMarket);
 	}
-	
+
 	public void clickOverview() {
 //		By byStatsBeforeOverview = By.xpath("//div[contains(@class,'statsSupplyBlock')]");
 //		By bySocialTab = By.xpath("//div[contains(@class,'cmc-tab-social__body')]");
@@ -434,36 +432,33 @@ public class Test_Pump_Fan8_InCMC {
 		}
 	}
 
-	
 	public void case3_OpenCMCPage_FromTokenFan8(String coin) {
-		driver.get(webTokenFan8);		
+		driver.get(webTokenFan8);
 //		sleep(3);
-		
+
 //		scrollTo_OnCMClink();
 		scrollTo_Fan8PlatformTxt();
-		clickOnCMC_Link();		
+		clickOnCMC_Link();
 
 		switchWindow(2);
 		sleep(3);
-		
+
 		closeCMCPolicyBanner();
-		clickMarket();		
-		scrollDown_ByPixel(400);		
-		
-		//ko dc scroll to end vi load nhiu data
+		clickMarket();
+		scrollDown_ByPixel(400);
+
+		// ko dc scroll to end vi load nhiu data
 //		scrollDownToEndPage();		
 //		scrollTo_About();		
 //		sleep(2);		
 //		clickAbout_OnCMC();
-		
-		
-		
+
 		sleep(3);
 		System.out.println("Verified link:\t" + driver.getCurrentUrl());
 		countTotalSuccess += 1;
 		System.out.println("Count Success:\t" + countTotalSuccess);
 	}
-	
+
 	public void case1_2_OpenFan8_FromCMC_AndFromGG(int numb, String coin) {
 		selectCaseTest(numb, coin);
 
@@ -478,7 +473,7 @@ public class Test_Pump_Fan8_InCMC {
 
 		clickTokenFan8Page();
 		System.out.print("TokenFan8 web:\t");
-		sleepRandom(list_RandomSecond_StopAtTokenFan8.get(0), list_RandomSecond_StopAtTokenFan8.get(1));
+//		sleepRandom(list_RandomSecond_StopAtTokenFan8.get(0), list_RandomSecond_StopAtTokenFan8.get(1));
 
 		switchWindow(1);
 
@@ -515,12 +510,12 @@ public class Test_Pump_Fan8_InCMC {
 			if (timeInSecond < 10) {
 				countTotalSuccess += 1;
 				System.out.println("Count Success:\t" + countTotalSuccess);
-//				driver.quit();
+
 			}
 		} else {
 			countTotalSuccess += 1;
 			System.out.println("Count Success:\t" + countTotalSuccess);
-//			driver.quit();
+
 		}
 	}
 
@@ -534,10 +529,13 @@ public class Test_Pump_Fan8_InCMC {
 		clickCookiePopup_IfExist();
 
 		// for both mini + maxi web
-		By by1stSearchResult = By.xpath("(//*[@class='LC20lb DKV0Md'])[1]");
+//		By by1stSearchResult = By.xpath("(//*[@class='LC20lb DKV0Md'])[1]");
+		
+		// for Noimage
+		By by1stSearchResult = By.xpath("(//*[@class= 'zBAuLc' or @class='LC20lb DKV0Md'])[1]");
 		click(by1stSearchResult);
 		System.out.print("CoinmarketCap:\t");
-		sleepRandom(list_RandomSecond_StopAtCMC.get(0), list_RandomSecond_StopAtCMC.get(1));
+//		sleepRandom(list_RandomSecond_StopAtCMC.get(0), list_RandomSecond_StopAtCMC.get(1));
 
 		// will wait later
 //		By symbolFan8 = By.xpath("//*[@class = 'nameSymbol___1arQV']");
@@ -546,7 +544,7 @@ public class Test_Pump_Fan8_InCMC {
 	public void case1_OpenCoinPage_FromSearchCMC(String coin) {
 		driver.get(webCMC);
 		System.out.print("CoinmarketCap:\t");
-		sleepRandom(list_RandomSecond_StopAtCMC.get(0), list_RandomSecond_StopAtCMC.get(1));
+//		sleepRandom(list_RandomSecond_StopAtCMC.get(0), list_RandomSecond_StopAtCMC.get(1));
 
 		// for maxi web
 //		By search = By.xpath("//div[contains(@class,'sc-266vnq-1')]");
@@ -682,30 +680,31 @@ public class Test_Pump_Fan8_InCMC {
 
 		// run without browser
 //		chromeOptions.addArguments("headless");
-		
+
 		// make no display : Chrome ia automated... .
 //		chromeOptions.addArguments("disable-infobars");
-		
-		//set size browser
+
+		// set size browser
 		chromeOptions.addArguments("window-size=800,1000");
-		
+
 		chromeOptions.addArguments("user-agent=" + getRandomString());
 		chromeOptions.setExperimentalOption("excludeSwitches", new String[] { "enable-automation", "enable-logging" });
 		chromeOptions.setExperimentalOption("useAutomationExtension", false);
-		
-		// a little weaker than System.setProperty("webdriver.chrome.silentOutput","true");
+
+		// a little weaker than
+		// System.setProperty("webdriver.chrome.silentOutput","true");
 //		chromeOptions.setLogLevel(ChromeDriverLogLevel.OFF);
-		
+
 		Map<String, Object> prefs = new HashMap<String, Object>();
-		
+
 		// make web not load image
-		prefs.put("profile.managed_default_content_settings.images", 2); 
-		
+		prefs.put("profile.managed_default_content_settings.images", 2);
+
 		// maybe this is for mobile appium
 		prefs.put("credentials_enable_service", false);
 		prefs.put("profile.password_manager_enabled", false);
 		prefs.put("profile.default_content_setting_values.notifications", 2); // disable browser noti
-		
+
 		chromeOptions.setExperimentalOption("prefs", prefs);
 //		Proxy proxy = new Proxy();
 //		proxy.setAutodetect(false);
@@ -767,14 +766,17 @@ public class Test_Pump_Fan8_InCMC {
 	// x 0 -x
 	// y
 
-	public void scrollDownUntilSeeElement(int positive, By by) {
-		try {
-			do {
+	public void scrollDownUntilSeeElement(int positive, By byElementToFind) {
+		for (int i = 0; i < 10; i++) {
+			try {
 				scrollDown_ByPixel(positive);
 				sleep(2);
-			} while (!driver.findElement(by).isDisplayed());
-		} catch (Exception e) {
-			scrollDownUntilSeeElement(positive, by);
+				if (driver.findElement(byElementToFind).isDisplayed()) {
+					break;
+				}
+			} catch (Exception e) {
+
+			}
 		}
 	}
 
@@ -911,6 +913,12 @@ public class Test_Pump_Fan8_InCMC {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	// for run any Testcase
+	public void forRunTest() {
+		test a = new test();
+		testOpenFan8_FromMultiProxy(2, a.coin_Default, a.getListUrl_Default(a.url1_PhuongCao, a.url2_PhuongCao));
 	}
 
 }
