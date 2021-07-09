@@ -84,24 +84,6 @@ public class Test_Pump_Fan8_InCMC {
 	List<Integer> list_RandomSecond_StopAtTokenFan8 = Lists.newArrayList(0, 0);
 
 	// ------------RUNTEST------------------------------------------------------------------------
-
-//	public List<String> addProxyToList(String proxy, List<String> list){
-//		List<String> listLocal = new ArrayList<>();
-//		listLocal.add(proxy);
-//		list.clear();
-//		list = listLocal;
-//		return list;
-//	}
-
-//	public void clearAllListProxy() {
-//		listProxy_Origin.clear();
-//		listProxy_DidRun.clear();
-//		listProxy_New.clear();
-//		listProxy_Remain.clear();
-//	}
-
-	
-
 	
 	// run case:
 	// - Go to Fan8, From CMC search
@@ -109,11 +91,7 @@ public class Test_Pump_Fan8_InCMC {
 	// - Go to CMC, From Token Fan8	
 	public void testOpenFan8_FromMultiProxy(int numb, String coin, List<String> listUrl) {
 		printRunningCaseTest(numb, coin);
-
 //		System.out.println();
-
-		// clear all list
-//		clearAllListProxy();
 
 		try {
 
@@ -151,10 +129,10 @@ public class Test_Pump_Fan8_InCMC {
 					// Can't run 3 cases at the same time
 
 					// Run case 1 and 2 : Must open this
-					case1_2_OpenFan8_FromCMC_AndFromGG(numb, coin);
+//					case1_2_OpenFan8_FromCMC_AndFromGG(numb, coin);
 
 					// Run case 3
-//					selectCaseTest(3, coin);
+					selectCaseTest(numb, coin);
 
 					listProxy_DidRun.add(listProxy_Origin.get(i));
 					driver.quit();
@@ -172,13 +150,7 @@ public class Test_Pump_Fan8_InCMC {
 					}
 				}
 			}
-
 			listProxy_Origin.clear();
-//			} else {
-//				sleep(30);				
-//				testOpenFan8_FromMultiProxy(numb, coin, listUrl);
-
-//			}
 		} catch (Exception e) {
 			driver.quit();
 			System.out.println("Something went wrong. Restarting script...");
@@ -186,16 +158,6 @@ public class Test_Pump_Fan8_InCMC {
 			testOpenFan8_FromMultiProxy(numb, coin, listUrl);
 		}
 	}
-
-//	public void setListUrlPhuongCao() {
-//		if(listURL_PhuongCao.size() <= 0) {
-//			listURL_PhuongCao.add(url1_PhuongCao);
-//			listURL_PhuongCao.add(url2_PhuongCao);
-//			listURL_PhuongCao.add(url3_PhuongCao);
-//			listURL_PhuongCao.add(url4_PhuongCao);
-//			listURL_PhuongCao.add(url5_PhuongCao);
-//		}
-//	}
 
 	// for case: Co restart trong so cac url
 	public boolean isRestarting_WhenGetListProxyAgain_FromListURL(List<String> listURL) {
@@ -237,11 +199,12 @@ public class Test_Pump_Fan8_InCMC {
 	public void testLoginDefiatoTesting() {
 //		getListProxy_FromFile();
 		List<String> listlocal = new ArrayList<>();
-		listlocal = getListProxy_FromURL("https://teamcity.quickom.com/proxy1.txt");
+		listlocal = getListProxy_FromURL("https://teamcity.quickom.com/proxy2.txt");
 		printListProxy(listlocal);
 		int count = 0;
 		for (String proxy : listlocal) {
 			initChromeWithProxyHTTP(proxy);
+			System.out.println("Running with proxy:" + proxy);
 //			driver.manage().window().maximize();
 			// String webIP = "https://whatismyipaddress.com/";
 			// driver.get(webIP);
@@ -249,8 +212,15 @@ public class Test_Pump_Fan8_InCMC {
 
 			try {
 				driver.get(webDefiatoTesting);
-				System.out.println("Started Chrome");
-				By bySignIn = By.xpath("(//a[@href='/signin'])[2]");
+				System.out.println("Chrome opened Defiato web");
+				
+				//For mini web
+				By byMenuBtn = By.xpath("//button[@aria-label='Toggle navigation']");
+				click(byMenuBtn);
+				By bySignIn = By.xpath("(//a[@href='/signin'])[1]");
+				
+				//For maxi web
+//				By bySignIn = By.xpath("(//a[@href='/signin'])[2]");
 				click(bySignIn);
 
 				By byEmail = By.xpath("//input[@name='email']");
@@ -259,24 +229,30 @@ public class Test_Pump_Fan8_InCMC {
 				input(byEmail, email);
 				input(byPass, pass);
 				click(bySignInBtn);
+				sleep(3);
 				int number = 0;
 				do {
 					System.out.println(driver.getCurrentUrl());
-					sleep(5);
-					number++;
-
-				} while (!driver.getCurrentUrl().contains("/account/details") && number < 12);
+					sleep(1);
+					System.out.println(number);
+					number++;					
+				} while (!driver.getCurrentUrl().contains("/account/details") && number < 10);
 
 				// count if success
-				if (number < 12) {
+				if (number < 10) {
 					count += 1;
-					System.out.println("Count " + count + " : " + proxy);
+					System.out.println(driver.getCurrentUrl());
+					System.out.println("Count " + count);
+					
 				}
+				driver.quit();
 			} catch (Exception e) {
 				// TODO: handle exception
+				driver.quit();
+				testLoginDefiatoTesting();
 			}
 
-			driver.close();
+//			driver.quit();
 		}
 	}
 
@@ -355,9 +331,6 @@ public class Test_Pump_Fan8_InCMC {
 	}
 
 	public void clickOverview() {
-//		By byStatsBeforeOverview = By.xpath("//div[contains(@class,'statsSupplyBlock')]");
-//		By bySocialTab = By.xpath("//div[contains(@class,'cmc-tab-social__body')]");
-//		By byTabSwitcher = By.xpath("//div[contains(@class,'container routeSwitcher')]");
 		By byOverview = By.xpath("//a[contains(@class,'x0o17e-0')][1]");
 		click(byOverview);
 //		sleep(2);
@@ -392,11 +365,6 @@ public class Test_Pump_Fan8_InCMC {
 		scrollUpToTopPage();
 		sleep(3);
 	}
-
-//	public void scrollToVolumeFan8() {
-//		By iconCoinVolume = By.xpath("//img[@alt='converter-coin-logo']");
-//		scrollToElementInView(iconCoinVolume);
-//	}
 
 	public void printRunningCaseTest(int numb, String coin) {
 		switch (numb) {
@@ -455,9 +423,14 @@ public class Test_Pump_Fan8_InCMC {
 //		clickAbout_OnCMC();
 
 		sleep(3);
-		System.out.println("Verified link:\t" + driver.getCurrentUrl());
-		countTotalSuccess += 1;
-		System.out.println("Count Success:\t" + countTotalSuccess);
+		if(driver.getCurrentUrl().contains("currencies/fan8/markets")) {
+			System.out.println("Verified link:\t" + driver.getCurrentUrl());
+			countTotalSuccess ++;
+			System.out.println("Count Success:\t" + countTotalSuccess);
+		}else {
+			System.out.println("URL is invalid. This page is not https://coinmarketcap.com/currencies/fan8/markets/");
+		}
+		
 	}
 
 	public void case1_2_OpenFan8_FromCMC_AndFromGG(int numb, String coin) {
@@ -680,7 +653,7 @@ public class Test_Pump_Fan8_InCMC {
 		ChromeOptions chromeOptions = new ChromeOptions();
 
 		// run without browser
-//		chromeOptions.addArguments("headless");
+		chromeOptions.addArguments("headless");
 
 		// make no display : Chrome ia automated... .
 //		chromeOptions.addArguments("disable-infobars");
@@ -919,9 +892,11 @@ public class Test_Pump_Fan8_InCMC {
 	}
 	
 	// for run any Testcase
+	@Test
 	public void forRunTest() {
-		test a = new test();
-		testOpenFan8_FromMultiProxy(2, a.coin_Default, a.getListUrl_Default(a.url1_PhuongCao, a.url2_PhuongCao));
+//		test a = new test();
+		testLoginDefiatoTesting();
+//		testOpenFan8_FromMultiProxy(2, a.coin_Default, a.getListUrl_Default(a.url1_PhuongCao, a.url2_PhuongCao));
 	}
 
 }
