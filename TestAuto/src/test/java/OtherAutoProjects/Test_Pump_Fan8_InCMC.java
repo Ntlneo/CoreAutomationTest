@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
@@ -206,7 +207,7 @@ public class Test_Pump_Fan8_InCMC {
 		int count = 0;
 		for (String proxy : listlocal) {
 			initChromeWithProxyHTTP(proxy);
-			System.out.println("Running with proxy:" + proxy);
+			System.out.println("Running with proxy:/t" + proxy);
 //			driver.manage().window().maximize();
 			// String webIP = "https://whatismyipaddress.com/";
 			// driver.get(webIP);
@@ -646,7 +647,7 @@ public class Test_Pump_Fan8_InCMC {
 	// using 1
 	public void initChromeWithProxyHTTP(String httpProxy) {
 //		System.out.println();
-		System.setProperty("webdriver.chrome.driver", path_DriverChrome_Window);
+//		System.setProperty("webdriver.chrome.driver", path_DriverChrome_Window);
 
 		// hide log of chromedriver and java selenium
 		System.setProperty("webdriver.chrome.silentOutput", "true");
@@ -697,10 +698,16 @@ public class Test_Pump_Fan8_InCMC {
 //			driverPath = "Driver/chromedriver.exe";
 			System.setProperty("webdriver.chrome.driver", path_DriverChrome_Window);
 			driver = new ChromeDriver(chromeOptions);
+			System.out.println("Platform:\t" + Platform.getCurrent());
+//			String userAgent = (String) ((JavascriptExecutor) driver).executeScript("return navigator.userAgent");
+//			System.out.println("UserAgent:\t" + userAgent);
 		} else {
 //	    	driverPath = "Driver/chromedriver-linux";
 	    	System.setProperty("webdriver.chrome.driver", path_DriverChrome_Linux);
 	    	driver = new ChromeDriver(chromeOptions);
+	    	System.out.println("Platform:\t" + Platform.getCurrent());
+//	    	String userAgent = (String) ((JavascriptExecutor) driver).executeScript("return navigator.userAgent");
+//			System.out.println("UserAgent:\t" + userAgent);
 		}
 		
 //		driver = new ChromeDriver(chromeOptions);
