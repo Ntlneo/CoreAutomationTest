@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -38,7 +39,8 @@ import com.google.common.collect.Lists;
 
 public class Test_Pump_Fan8_InCMC {
 	WebDriver driver;
-	String path_DriverChromeForWeb = "Drivers/WebChromeDriver/chromedriver.exe";
+	String path_DriverChrome_Window = "Drivers/WebChromeDriver/chromedriver.exe";
+	String path_DriverChrome_Linux = "Drivers/WebChromeDriver_Linux/chromedriver";
 //	String proxyhttp = "http://191.101.39.131";
 //	String port = "80";
 //	String urlPubProxyToGetProxy = "http://pubproxy.com/api/proxy?limit=10&last_check=1&format=txt&type=http&https=false";
@@ -129,10 +131,10 @@ public class Test_Pump_Fan8_InCMC {
 					// Can't run 3 cases at the same time
 
 					// Run case 1 and 2 : Must open this
-//					case1_2_OpenFan8_FromCMC_AndFromGG(numb, coin);
+					case1_2_OpenFan8_FromCMC_AndFromGG(numb, coin);
 
 					// Run case 3
-					selectCaseTest(numb, coin);
+//					selectCaseTest(numb, coin);
 
 					listProxy_DidRun.add(listProxy_Origin.get(i));
 					driver.quit();
@@ -644,7 +646,7 @@ public class Test_Pump_Fan8_InCMC {
 	// using 1
 	public void initChromeWithProxyHTTP(String httpProxy) {
 //		System.out.println();
-		System.setProperty("webdriver.chrome.driver", path_DriverChromeForWeb);
+		System.setProperty("webdriver.chrome.driver", path_DriverChrome_Window);
 
 		// hide log of chromedriver and java selenium
 		System.setProperty("webdriver.chrome.silentOutput", "true");
@@ -653,7 +655,7 @@ public class Test_Pump_Fan8_InCMC {
 		ChromeOptions chromeOptions = new ChromeOptions();
 
 		// run without browser
-		chromeOptions.addArguments("headless");
+//		chromeOptions.addArguments("headless");
 
 		// make no display : Chrome ia automated... .
 //		chromeOptions.addArguments("disable-infobars");
@@ -690,7 +692,18 @@ public class Test_Pump_Fan8_InCMC {
 //		chromeOptions.addArguments("start-maximized");
 //		chromeOptions.addArguments("start-minimized");
 
-		driver = new ChromeDriver(chromeOptions);
+		
+		if (Platform.getCurrent().is(Platform.WINDOWS)) {
+//			driverPath = "Driver/chromedriver.exe";
+			System.setProperty("webdriver.chrome.driver", path_DriverChrome_Window);
+			driver = new ChromeDriver(chromeOptions);
+		} else {
+//	    	driverPath = "Driver/chromedriver-linux";
+	    	System.setProperty("webdriver.chrome.driver", path_DriverChrome_Linux);
+	    	driver = new ChromeDriver(chromeOptions);
+		}
+		
+//		driver = new ChromeDriver(chromeOptions);
 		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 		driver.manage().deleteAllCookies();
 
@@ -700,7 +713,7 @@ public class Test_Pump_Fan8_InCMC {
 
 	// ssl proxy : not using
 	public void initChromeWithProxyHTTPS(String httpsproxy) {
-		System.setProperty("webdriver.chrome.driver", path_DriverChromeForWeb);
+		System.setProperty("webdriver.chrome.driver", path_DriverChrome_Window);
 		System.setProperty("webdriver.chrome.silentOutput", "false");
 		ChromeOptions chromeOptions = new ChromeOptions();
 		Proxy proxy = new Proxy();
@@ -715,7 +728,7 @@ public class Test_Pump_Fan8_InCMC {
 	}
 
 	public void initChromeNoProxy() {
-		System.setProperty("webdriver.chrome.driver", path_DriverChromeForWeb);
+		System.setProperty("webdriver.chrome.driver", path_DriverChrome_Window);
 		System.setProperty("webdriver.chrome.silentOutput", "false");
 		driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
