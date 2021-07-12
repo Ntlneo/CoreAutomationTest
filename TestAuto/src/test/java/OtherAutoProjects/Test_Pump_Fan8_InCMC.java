@@ -1,15 +1,20 @@
 package OtherAutoProjects;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +44,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.google.common.collect.Lists;
 
 public class Test_Pump_Fan8_InCMC {
+	
+
+
+	
+	public Process process;
+	
 	WebDriver driver;
 	String path_DriverChrome_Window = "Drivers/WebChromeDriver/chromedriver.exe";
 	String path_DriverChrome_Linux = "Drivers/WebChromeDriver_Linux/chromedriver";
@@ -84,7 +95,7 @@ public class Test_Pump_Fan8_InCMC {
 //	List<Integer> list_RandomSecond_StopAtCMC = Lists.newArrayList(30, 60);
 //	List<Integer> list_RandomSecond_StopAtTokenFan8 = Lists.newArrayList(30, 60);
 	List<Integer> list_RandomSecond_StopAtCMC = Lists.newArrayList(0, 0);
-	List<Integer> list_RandomSecond_StopAtTokenFan8 = Lists.newArrayList(0, 0);
+	List<Integer> list_RandomSecond_StopAtTokenFan8 = Lists.newArrayList(0, 0);	
 
 	// ------------RUNTEST------------------------------------------------------------------------
 	
@@ -94,7 +105,7 @@ public class Test_Pump_Fan8_InCMC {
 	// - Go to CMC, From Token Fan8	
 	public void testOpenFan8_FromMultiProxy(int numb, String coin, List<String> listUrl) {
 		printRunningCaseTest(numb, coin);
-//		System.out.println();
+//		Ztest.log.printToLogFileAndConsole();
 
 		try {
 
@@ -106,7 +117,7 @@ public class Test_Pump_Fan8_InCMC {
 				Collections.shuffle(listProxy_Origin);
 				printListProxy(listProxy_Origin);
 			} else {
-				System.out.println("No proxy on servers now. Trying to get proxy after 30s...");
+				Ztest.log.printToLogFileAndConsole("No proxy on servers now. Trying to get proxy after 30s...");
 				sleep(30);
 			}
 
@@ -119,13 +130,13 @@ public class Test_Pump_Fan8_InCMC {
 			}
 
 			for (int i = 0; i < listProxy_Origin.size(); i++) {
-				System.out.println("\r");
+				Ztest.log.printToLogFileAndConsole("\r");
 				initChromeWithProxyHTTP(listProxy_Origin.get(i));
 				int countProxy = i + 1;
-				System.out.println("Using proxy " + countProxy + ":\t" + listProxy_Origin.get(i));
+				Ztest.log.printToLogFileAndConsole("Using proxy " + countProxy + ":\t" + listProxy_Origin.get(i));
 
 				String userAgent = (String) ((JavascriptExecutor) driver).executeScript("return navigator.userAgent");
-				System.out.println("UserAgent:\t" + userAgent);
+				Ztest.log.printToLogFileAndConsole("UserAgent:\t" + userAgent);
 
 				try {
 
@@ -144,11 +155,11 @@ public class Test_Pump_Fan8_InCMC {
 					driver.quit();
 					
 					if (isRestarting_WhenGetListProxyAgain_FromListURL(listUrl)) {
-						System.out.println("A server is in RESTARTING status. Restarting script...");
+						Ztest.log.printToLogFileAndConsole("A server is in RESTARTING status. Restarting script...");
 						sleep(30);
 						testOpenFan8_FromMultiProxy(numb, coin, listUrl);
 					} else {
-						System.out.println(
+						Ztest.log.printToLogFileAndConsole(
 								"Something went wrong (proxy die slow, can't click element...) but no RESTARTING status in servers. Continue to the next Proxy.");
 					}
 				}
@@ -156,7 +167,7 @@ public class Test_Pump_Fan8_InCMC {
 			listProxy_Origin.clear();
 		} catch (Exception e) {
 			driver.quit();
-			System.out.println("Something went wrong. Restarting script...");
+			Ztest.log.printToLogFileAndConsole("Something went wrong. Restarting script...");
 			sleep(30);
 			testOpenFan8_FromMultiProxy(numb, coin, listUrl);
 		}
@@ -183,7 +194,7 @@ public class Test_Pump_Fan8_InCMC {
 
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("Can't get proxy AGAIN from URLs:" + listURL);
+			Ztest.log.printToLogFileAndConsole("Can't get proxy AGAIN from URLs:" + listURL);
 		}
 		return bo;
 	}
@@ -207,7 +218,7 @@ public class Test_Pump_Fan8_InCMC {
 		int count = 0;
 		for (String proxy : listlocal) {
 			initChromeWithProxyHTTP(proxy);
-			System.out.println("Running with proxy:/t" + proxy);
+			Ztest.log.printToLogFileAndConsole("Running with proxy:/t" + proxy);
 //			driver.manage().window().maximize();
 			// String webIP = "https://whatismyipaddress.com/";
 			// driver.get(webIP);
@@ -215,7 +226,7 @@ public class Test_Pump_Fan8_InCMC {
 
 			try {
 				driver.get(webDefiatoTesting);
-				System.out.println("Chrome opened Defiato web");
+				Ztest.log.printToLogFileAndConsole("Chrome opened Defiato web");
 				
 				//For mini web
 				By byMenuBtn = By.xpath("//button[@aria-label='Toggle navigation']");
@@ -235,17 +246,17 @@ public class Test_Pump_Fan8_InCMC {
 				sleep(3);
 				int number = 0;
 				do {
-					System.out.println(driver.getCurrentUrl());
+					Ztest.log.printToLogFileAndConsole(driver.getCurrentUrl());
 					sleep(1);
-					System.out.println(number);
+					Ztest.log.printToLogFileAndConsole(number);
 					number++;					
 				} while (!driver.getCurrentUrl().contains("/account/details") && number < 10);
 
 				// count if success
 				if (number < 10) {
 					count += 1;
-					System.out.println(driver.getCurrentUrl());
-					System.out.println("Count " + count);
+					Ztest.log.printToLogFileAndConsole(driver.getCurrentUrl());
+					Ztest.log.printToLogFileAndConsole("Count " + count);
 					
 				}
 				driver.quit();
@@ -372,13 +383,13 @@ public class Test_Pump_Fan8_InCMC {
 	public void printRunningCaseTest(int numb, String coin) {
 		switch (numb) {
 		case 1:
-			System.out.println("### Running: Open " + coin.toUpperCase() + " page from Coinmarket Cap");
+			Ztest.log.printToLogFileAndConsole("### Running: Open " + coin.toUpperCase() + " page from Coinmarket Cap");
 			break;
 		case 2:
-			System.out.println("### Running: Open " + coin.toUpperCase() + " page from Google Search");
+			Ztest.log.printToLogFileAndConsole("### Running: Open " + coin.toUpperCase() + " page from Google Search");
 			break;
 		case 3:
-			System.out.println("### Running: Open " + "Coinmarketcap".toUpperCase() + " page from Token Fan8");
+			Ztest.log.printToLogFileAndConsole("### Running: Open " + "Coinmarketcap".toUpperCase() + " page from Token Fan8");
 			break;
 		default:
 			break;
@@ -427,11 +438,11 @@ public class Test_Pump_Fan8_InCMC {
 
 		sleep(3);
 		if(driver.getCurrentUrl().contains("currencies/fan8/markets")) {
-			System.out.println("Verified link:\t" + driver.getCurrentUrl());
+			Ztest.log.printToLogFileAndConsole("Verified link:\t" + driver.getCurrentUrl());
 			countTotalSuccess ++;
-			System.out.println("Count Success:\t" + countTotalSuccess);
+			Ztest.log.printToLogFileAndConsole("Count Success:\t" + countTotalSuccess);
 		}else {
-			System.out.println("URL is invalid. This page is not https://coinmarketcap.com/currencies/fan8/markets/");
+			Ztest.log.printToLogFileAndConsole("URL is invalid. This page is not https://coinmarketcap.com/currencies/fan8/markets/");
 		}
 		
 	}
@@ -449,7 +460,7 @@ public class Test_Pump_Fan8_InCMC {
 //		scrollBotAndTopPage();
 
 		clickTokenFan8Page();
-		System.out.print("TokenFan8 web:\t");
+		Ztest.log.printToLogFileAndConsole("TokenFan8 web:\t");
 //		sleepRandom(list_RandomSecond_StopAtTokenFan8.get(0), list_RandomSecond_StopAtTokenFan8.get(1));
 
 		switchWindow(1);
@@ -478,7 +489,7 @@ public class Test_Pump_Fan8_InCMC {
 
 			// verify Fan8 link when wait < 10s
 			do {
-				System.out.println("Verified link:\t" + driver.getCurrentUrl());
+				Ztest.log.printToLogFileAndConsole("Verified link:\t" + driver.getCurrentUrl());
 				sleep(1);
 				timeInSecond++;
 			} while (!driver.getCurrentUrl().contains("/currencies/fan8") && timeInSecond < 10);
@@ -486,12 +497,12 @@ public class Test_Pump_Fan8_InCMC {
 			// Count success if wait < 10s
 			if (timeInSecond < 10) {
 				countTotalSuccess += 1;
-				System.out.println("Count Success:\t" + countTotalSuccess);
+				Ztest.log.printToLogFileAndConsole("Count Success:\t" + countTotalSuccess);
 
 			}
 		} else {
 			countTotalSuccess += 1;
-			System.out.println("Count Success:\t" + countTotalSuccess);
+			Ztest.log.printToLogFileAndConsole("Count Success:\t" + countTotalSuccess);
 
 		}
 	}
@@ -511,7 +522,7 @@ public class Test_Pump_Fan8_InCMC {
 		// for Noimage
 		By by1stSearchResult = By.xpath("(//*[@class= 'zBAuLc' or @class='LC20lb DKV0Md'])[1]");
 		click(by1stSearchResult);
-		System.out.print("CoinmarketCap:\t");
+		Ztest.log.printToLogFileAndConsole("CoinmarketCap:\t");
 //		sleepRandom(list_RandomSecond_StopAtCMC.get(0), list_RandomSecond_StopAtCMC.get(1));
 
 		// will wait later
@@ -520,7 +531,7 @@ public class Test_Pump_Fan8_InCMC {
 
 	public void case1_OpenCoinPage_FromSearchCMC(String coin) {
 		driver.get(webCMC);
-		System.out.print("CoinmarketCap:\t");
+		Ztest.log.printToLogFileAndConsole("CoinmarketCap:\t");
 //		sleepRandom(list_RandomSecond_StopAtCMC.get(0), list_RandomSecond_StopAtCMC.get(1));
 
 		// for maxi web
@@ -545,21 +556,24 @@ public class Test_Pump_Fan8_InCMC {
 //		driver.get(webIP);
 //		;
 //		String countryCode = driver.findElement(valueCountryCode).getText();
-////		System.out.println("The new IP is " + countryCode);
+////		Ztest.log.printToLogFileAndConsole("The new IP is " + countryCode);
 //		if (!countryCode.equalsIgnoreCase("VN")) {
-//			System.out.println("Change proxy success:");
-//			System.out.println("\tThe new IP: " + proxyhttp);
+//			Ztest.log.printToLogFileAndConsole("Change proxy success:");
+//			Ztest.log.printToLogFileAndConsole("\tThe new IP: " + proxyhttp);
 //			System.out.print("\tCountry Code: " + countryCode);
 //		}
 //
 //	}
 
+	// using 1
 	public void printListProxy(List<String> list) {
-		System.out.println("List Proxy");
+		Ztest.log.printToLogFileAndConsole("List Proxy");
+//		Ztest.log.printToLogFileAndConsole("List Proxy");
 		int countProxy = 0;
 		for (String proxy : list) {
 			countProxy += 1;
-			System.out.println("Proxy " + countProxy + ":\t" + proxy);
+			Ztest.log.printToLogFileAndConsole("Proxy " + countProxy + ":\t" + proxy);
+//			Ztest.log.printToLogFileAndConsole("Proxy " + countProxy + ":\t" + proxy);
 		}
 	}
 
@@ -586,7 +600,7 @@ public class Test_Pump_Fan8_InCMC {
 			}
 //			connection.disconnect();
 		} catch (Exception e) {
-			System.out.println("Unable to get list Proxy now, maybe servers died.");
+			Ztest.log.printToLogFileAndConsole("Unable to get list Proxy now, maybe servers died.");
 		}
 		return listLocal;
 	}
@@ -626,7 +640,7 @@ public class Test_Pump_Fan8_InCMC {
 
 //			connection.disconnect();
 		} catch (Exception e) {
-			System.out.println("Unable to get list Proxy now, maybe servers died.");
+			Ztest.log.printToLogFileAndConsole("Unable to get list Proxy now, maybe servers died.");
 		}
 		return listLocal;
 	}
@@ -641,12 +655,12 @@ public class Test_Pump_Fan8_InCMC {
 //		while ((line = bufferedReader.readLine()) != null) {
 //			listProxy.add(line);
 //		}
-//		System.out.println("Success add Proxy");
+//		Ztest.log.printToLogFileAndConsole("Success add Proxy");
 //	}
 
 	// using 1
 	public void initChromeWithProxyHTTP(String httpProxy) {
-//		System.out.println();
+//		Ztest.log.printToLogFileAndConsole();
 //		System.setProperty("webdriver.chrome.driver", path_DriverChrome_Window);
 
 		// hide log of chromedriver and java selenium
@@ -698,16 +712,16 @@ public class Test_Pump_Fan8_InCMC {
 //			driverPath = "Driver/chromedriver.exe";
 			System.setProperty("webdriver.chrome.driver", path_DriverChrome_Window);
 			driver = new ChromeDriver(chromeOptions);
-			System.out.println("Platform:\t" + Platform.getCurrent());
+			Ztest.log.printToLogFileAndConsole("Platform:\t" + Platform.getCurrent());
 //			String userAgent = (String) ((JavascriptExecutor) driver).executeScript("return navigator.userAgent");
-//			System.out.println("UserAgent:\t" + userAgent);
+//			Ztest.log.printToLogFileAndConsole("UserAgent:\t" + userAgent);
 		} else {
 //	    	driverPath = "Driver/chromedriver-linux";
 	    	System.setProperty("webdriver.chrome.driver", path_DriverChrome_Linux);
 	    	driver = new ChromeDriver(chromeOptions);
-	    	System.out.println("Platform:\t" + Platform.getCurrent());
+	    	Ztest.log.printToLogFileAndConsole("Platform:\t" + Platform.getCurrent());
 //	    	String userAgent = (String) ((JavascriptExecutor) driver).executeScript("return navigator.userAgent");
-//			System.out.println("UserAgent:\t" + userAgent);
+//			Ztest.log.printToLogFileAndConsole("UserAgent:\t" + userAgent);
 		}
 		
 //		driver = new ChromeDriver(chromeOptions);
@@ -715,7 +729,7 @@ public class Test_Pump_Fan8_InCMC {
 		driver.manage().deleteAllCookies();
 
 //		driver.manage().window().minimize();
-//		System.out.println("\rPre-Test: CHROME Driver Start Success");
+//		Ztest.log.printToLogFileAndConsole("\rPre-Test: CHROME Driver Start Success");
 	}
 
 	// ssl proxy : not using
@@ -731,7 +745,7 @@ public class Test_Pump_Fan8_InCMC {
 //		driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 //		driver.manage().window().fullscreen();
-		System.out.println("Pre-Test: CHROME Driver Start Success\r");
+		Ztest.log.printToLogFileAndConsole("Pre-Test: CHROME Driver Start Success\r");
 	}
 
 	public void initChromeNoProxy() {
@@ -740,7 +754,7 @@ public class Test_Pump_Fan8_InCMC {
 		driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 //		driver.manage().window().maximize();
-		System.out.println("Pre-Test: CHROME Driver Start Success\r");
+		Ztest.log.printToLogFileAndConsole("Pre-Test: CHROME Driver Start Success\r");
 	}
 
 	// ------------HANDLE_USER
@@ -766,7 +780,7 @@ public class Test_Pump_Fan8_InCMC {
 				scrollDown_ByPixel(positive);
 				sleep(2);
 				if (driver.findElement(byElementToFind).isDisplayed()) {
-//					System.out.println("Đã scroll và thấy element");
+//					Ztest.log.printToLogFileAndConsole("Đã scroll và thấy element");
 					break;
 				}
 			} catch (Exception e) {
@@ -855,7 +869,7 @@ public class Test_Pump_Fan8_InCMC {
 
 	public void click(By by) {
 		getWebElement(by).click();	
-//		System.out.println("Đã thấy element và Click xong");
+//		Ztest.log.printToLogFileAndConsole("Đã thấy element và Click xong");
 	}
 
 	public WebElement getWebElement(By by) {
@@ -864,7 +878,7 @@ public class Test_Pump_Fan8_InCMC {
 
 	public int sleepRandom(int begin_inSecond, int end_inSecond) {
 		int x = RandomUtils.nextInt(begin_inSecond, end_inSecond + 1);
-		System.out.println("Waiting " + x + "s...");
+		Ztest.log.printToLogFileAndConsole("Waiting " + x + "s...");
 		sleep(x);
 		return x;
 	}
@@ -901,8 +915,6 @@ public class Test_Pump_Fan8_InCMC {
 		return driver.getWindowHandles().size();
 	}
 
-	public Process process;
-
 	public void runCmdComand(String command) {
 		try {
 			process = Runtime.getRuntime().exec(command);
@@ -910,6 +922,7 @@ public class Test_Pump_Fan8_InCMC {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	// for run any Testcase
 	@Test
