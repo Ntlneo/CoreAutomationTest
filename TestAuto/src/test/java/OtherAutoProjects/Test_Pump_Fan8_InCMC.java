@@ -3,6 +3,8 @@ package OtherAutoProjects;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +25,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-
+import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
@@ -111,29 +113,32 @@ public class Test_Pump_Fan8_InCMC {
 
 			// List Proxy now is sure no Restarting
 			// get list Proxy mới phải clear list cũ trc
-			listProxy_Origin.clear();
-			listProxy_Origin = getListProxy_FromListURL(listUrl);
-			if (listProxy_Origin.size() > 0) {
-				Collections.shuffle(listProxy_Origin);
-				printListProxy(listProxy_Origin);
-			} else {
-				Ztest.log.printToLogFileAndConsole("No proxy on servers now. Trying to get proxy after 30s...");
-				sleep(30);
-			}
+//			listProxy_Origin.clear();
+////			listProxy_Origin = getListProxy_FromListURL(listUrl);
+//			listProxy_Origin = getListProxy_FromFile();
+//			if (listProxy_Origin.size() > 0) {
+//				Collections.shuffle(listProxy_Origin);
+//				printListProxy(listProxy_Origin);
+//			} else {
+//				Ztest.log.printToLogFileAndConsole("No proxy on servers now. Trying to get proxy after 30s...");
+//				sleep(30);
+//			}
+//
+//			// nếu đã từng chay thì remove những proxy đã chạy
+//			if (listProxy_DidRun.size() > 0) {
+//				Collection collection_ofListDidRun = new ArrayList(listProxy_DidRun);
+//				listProxy_Origin.removeAll(collection_ofListDidRun);
+//				listProxy_DidRun.clear();
+//
+//			}
 
-			// nếu đã từng chay thì remove những proxy đã chạy
-			if (listProxy_DidRun.size() > 0) {
-				Collection collection_ofListDidRun = new ArrayList(listProxy_DidRun);
-				listProxy_Origin.removeAll(collection_ofListDidRun);
-				listProxy_DidRun.clear();
-
-			}
-
-			for (int i = 0; i < listProxy_Origin.size(); i++) {
+//			for (int i = 0; i < listProxy_Origin.size(); i++) {
+			for (int i = 0; i < 10; i++) {
 				Ztest.log.printToLogFileAndConsole("\r");
-				initChromeWithProxyHTTP(listProxy_Origin.get(i));
+//				initChromeWithProxyHTTP(listProxy_Origin.get(i));
+				initChromeNoProxy();
 				int countProxy = i + 1;
-				Ztest.log.printToLogFileAndConsole("Using proxy " + countProxy + ":\t" + listProxy_Origin.get(i));
+//				Ztest.log.printToLogFileAndConsole("Using proxy " + countProxy + ":\t" + listProxy_Origin.get(i));
 
 				String userAgent = (String) ((JavascriptExecutor) driver).executeScript("return navigator.userAgent");
 				Ztest.log.printToLogFileAndConsole("UserAgent:\t" + userAgent);
@@ -154,14 +159,14 @@ public class Test_Pump_Fan8_InCMC {
 				} catch (Exception e) {					
 					driver.quit();
 					
-					if (isRestarting_WhenGetListProxyAgain_FromListURL(listUrl)) {
-						Ztest.log.printToLogFileAndConsole("A server is in RESTARTING status. Restarting script...");
-						sleep(30);
-						testOpenFan8_FromMultiProxy(numb, coin, listUrl);
-					} else {
-						Ztest.log.printToLogFileAndConsole(
-								"Something went wrong (proxy die slow, can't click element...) but no RESTARTING status in servers. Continue to the next Proxy.");
-					}
+//					if (isRestarting_WhenGetListProxyAgain_FromListURL(listUrl)) {
+//						Ztest.log.printToLogFileAndConsole("A server is in RESTARTING status. Restarting script...");
+//						sleep(30);
+//						testOpenFan8_FromMultiProxy(numb, coin, listUrl);
+//					} else {
+//						Ztest.log.printToLogFileAndConsole(
+//								"Something went wrong (proxy die slow, can't click element...) but no RESTARTING status in servers. Continue to the next Proxy.");
+//					}
 				}
 			}
 			listProxy_Origin.clear();
@@ -645,18 +650,28 @@ public class Test_Pump_Fan8_InCMC {
 		return listLocal;
 	}
 
-//	// using 1
-//	public void getListProxy_FromFile() throws IOException {
-//		File file1 = new File(path_FileProxy);
-//		InputStream in = new FileInputStream(file1);
-//		BOMInputStream bomInputStream = new BOMInputStream(in, false);
-//		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bomInputStream));
-//		String line;
-//		while ((line = bufferedReader.readLine()) != null) {
-//			listProxy.add(line);
-//		}
+	// using 1
+	public List<String> getListProxy_FromFile() {
+		List<String> listLocal = new ArrayList<>();
+		String path_FileProxy = "DataTest/httpproxies.txt";
+		File file1 = new File(path_FileProxy);
+		
+		try {
+			InputStream in = new FileInputStream(file1);
+			BOMInputStream bomInputStream = new BOMInputStream(in, false);
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bomInputStream));
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				listLocal.add(line);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Ztest.log.printToLogFileAndConsole("Unable to get list Proxy now, maybe servers died.");
+		}
+		
 //		Ztest.log.printToLogFileAndConsole("Success add Proxy");
-//	}
+		return listLocal;
+	}
 
 	// using 1
 	public void initChromeWithProxyHTTP(String httpProxy) {
@@ -743,18 +758,35 @@ public class Test_Pump_Fan8_InCMC {
 		chromeOptions.setCapability("proxy", proxy);
 		driver = new ChromeDriver(chromeOptions);
 //		driver = new ChromeDriver();
-		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+		driver.manage().deleteAllCookies();
 //		driver.manage().window().fullscreen();
-		Ztest.log.printToLogFileAndConsole("Pre-Test: CHROME Driver Start Success\r");
+		Ztest.log.printToLogFileAndConsole("Pre-Test: CHROME Driver Start Success");
 	}
 
 	public void initChromeNoProxy() {
 		System.setProperty("webdriver.chrome.driver", path_DriverChrome_Window);
-		System.setProperty("webdriver.chrome.silentOutput", "false");
-		driver = new ChromeDriver();
+		System.setProperty("webdriver.chrome.silentOutput", "true");
+		java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
+
+		ChromeOptions chromeOptions = new ChromeOptions();
+		
+		chromeOptions.addArguments("window-size=800,1000");
+
+		chromeOptions.addArguments("user-agent=" + getRandomString());
+		chromeOptions.setExperimentalOption("excludeSwitches", new String[] { "enable-automation", "enable-logging" });
+		chromeOptions.setExperimentalOption("useAutomationExtension", false);
+		Map<String, Object> prefs = new HashMap<String, Object>();
+
+		// maybe this is for mobile appium
+		prefs.put("credentials_enable_service", false);
+		prefs.put("profile.password_manager_enabled", false);
+		prefs.put("profile.default_content_setting_values.notifications", 2); // disable browser noti
+		chromeOptions.setExperimentalOption("prefs", prefs);
+		driver = new ChromeDriver(chromeOptions);
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 //		driver.manage().window().maximize();
-		Ztest.log.printToLogFileAndConsole("Pre-Test: CHROME Driver Start Success\r");
+		Ztest.log.printToLogFileAndConsole("Pre-Test: CHROME Driver Started Success");
 	}
 
 	// ------------HANDLE_USER
