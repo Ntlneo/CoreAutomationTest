@@ -35,13 +35,15 @@ public class LogTestManager {
 	
 	public void clearLogFolderIfLargeSize(long size_byMB) {
 		String s = FileUtils.byteCountToDisplaySize(FileUtils.sizeOfDirectory(logFolder));
-		System.out.println(s);
-		System.out.println(StringUtils.getDigits(s));
+		printToLogFileAndConsole("Log files will be auto deteled if > " + size_byMB + " MB");
+		printToLogFileAndConsole("Current size of Log files: " + s);
+//		System.out.println(StringUtils.getDigits(s));
 		try {
 			if(s.equalsIgnoreCase("mb")) {
 				long sizeFolder = Long.parseLong(StringUtils.getDigits(s));
 				if(sizeFolder > size_byMB) {
 					FileUtils.cleanDirectory(logFolder);
+					printToLogFileAndConsole("Log files cleared.");
 				}
 			}			
 		} catch (IOException e) {

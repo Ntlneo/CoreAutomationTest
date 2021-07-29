@@ -538,8 +538,9 @@ public class Test_Pump_Fan8_InCMC {
 //		By search = By.xpath("//div[contains(@class,'sc-266vnq-1')]");
 //		By inputFan8 = By.xpath("//input[contains(@class,'bzyaeu-3')]");
 
-		// for not mini web
-		By search = By.xpath("(//*[@class='sc-16r8icm-0 fNFbRb'])[1]");
+		// for mini web
+//		By search = By.xpath("(//*[@class='sc-16r8icm-0 fNFbRb'])[1]");
+		By search = By.xpath("(//*[contains(@class,'sc-16r8icm-0')])[1]");
 		By inputFan8 = By.xpath("//input[@class='bzyaeu-3 exjgFJ']");
 
 		click(search);
