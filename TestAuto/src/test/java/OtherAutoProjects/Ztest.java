@@ -79,7 +79,7 @@ public class Ztest {
 
 				// 1:CoinMarketCap - 2:Google - 3:Fan8-aDat
 				cmc.testOpenFan8_FromMultiProxy(1, coin, listUrl);
-				cmc.testOpenFan8_FromMultiProxy(2, coin, listUrl);
+//				cmc.testOpenFan8_FromMultiProxy(2, coin, listUrl);
 //				cmc.testOpenFan8_FromMultiProxy(3, coin, listUrl);
 				round++;
 
